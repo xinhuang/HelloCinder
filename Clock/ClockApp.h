@@ -1,7 +1,5 @@
 #pragma once
 
-#include "SpriteSheet.h"
-
 #include <cinder/cinder.h>
 #include <cinder/app/AppBasic.h>
 #include <cinder/gl/TextureFont.h>
@@ -63,6 +61,5 @@ private:
 private:
   bool _dragging;
   Vec2f _mouseDownPos;
-  map<char, SpriteSheetRef> _sprites;
   TextureFontRef _font;
 };

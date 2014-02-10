@@ -1,6 +1,13 @@
 /ipch
-Debug
 Release
 *.sdf
 *.suo
 /*.opensdf
+/Clock/Debug
+/Debug
+/DrMario/Debug
+/HCT/Debug
+/HCUI/Debug
+/LifeGame/Debug
+/LifeGameTest/Debug
+/Roll/Debug
