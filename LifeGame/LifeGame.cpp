@@ -53,7 +53,10 @@ void LifeGame::draw() {
 void LifeGame::update() {
   if (!suspend_) {
     sysinfo_.onPreGen(universe_);
-    universe_ = universe_.nextGeneration();
+
+    universe_.nextGeneration(back_);
+    universe_.swap(back_);
+
     sysinfo_.onPostGen(universe_);
   }
 }

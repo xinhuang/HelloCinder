@@ -23,6 +23,8 @@ public:
   }
 
   std::string msg() const {
+    if (costs_.size() == 0)
+      return "GPS: INFINITE";
     if (costs_.size() > MAX_GEN_COST)
       costs_.resize(MAX_GEN_COST);
     long long total{ 0 };

@@ -48,4 +48,5 @@ private:
   ci::Vec2f offset_;
   ci::Vec2f mouseDownOffset_;
   Universe universe_;
+  Universe back_;
 };
