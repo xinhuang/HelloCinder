@@ -10,8 +10,6 @@
 
 using namespace std;
 
-class invalid_commandline_argument : public invalid_argument {};
-
 const string PREFIX("LifeGame_");
 const string EXT("dat");
 
@@ -50,7 +48,7 @@ void generate(const string& path, int ncases) {
       exit(1);
     }
     ofstream ofs(file);
-    ofs << Universe::bigbang(1000, 1000, 0.3, rand);
+    ofs << Universe::bigBang(1000, 1000, 0.3, rand);
     cout << ".";
   }
 
@@ -115,17 +113,13 @@ int main(int argc, char** argv) {
     return 0;
   }
 
-  try {
-    if (argv[1] == string("--generate") || argv[1] == string("-g")) {
-      int ncases = atoi(argv[3]);
-      generate(argv[2], ncases);
-    } else if (argv[1] == string("--test") || argv[1] == string("-t")) {
-      int ngen = atoi(argv[3]);
-      test(argv[2], ngen);
-    } else {
-      usage();
-    }
-  } catch (invalid_commandline_argument&) {
+  if (argv[1] == string("--generate") || argv[1] == string("-g")) {
+    int ncases = atoi(argv[3]);
+    generate(argv[2], ncases);
+  } else if (argv[1] == string("--test") || argv[1] == string("-t")) {
+    int ngen = atoi(argv[3]);
+    test(argv[2], ngen);
+  } else {
     usage();
   }
 

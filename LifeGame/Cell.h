@@ -38,6 +38,7 @@ enum class CellState {
 class Cell {
 public:
   Cell() : state_(CellState::DEAD) {}
+  Cell(int x, int y) : pos_{ x, y }, state_(CellState::DEAD) {}
   Cell(const Point &p) : pos_(p), state_(CellState::DEAD) {}
   Cell(const Point &p, CellState s) : pos_(p), state_(s) {}
 

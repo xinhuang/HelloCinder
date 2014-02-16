@@ -12,17 +12,17 @@ using namespace std;
 void square10x10(Universe &u, Point offset) {
   for (int y = 0; y < 10; ++y) {
     for (int x = 0; x < 10; ++x) {
-      u.add({ offset.x + x, offset.y + y }, CellState::ALIVE);
+      u.addn({ offset.x + x, offset.y + y }, CellState::ALIVE);
     }
   }
 }
 
 void glider(Universe &u, Point offset) {
-  u.add({ offset.x + 1, offset.y + 0 }, CellState::ALIVE);
-  u.add({ offset.x + 2, offset.y + 1 }, CellState::ALIVE);
-  u.add({ offset.x + 0, offset.y + 2 }, CellState::ALIVE);
-  u.add({ offset.x + 1, offset.y + 2 }, CellState::ALIVE);
-  u.add({ offset.x + 2, offset.y + 2 }, CellState::ALIVE);
+  u.addn({ offset.x + 1, offset.y + 0 }, CellState::ALIVE);
+  u.addn({ offset.x + 2, offset.y + 1 }, CellState::ALIVE);
+  u.addn({ offset.x + 0, offset.y + 2 }, CellState::ALIVE);
+  u.addn({ offset.x + 1, offset.y + 2 }, CellState::ALIVE);
+  u.addn({ offset.x + 2, offset.y + 2 }, CellState::ALIVE);
 }
 
 LifeGame::LifeGame()
@@ -178,7 +178,7 @@ Universe LifeGame::bigBang() const {
   for (int i = 0; i < width * height * BORN_RATE; ++i) {
     int x = offsetx + rand_(width);
     int y = offsety + rand_(height);
-    u.add({ x, y }, CellState::ALIVE);
+    u.addn({ x, y }, CellState::ALIVE);
   }
   return u;
 }

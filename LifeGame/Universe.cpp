@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "Universe.h"
 
+#include <limits>
+#include <future>
+
 using namespace std;
 
 bool Universe::isSilent() const {
@@ -17,9 +20,15 @@ void Universe::add(const Cell &cell) {
     cells_.erase(r.first);
     cells_.insert(cell);
   }
+}
 
-  for (const auto &n : neighbors(cell.pos())) {
-    createIfNonexists(n);
+void Universe::addn(const Cell& cell) {
+  add(cell);
+  if (cell.isDead())
+    return;
+  for (const auto& n : neighbors(cell.pos())) {
+    if (!alive(n))
+      add({ n, CellState::DEAD });
   }
 }
 
@@ -27,7 +36,7 @@ void Universe::createIfNonexists(const Point &p) {
   cells_.insert({ p });
 }
 
-void Universe::nextGeneration(Universe& u) const {
+void Universe::nextGeneration(Universe &u) const {
   u.clear();
   for (const auto &cell : cells_) {
     const auto &pos = cell.pos();
@@ -40,6 +49,40 @@ void Universe::nextGeneration(Universe& u) const {
       u.add(nextCell);
     }
   }
+
+  vector<Cell> toAdd;
+  for (const auto cell : u.cells_) {
+    const auto& pos = cell.pos();
+    if (!u.alive({ pos.x - 1, pos.y - 1 }))
+      toAdd.emplace_back(pos.x - 1, pos.y - 1);
+    if (!u.alive({ pos.x, pos.y - 1 }))
+      toAdd.emplace_back(pos.x, pos.y - 1);
+    if (!u.alive({ pos.x + 1, pos.y - 1 }))
+      toAdd.emplace_back(pos.x + 1, pos.y - 1);
+
+    if (!u.alive({ pos.x - 1, pos.y }))
+      toAdd.emplace_back(pos.x - 1, pos.y);
+    if (!u.alive({ pos.x + 1, pos.y }))
+      toAdd.emplace_back(pos.x + 1, pos.y);
+
+    if (!u.alive({ pos.x - 1, pos.y + 1 }))
+      toAdd.emplace_back(pos.x - 1, pos.y + 1);
+    if (!u.alive({ pos.x, pos.y + 1 }))
+      toAdd.emplace_back(pos.x, pos.y + 1);
+    if (!u.alive({ pos.x + 1, pos.y + 1 }))
+      toAdd.emplace_back(pos.x + 1, pos.y + 1);
+  }
+
+  for (const auto& c : toAdd)
+    u.add(c);
+}
+
+bool Universe::tryAdd(int x, int y) {
+  Cell c{ { x, y }, CellState::DEAD };
+  if (contains(c))
+    return false;
+  cells_.insert(c);
+  return true;
 }
 
 vector<Point> Universe::neighbors(const Point &pos) const {
@@ -71,13 +114,23 @@ const Cell &Universe::operator[](const Point &pos) const {
   return *iter;
 }
 
-Universe Universe::bigbang(int width, int height, double rate, function<int(int)> rand) {
+Universe Universe::bigBang(int width, int height, double rate, function<int(int)> rand) {
   Universe u;
   for (int i = 0; i < width * height * rate; ++i) {
     int x = rand(width);
     int y = rand(height);
-    u.add({ x, y }, CellState::ALIVE);
+    u.addn({ x, y }, CellState::ALIVE);
   }
+  return u;
+}
+
+Universe Universe::glider() {
+  Universe u;
+  u.addn({ 0, 1 }, CellState::ALIVE);
+  u.addn({ 1, 2 }, CellState::ALIVE);
+  u.addn({ 2, 0 }, CellState::ALIVE);
+  u.addn({ 2, 1 }, CellState::ALIVE);
+  u.addn({ 2, 2 }, CellState::ALIVE);
   return u;
 }
 

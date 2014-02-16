@@ -5,21 +5,19 @@
 
 #include <unordered_set>
 #include <functional>
-#include <sparsehash/sparse_hash_set>
-#include <limits>
 #include <iostream>
 #include <functional>
+#include <mutex>
+
+#include <concurrent_unordered_set.h>
 
 class Universe {
   using container_t = std::unordered_set<Cell, hash<Cell> >;
-  //using container_t = google::sparse_hash_set<Cell, hash<Cell> >;
+  //using container_t = concurrency::concurrent_unordered_set<Cell, hash<Cell> >;
 
 public:
-  Universe()
-      : DeletedCell({ std::numeric_limits<int>::min(),
-                      std::numeric_limits<int>::min() }) {
-    //cells_.set_deleted_key(DeletedCell);
-  }
+  Universe() {}
+  Universe(const Universe &u) : rule_(u.rule_), cells_(u.cells_) {}
   Universe &operator=(Universe &&v) {
     rule_ = std::move(v.rule_);
     cells_ = std::move(v.cells_);
@@ -33,18 +31,20 @@ public:
   void add(const Point &pos, CellState state) {
     add(Cell{ pos, state });
   }
+  void addn(const Cell& cell);
+  void addn(const Point &pos, CellState state) {
+    addn(Cell{ pos, state });
+  }
 
   void nextGeneration(Universe& u) const;
-  static Universe bigbang(int width, int height, double rate, std::function<int(int)> rand);
+
+  static Universe bigBang(int width, int height, double rate, std::function<int(int)> rand);
+  static Universe glider();
 
   bool contains(const Cell& cell) const { return cells_.find(cell) != cells_.end(); }
   bool alive(const Point &pt) const { return !(*this)[pt].isDead(); }
 
-  void clear() { 
-    cells_.clear();
-    //for (auto iter = cells_.begin(); iter != cells_.end(); ++iter)
-    //  cells_.erase(iter);
-  }
+  void clear() { cells_.clear(); }
   void swap(Universe& u) { cells_.swap(u.cells_); }
 
   class const_iterator {
@@ -98,11 +98,11 @@ private:
   std::vector<Point> neighbors(const Point &pos) const;
   std::vector<Cell> neighborCells(const Cell &pos) const;
   void createIfNonexists(const Point &p);
+  bool Universe::tryAdd(int x, int y);
 
 private:
   Rule rule_;
   container_t cells_;
-  const Cell DeletedCell;
 };
 
 bool operator==(const Universe &lhs, const Universe &rhs);

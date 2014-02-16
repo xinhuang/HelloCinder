@@ -127,3 +127,16 @@ TEST(UniverseTests, deserialization_test) {
 
   ASSERT_EQ(expect, actual);
 }
+
+TEST(UniverseTests, glider) {
+  Universe origin = Universe::glider();
+
+  Universe next;
+  origin.nextGeneration(next);
+
+  ASSERT_TRUE(next.alive({ 1, 0 }));
+  ASSERT_TRUE(next.alive({ 1, 2 }));
+  ASSERT_TRUE(next.alive({ 2, 1 }));
+  ASSERT_TRUE(next.alive({ 2, 2 }));
+  ASSERT_TRUE(next.alive({ 3, 1 }));
+}
