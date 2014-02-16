@@ -37,6 +37,7 @@ LifeGame::LifeGame()
 void LifeGame::setup() {
   font_ = TextureFont::create(Font("Consolas", 20));
   glider(universe_, { 0, 0 });
+  sysinfo_.init(universe_);
 }
 
 void LifeGame::draw() {
@@ -70,6 +71,7 @@ void LifeGame::keyUp(KeyEvent e) {
   switch (e.getCode()) {
   case KeyEvent::KEY_RETURN:
     universe_ = bigBang();
+    sysinfo_.init(universe_);
     offset_ = {};
     break;
 

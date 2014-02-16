@@ -3,6 +3,8 @@
 #include <functional>
 #include <cstdint>
 
+template <typename T> struct hash;
+
 struct Point {
   Point() : value{ 0 } {}
   Point(int x, int y) : x{ x }, y{ y } {}
@@ -14,16 +16,17 @@ struct Point {
     uint64_t value;
   };
 
-  friend bool operator<(const Point &lhs, const Point &rhs) {
-    return lhs.value < rhs.value;
-  }
-
-  friend bool operator==(const Point &lhs, const Point &rhs) {
-    return lhs.value == rhs.value;
-  }
+  using hash = hash<Point>;
 };
 
-template <typename T> struct hash;
+inline bool operator<(const Point &lhs, const Point &rhs) {
+  return lhs.value < rhs.value;
+}
+
+inline bool operator==(const Point &lhs, const Point &rhs) {
+  return lhs.value == rhs.value;
+}
+
 template <> struct hash<Point> {
   size_t operator()(const Point &p) const {
     return std::hash<uint64_t>()(p.value);
@@ -47,16 +50,16 @@ public:
   void setState(CellState s) { state_ = s; }
   const Point &pos() const { return pos_; }
 
-  friend bool operator==(const Cell &lhs, const Cell &rhs) {
-    return lhs.pos() == rhs.pos();
-  }
-
   static const Cell DEAD_CELL;
 
 private:
   Point pos_;
   CellState state_;
 };
+
+inline bool operator==(const Cell &lhs, const Cell &rhs) {
+  return lhs.pos() == rhs.pos();
+}
 
 template <> struct hash<Cell> {
   size_t operator()(const Cell &c) const { return hash<Point>()(c.pos()); }

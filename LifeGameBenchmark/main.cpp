@@ -7,6 +7,7 @@
 #include <sstream>
 #include <boost/filesystem.hpp>
 #include <chrono>
+#include <future>
 
 using namespace std;
 
@@ -16,22 +17,19 @@ const string EXT("dat");
 void usage() {
   cout << "LifeGameBenchmark.exe <mode> ..." << endl
        << "\t --generate, -g: Generation mode" << endl
-       << "\t\t Path to save test cases" << endl
-       << "\t\t N cases" << endl
-       << endl
-       << "\t --test, -t: Test mode" << endl
-       << "\t\t Path to load test cases" << endl
-       << "\t\t N generations"
+       << "\t\t Path to save test cases" << endl << "\t\t N cases" << endl
+       << "\t\t A of width/height" << endl << endl << "\t --test, -t: Test mode"
+       << endl << "\t\t Path to load test cases" << endl << "\t\t N generations"
        << endl;
 }
 
-string testdata(const string& path, int i) {
+string testdata(const string &path, int i) {
   stringstream sstr;
   sstr << path << "/" << PREFIX << i << "." << EXT;
   return sstr.str();
 }
 
-void generate(const string& path, int ncases) {
+void generate(const string &path, int ncases, int width) {
   if (!boost::filesystem::exists(path))
     boost::filesystem::create_directories(path);
 
@@ -48,14 +46,14 @@ void generate(const string& path, int ncases) {
       exit(1);
     }
     ofstream ofs(file);
-    ofs << Universe::bigBang(1000, 1000, 0.3, rand);
+    ofs << Universe::bigBang(width, width, 0.3, rand);
     cout << ".";
   }
 
   cout << endl << "Test data saved to: " << path << endl;
 }
 
-void run(Universe u, int n) {
+void run(Universe& u, int n) {
   Universe v;
   for (int i = 0; i < n; ++i) {
     u.nextGeneration(v);
@@ -63,14 +61,14 @@ void run(Universe u, int n) {
   }
 }
 
-chrono::steady_clock::duration timeit(function<void()> f) {
+chrono::steady_clock::duration timeit(const function<void()>& f) {
   auto begin = chrono::steady_clock::now();
   f();
   auto now = chrono::steady_clock::now();
   return now - begin;
 }
 
-string report_path(const string& path) {
+string report_path(const string &path) {
   auto report = path + "/Benchmark.txt";
   int i = 0;
   while (boost::filesystem::exists(report)) {
@@ -81,7 +79,7 @@ string report_path(const string& path) {
   return report;
 }
 
-void test(const string& path, int ngen) {
+void test(const string &path, int ngen) {
   int idata = 0;
 
   auto report = report_path(path);
@@ -99,26 +97,35 @@ void test(const string& path, int ngen) {
     auto duration = timeit([&]() { run(u, ngen); });
     cout << testdata(path, idata) << "\t"
          << chrono::duration_cast<chrono::milliseconds>(duration).count()
-         << "ms" << "\t"
-         << cellCount << endl;
+         << "ms"
+         << "\t" << cellCount << endl;
     ofs << idata << "," << duration.count() << ","
-        << chrono::duration_cast<chrono::milliseconds>(duration).count()
-        << "ms" << ","
-        << cellCount << endl;
+        << chrono::duration_cast<chrono::milliseconds>(duration).count() << "ms"
+        << "," << cellCount << endl;
     ++idata;
   }
   cout << endl << "Report saved to: " << report << endl;
 }
 
-int main(int argc, char** argv) {
-  if (argc != 4) {
+int main(int argc, char **argv) {
+  if (argc < 2) {
     usage();
     return 0;
   }
 
   if (argv[1] == string("--generate") || argv[1] == string("-g")) {
+    if (argc < 5) {
+      usage();
+      return 1;
+    }
     int ncases = atoi(argv[3]);
-    generate(argv[2], ncases);
+    int width = atoi(argv[4]);
+    if (ncases <= 0 || width <= 0) {
+      cout << "Error: case number & canvas width must be positive." << endl;
+      return 1;
+    }
+
+    generate(argv[2], ncases, width);
   } else if (argv[1] == string("--test") || argv[1] == string("-t")) {
     int ngen = atoi(argv[3]);
     test(argv[2], ngen);

@@ -12,8 +12,11 @@
 #include <concurrent_unordered_set.h>
 
 class Universe {
+#if defined CONCURRENT_GENERATION
+  using container_t = concurrency::concurrent_unordered_set<Cell, hash<Cell> >;
+#else
   using container_t = std::unordered_set<Cell, hash<Cell> >;
-  //using container_t = concurrency::concurrent_unordered_set<Cell, hash<Cell> >;
+#endif
 
 public:
   Universe() {}
@@ -38,11 +41,12 @@ public:
 
   void nextGeneration(Universe& u) const;
 
-  static Universe bigBang(int width, int height, double rate, std::function<int(int)> rand);
+  static Universe bigBang(int width, int height, double rate, const std::function<int(int)>& rand);
   static Universe glider();
 
   bool contains(const Cell& cell) const { return cells_.find(cell) != cells_.end(); }
   bool alive(const Point &pt) const { return !(*this)[pt].isDead(); }
+  size_t size() const { return cells_.size(); }
 
   void clear() { cells_.clear(); }
   void swap(Universe& u) { cells_.swap(u.cells_); }
@@ -98,7 +102,12 @@ private:
   std::vector<Point> neighbors(const Point &pos) const;
   std::vector<Cell> neighborCells(const Cell &pos) const;
   void createIfNonexists(const Point &p);
-  bool Universe::tryAdd(int x, int y);
+  bool Universe::tryAdd(const Cell& c);
+  bool Universe::tryAdd(int x, int y) {
+    return tryAdd({ x, y });
+  }
+  void sequentialNextGeneration(Universe& u) const;
+  void parallelNextGeneration(Universe& u) const;
 
 private:
   Rule rule_;

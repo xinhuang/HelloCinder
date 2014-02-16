@@ -17,18 +17,21 @@ bool Universe::isSilent() const {
 void Universe::add(const Cell &cell) {
   auto r = cells_.insert(cell);
   if (!r.second) {
+#if defined CONCURRENT_GENERATION
+    cells_.unsafe_erase(r.first);
+#else
     cells_.erase(r.first);
+#endif
     cells_.insert(cell);
   }
 }
 
-void Universe::addn(const Cell& cell) {
+void Universe::addn(const Cell &cell) {
   add(cell);
   if (cell.isDead())
     return;
-  for (const auto& n : neighbors(cell.pos())) {
-    if (!alive(n))
-      add({ n, CellState::DEAD });
+  for (const auto &n : neighbors(cell.pos())) {
+    tryAdd(Cell(n, CellState::DEAD));
   }
 }
 
@@ -37,6 +40,60 @@ void Universe::createIfNonexists(const Point &p) {
 }
 
 void Universe::nextGeneration(Universe &u) const {
+#if defined CONCURRENT_GENERATION
+  parallelNextGeneration(u);
+#else
+  sequentialNextGeneration(u);
+#endif
+}
+
+void Universe::parallelNextGeneration(Universe &u) const {
+  u.clear();
+
+  const double MIN_CHUNK = 1000.0;
+  const double trunkSize = max(cells_.size() / 4.0, MIN_CHUNK);
+  const int nTrunk = static_cast<int>(ceil(cells_.size() / trunkSize));
+
+  auto generate = [=, &u](int trunk) {
+    auto iter = cells_.begin();
+    advance(iter, trunk * trunkSize);
+    for (int i = 0; i < trunkSize && iter != cells_.end(); ++i) {
+      const auto &cell = *iter;
+      const auto &pos = cell.pos();
+      auto nextCell = rule_.nextGeneration(
+          cell, (*this)[{ pos.x - 1, pos.y - 1 }],
+          (*this)[{ pos.x - 1, pos.y }], (*this)[{ pos.x - 1, pos.y + 1 }],
+          (*this)[{ pos.x, pos.y - 1 }], (*this)[{ pos.x, pos.y + 1 }],
+          (*this)[{ pos.x + 1, pos.y - 1 }], (*this)[{ pos.x + 1, pos.y }],
+          (*this)[{ pos.x + 1, pos.y + 1 }]);
+      if (!nextCell.isDead()) {
+        u.add(nextCell);
+
+        u.tryAdd(pos.x - 1, pos.y - 1);
+        u.tryAdd(pos.x, pos.y - 1);
+        u.tryAdd(pos.x + 1, pos.y - 1);
+
+        u.tryAdd(pos.x - 1, pos.y);
+        u.tryAdd(pos.x + 1, pos.y);
+
+        u.tryAdd(pos.x - 1, pos.y + 1);
+        u.tryAdd(pos.x, pos.y + 1);
+        u.tryAdd(pos.x + 1, pos.y + 1);
+      }
+      ++iter;
+    }
+  };
+
+  vector<future<void> > fs;
+  for (int trunk = 0; trunk < nTrunk - 1; ++trunk)
+    fs.push_back(async(generate, trunk));
+  generate(nTrunk - 1);
+
+  for (auto &f : fs)
+    f.wait();
+}
+
+void Universe::sequentialNextGeneration(Universe &u) const {
   u.clear();
   for (const auto &cell : cells_) {
     const auto &pos = cell.pos();
@@ -52,7 +109,7 @@ void Universe::nextGeneration(Universe &u) const {
 
   vector<Cell> toAdd;
   for (const auto cell : u.cells_) {
-    const auto& pos = cell.pos();
+    const auto &pos = cell.pos();
     if (!u.alive({ pos.x - 1, pos.y - 1 }))
       toAdd.emplace_back(pos.x - 1, pos.y - 1);
     if (!u.alive({ pos.x, pos.y - 1 }))
@@ -73,12 +130,11 @@ void Universe::nextGeneration(Universe &u) const {
       toAdd.emplace_back(pos.x + 1, pos.y + 1);
   }
 
-  for (const auto& c : toAdd)
+  for (const auto &c : toAdd)
     u.add(c);
 }
 
-bool Universe::tryAdd(int x, int y) {
-  Cell c{ { x, y }, CellState::DEAD };
+bool Universe::tryAdd(const Cell &c) {
   if (contains(c))
     return false;
   cells_.insert(c);
@@ -114,7 +170,8 @@ const Cell &Universe::operator[](const Point &pos) const {
   return *iter;
 }
 
-Universe Universe::bigBang(int width, int height, double rate, function<int(int)> rand) {
+Universe Universe::bigBang(int width, int height, double rate,
+                           const function<int(int)> &rand) {
   Universe u;
   for (int i = 0; i < width * height * rate; ++i) {
     int x = rand(width);
@@ -134,12 +191,12 @@ Universe Universe::glider() {
   return u;
 }
 
-ostream& operator<<(ostream& os, const Universe& u) {
+ostream &operator<<(ostream &os, const Universe &u) {
   int minx = numeric_limits<int>::max();
   int miny = numeric_limits<int>::max();
   int maxx = numeric_limits<int>::min();
   int maxy = numeric_limits<int>::min();
-  for (auto& iter = u.begin(); iter != u.end(); ++iter) {
+  for (auto &iter = u.begin(); iter != u.end(); ++iter) {
     if (iter->isDead())
       continue;
     if (iter->pos().x < minx)
@@ -165,13 +222,13 @@ ostream& operator<<(ostream& os, const Universe& u) {
   return os;
 }
 
-istream& operator>>(istream& is, Universe& u) {
+istream &operator>>(istream &is, Universe &u) {
   u.clear();
   string s;
   int y = 0;
   while (getline(is, s)) {
     int x = 0;
-    for (const auto& c : s) {
+    for (const auto &c : s) {
       u.add({ { x++, y }, CellState::ALIVE });
     }
     ++y;
@@ -179,8 +236,8 @@ istream& operator>>(istream& is, Universe& u) {
   return is;
 }
 
-bool operator==(const Universe& lhs, const Universe& rhs) {
-  for (auto& iter = lhs.begin(); iter != lhs.end(); ++iter) {
+bool operator==(const Universe &lhs, const Universe &rhs) {
+  for (auto &iter = lhs.begin(); iter != lhs.end(); ++iter) {
     if (!rhs.contains(*iter))
       return false;
   }

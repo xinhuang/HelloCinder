@@ -7,6 +7,9 @@
 class Universe;
 
 class Sysinfo {
+  size_t ngen_ = 0;
+  size_t size_ = 0;
+  size_t startSize_ = 0;
   const size_t MAX_GEN_COST = 10;
   std::chrono::steady_clock::time_point begin_;
   mutable std::deque<std::chrono::milliseconds> costs_;
@@ -17,25 +20,38 @@ public:
   }
 
   void onPostGen(const Universe& u) {
+    ++ngen_;
+    size_ = u.size();
     auto now = std::chrono::steady_clock::now();
     costs_.push_front(
       std::chrono::duration_cast<std::chrono::milliseconds>(now - begin_));
   }
 
+  void init(const Universe& u) {
+    ngen_ = 0;
+    startSize_ = u.size();
+  }
+
   std::string msg() const {
-    if (costs_.size() == 0)
-      return "GPS: INFINITE";
+    std::ostringstream oss;
+    oss << "#GEN \t" << ngen_ << std::endl << "SIZE \t" << size_ << " / " << startSize_
+        << std::endl;
+    if (costs_.size() == 0) {
+      oss << "GPS \tINFINITE";
+      return oss.str();
+    }
     if (costs_.size() > MAX_GEN_COST)
       costs_.resize(MAX_GEN_COST);
     long long total{ 0 };
     for (const auto &ms : costs_)
       total += ms.count();
     auto average = total / costs_.size();
-    if (average == 0)
-      return "GPS: INFINITE";
+    if (average == 0) {
+      oss << "GPS \tINFINITE";
+      return oss.str();
+    }
     auto gps = 1000 / average;
-    std::ostringstream oss;
-    oss << "GPS: " << gps;
+    oss << "GPS \t" << gps;
     return oss.str();
   }
 };
