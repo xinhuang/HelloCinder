@@ -36,7 +36,7 @@ void generate(const string& path, int ncases) {
     boost::filesystem::create_directories(path);
 
   auto engine = mt19937{ random_device()() };
-  auto rand = [=](int range) mutable {
+  function<int(int)> rand = [=](int range) mutable {
     auto idist = uniform_int_distribution<int>(0, range);
     return idist(engine);
   };
@@ -87,7 +87,7 @@ void test(const string& path, int ngen) {
   auto report = report_path(path);
   ofstream ofs(report);
   ofs << "Run each universe of " << ngen << " generations." << endl
-      << "idata,tick,milliseconds" << endl;
+      << "idata,tick,milliseconds,#Cell" << endl;
 
   while (true) {
     if (!boost::filesystem::exists(testdata(path, idata)))
@@ -95,13 +95,16 @@ void test(const string& path, int ngen) {
     Universe u;
     ifstream ifs(testdata(path, idata));
     ifs >> u;
+    auto cellCount = u.size();
     auto duration = timeit([&]() { run(u, ngen); });
     cout << testdata(path, idata) << "\t"
          << chrono::duration_cast<chrono::milliseconds>(duration).count()
-         << "ms" << endl;
+         << "ms" << "\t"
+         << cellCount << endl;
     ofs << idata << "," << duration.count() << ","
         << chrono::duration_cast<chrono::milliseconds>(duration).count()
-        << endl;
+        << "ms" << ","
+        << cellCount << endl;
     ++idata;
   }
   cout << endl << "Report saved to: " << report << endl;
