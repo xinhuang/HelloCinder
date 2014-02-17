@@ -53,8 +53,7 @@ void generate(const string &path, int ncases, int width) {
   cout << endl << "Test data saved to: " << path << endl;
 }
 
-void run(Universe& u, int n) {
-  Universe v;
+void run(Universe& u, Universe& v, int n) {
   for (int i = 0; i < n; ++i) {
     u.nextGeneration(v);
     u.swap(v);
@@ -94,7 +93,10 @@ void test(const string &path, int ngen) {
     ifstream ifs(testdata(path, idata));
     ifs >> u;
     auto cellCount = u.size();
-    auto duration = timeit([&]() { run(u, ngen); });
+    Universe v(u);
+
+    auto duration = timeit([&]() { run(u, v, ngen); });
+
     cout << testdata(path, idata) << "\t"
          << chrono::duration_cast<chrono::milliseconds>(duration).count()
          << "ms"
