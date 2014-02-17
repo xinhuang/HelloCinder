@@ -52,6 +52,10 @@ void ScreenSaver::draw() {
 
 void ScreenSaver::update() {
   if (!suspend_) {
+    if (sysinfo_.elapsed() >= REFRESH_TIME) {
+      universe_ = bigBang();
+      sysinfo_.init(universe_);
+    }
     sysinfo_.onPreGen(universe_);
 
     universe_.nextGeneration(back_);

@@ -29,6 +29,7 @@ private:
   const float MAX_CELL_SIZE = 20.f;
   const float MIN_CELL_SIZE = 1.f;
   const float BORN_RATE = 0.1f;
+  const std::chrono::seconds REFRESH_TIME = 300;
 
   bool suspend_;
   bool dragging_;

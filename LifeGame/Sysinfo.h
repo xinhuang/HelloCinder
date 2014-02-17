@@ -12,6 +12,7 @@ class Sysinfo {
   size_t startSize_ = 0;
   const size_t MAX_GEN_COST = 10;
   std::chrono::steady_clock::time_point begin_;
+  std::chrono::steady_clock::time_point systemStart_;
   mutable std::deque<std::chrono::milliseconds> costs_;
 
 public:
@@ -27,9 +28,15 @@ public:
       std::chrono::duration_cast<std::chrono::milliseconds>(now - begin_));
   }
 
+  std::chrono::seconds elapsed() const {
+    auto now = std::chrono::steady_clock::now();
+    return std::chrono::duration_cast<std::chrono::seconds>(now - systemStart_);
+  }
+
   void init(const Universe& u) {
     ngen_ = 0;
     startSize_ = u.size();
+    systemStart_ = std::chrono::steady_clock::now();
   }
 
   std::string msg() const {
