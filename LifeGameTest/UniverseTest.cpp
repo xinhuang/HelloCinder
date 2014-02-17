@@ -134,9 +134,18 @@ TEST(UniverseTests, glider) {
   Universe next;
   origin.nextGeneration(next);
 
-  ASSERT_TRUE(next.alive({ 1, 0 }));
-  ASSERT_TRUE(next.alive({ 1, 2 }));
-  ASSERT_TRUE(next.alive({ 2, 1 }));
-  ASSERT_TRUE(next.alive({ 2, 2 }));
-  ASSERT_TRUE(next.alive({ 3, 1 }));
+  for (const auto& c : next) {
+    if (c.pos() == Point{ 1, 0 })
+      ASSERT_FALSE(c.isDead());
+    else if (c.pos() == Point{ 1, 2 })
+      ASSERT_FALSE(c.isDead());
+    else if (c.pos() == Point{ 2, 1 })
+      ASSERT_FALSE(c.isDead());
+    else if (c.pos() == Point{ 2, 2 })
+      ASSERT_FALSE(c.isDead());
+    else if (c.pos() == Point{ 3, 1 })
+      ASSERT_FALSE(c.isDead());
+    else
+      ASSERT_TRUE(c.isDead());
+  }
 }
