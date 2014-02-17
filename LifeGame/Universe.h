@@ -30,14 +30,8 @@ public:
   bool isSilent() const;
   const Cell &operator[](const Point &pos) const;
 
-  void add(const Cell &cell);
-  void add(const Point &pos, CellState state) {
-    add(Cell{ pos, state });
-  }
-  void addn(const Cell& cell);
-  void addn(const Point &pos, CellState state) {
-    addn(Cell{ pos, state });
-  }
+  void add(const Point &pos, CellState state);
+  void addn(const Point &pos, CellState state);
 
   void nextGeneration(Universe& u) const;
 
@@ -99,13 +93,13 @@ public:
   const_iterator end() const { return const_iterator(cells_).end(); }
 
 private:
-  std::vector<Point> neighbors(const Point &pos) const;
-  std::vector<Cell> neighborCells(const Cell &pos) const;
-  void createIfNonexists(const Point &p);
-  bool Universe::tryAdd(const Cell& c);
-  bool Universe::tryAdd(int x, int y) {
-    return tryAdd({ x, y });
-  }
+  auto erase(const Point& c) ->
+#if defined CONCURRENT_GENERATION
+    decltype(container_t().unsafe_erase(c))
+#else
+    decltype(container_t().erase(c))
+#endif
+    ;
   void sequentialNextGeneration(Universe& u) const;
   void parallelNextGeneration(Universe& u) const;
 

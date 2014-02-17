@@ -14,29 +14,48 @@ bool Universe::isSilent() const {
   return true;
 }
 
-void Universe::add(const Cell &cell) {
-  auto r = cells_.insert(cell);
-  if (!r.second) {
-#if defined CONCURRENT_GENERATION
-    cells_.unsafe_erase(r.first);
-#else
-    cells_.erase(r.first);
-#endif
-    cells_.insert(cell);
-  }
-}
-
-void Universe::addn(const Cell &cell) {
-  add(cell);
-  if (cell.isDead())
+void Universe::add(const Point &p, CellState s) {
+  if (s == CellState::DEAD) {
+    cells_.insert({ p, s });
     return;
-  for (const auto &n : neighbors(cell.pos())) {
-    tryAdd(Cell(n, CellState::DEAD));
   }
+
+  bool r;
+  do {
+    r = cells_.insert({ p, s }).second;
+    if (!r)
+      erase(p);
+  } while (!r);
 }
 
-void Universe::createIfNonexists(const Point &p) {
-  cells_.insert({ p });
+void Universe::addn(const Point &pos, CellState state) {
+  add(pos, state);
+  if (state == CellState::DEAD)
+    return;
+  add({ pos.x - 1, pos.y - 1 }, CellState::DEAD);
+  add({ pos.x, pos.y - 1 }, CellState::DEAD);
+  add({ pos.x + 1, pos.y - 1 }, CellState::DEAD);
+
+  add({ pos.x - 1, pos.y }, CellState::DEAD);
+  add({ pos.x + 1, pos.y }, CellState::DEAD);
+
+  add({ pos.x - 1, pos.y + 1 }, CellState::DEAD);
+  add({ pos.x, pos.y + 1 }, CellState::DEAD);
+  add({ pos.x + 1, pos.y + 1 }, CellState::DEAD);
+}
+
+auto Universe::erase(const Point& c) ->
+#if defined CONCURRENT_GENERATION
+decltype(container_t().unsafe_erase(c))
+#else
+decltype(container_t().erase(c))
+#endif 
+{
+#if defined CONCURRENT_GENERATION
+  return cells_.unsafe_erase(c);
+#else
+  return cells_.erase(c);
+#endif
 }
 
 void Universe::nextGeneration(Universe &u) const {
@@ -67,18 +86,7 @@ void Universe::parallelNextGeneration(Universe &u) const {
           (*this)[{ pos.x + 1, pos.y - 1 }], (*this)[{ pos.x + 1, pos.y }],
           (*this)[{ pos.x + 1, pos.y + 1 }]);
       if (!nextCell.isDead()) {
-        u.add(nextCell);
-
-        u.tryAdd(pos.x - 1, pos.y - 1);
-        u.tryAdd(pos.x, pos.y - 1);
-        u.tryAdd(pos.x + 1, pos.y - 1);
-
-        u.tryAdd(pos.x - 1, pos.y);
-        u.tryAdd(pos.x + 1, pos.y);
-
-        u.tryAdd(pos.x - 1, pos.y + 1);
-        u.tryAdd(pos.x, pos.y + 1);
-        u.tryAdd(pos.x + 1, pos.y + 1);
+        u.addn(pos, nextCell.state());
       }
       ++iter;
     }
@@ -89,8 +97,9 @@ void Universe::parallelNextGeneration(Universe &u) const {
     fs.push_back(async(generate, trunk));
   generate(nTrunk - 1);
 
-  for (auto &f : fs)
-    f.wait();
+  for (auto &f : fs) {
+    f.get();
+  }
 }
 
 void Universe::sequentialNextGeneration(Universe &u) const {
@@ -103,7 +112,7 @@ void Universe::sequentialNextGeneration(Universe &u) const {
         (*this)[{ pos.x, pos.y + 1 }], (*this)[{ pos.x + 1, pos.y - 1 }],
         (*this)[{ pos.x + 1, pos.y }], (*this)[{ pos.x + 1, pos.y + 1 }]);
     if (!nextCell.isDead()) {
-      u.add(nextCell);
+      u.add(pos, nextCell.state());
     }
   }
 
@@ -131,35 +140,7 @@ void Universe::sequentialNextGeneration(Universe &u) const {
   }
 
   for (const auto &c : toAdd)
-    u.add(c);
-}
-
-bool Universe::tryAdd(const Cell &c) {
-  if (contains(c))
-    return false;
-  cells_.insert(c);
-  return true;
-}
-
-vector<Point> Universe::neighbors(const Point &pos) const {
-  return { { pos.x - 1, pos.y - 1 },
-           { pos.x - 1, pos.y },
-           { pos.x - 1, pos.y + 1 },
-           { pos.x, pos.y - 1 },
-           { pos.x, pos.y + 1 },
-           { pos.x + 1, pos.y - 1 },
-           { pos.x + 1, pos.y },
-           { pos.x + 1, pos.y + 1 }, };
-}
-
-vector<Cell> Universe::neighborCells(const Cell &cell) const {
-  const auto &pos = cell.pos();
-  return {
-    (*this)[{ pos.x - 1, pos.y - 1 }], (*this)[{ pos.x - 1, pos.y }],
-    (*this)[{ pos.x - 1, pos.y + 1 }], (*this)[{ pos.x, pos.y - 1 }],
-    (*this)[{ pos.x, pos.y + 1 }],     (*this)[{ pos.x + 1, pos.y - 1 }],
-    (*this)[{ pos.x + 1, pos.y }],     (*this)[{ pos.x + 1, pos.y + 1 }],
-  };
+    u.add(c.pos(), c.state());
 }
 
 const Cell &Universe::operator[](const Point &pos) const {
@@ -229,7 +210,7 @@ istream &operator>>(istream &is, Universe &u) {
   while (getline(is, s)) {
     int x = 0;
     for (const auto &c : s) {
-      u.add({ { x++, y }, CellState::ALIVE });
+      u.add({ x++, y }, CellState::ALIVE);
     }
     ++y;
   }
