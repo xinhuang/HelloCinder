@@ -20,12 +20,9 @@ void Universe::add(const Point &p, CellState s) {
     return;
   }
 
-  bool r;
-  do {
-    r = cells_.insert({ p, s }).second;
-    if (!r)
-      erase(p);
-  } while (!r);
+  auto r = cells_.insert({ p, s });
+  if (!r.second)
+    r.first->setState(s);
 }
 
 void Universe::addn(const Point &pos, CellState state) {

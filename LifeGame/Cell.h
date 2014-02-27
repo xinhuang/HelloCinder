@@ -47,14 +47,14 @@ public:
 
   bool isDead() const { return state_ == CellState::DEAD; }
   CellState state() const { return state_; }
-  void setState(CellState s) { state_ = s; }
+  void setState(CellState s) const { state_ = s; }
   const Point &pos() const { return pos_; }
 
   static const Cell DEAD_CELL;
 
 private:
   Point pos_;
-  CellState state_;
+  mutable CellState state_;
 };
 
 inline bool operator==(const Cell &lhs, const Cell &rhs) {

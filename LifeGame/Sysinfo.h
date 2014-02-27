@@ -36,6 +36,7 @@ public:
   void init(const Universe& u) {
     ngen_ = 0;
     startSize_ = u.size();
+    size_ = startSize_;
     systemStart_ = std::chrono::steady_clock::now();
   }
 

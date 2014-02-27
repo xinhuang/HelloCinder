@@ -21,6 +21,8 @@ class Universe {
 public:
   Universe() {}
   Universe(const Universe &u) : rule_(u.rule_), cells_(u.cells_) {}
+  Universe(Universe &&u) : rule_(std::move(u.rule_)), cells_(std::move(u.cells_)) {}
+
   Universe &operator=(Universe &&v) {
     rule_ = std::move(v.rule_);
     cells_ = std::move(v.cells_);
