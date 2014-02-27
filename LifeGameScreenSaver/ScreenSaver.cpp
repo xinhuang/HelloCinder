@@ -9,6 +9,7 @@
 #include <string>
 #include <map>
 #include <random>
+
 #include "ScreenSaver.h"
 
 #include <cinder/cinder.h>
@@ -22,8 +23,7 @@ using namespace ci::gl;
 
 using namespace std;
 
-ScreenSaver::ScreenSaver()
-    : suspend_{ false }, cellSize_(INIT_CELL_SIZE), dragging_(false) {
+ScreenSaver::ScreenSaver() {
   auto engine = mt19937{ random_device()() };
   rand_ = [=](int range) mutable {
     auto idist = uniform_int_distribution<int>(0, range);
@@ -33,7 +33,6 @@ ScreenSaver::ScreenSaver()
 
 void ScreenSaver::setup() {
   font_ = TextureFont::create(Font("Consolas", 20));
-  cellSize_ = 2.f;
   universe_ = bigBang();
   sysinfo_.init(universe_);
 }
@@ -51,11 +50,10 @@ void ScreenSaver::draw() {
 }
 
 void ScreenSaver::update() {
-  if (!suspend_) {
-    if (sysinfo_.elapsed() >= REFRESH_TIME) {
-      universe_ = bigBang();
-      sysinfo_.init(universe_);
-    }
+  if (sysinfo_.elapsed() >= REFRESH_TIME) {
+    universe_ = bigBang();
+    sysinfo_.init(universe_);
+  } else {
     sysinfo_.onPreGen(universe_);
 
     universe_.nextGeneration(back_);
@@ -71,17 +69,7 @@ Color ScreenSaver::color(const Cell &cell) const {
 }
 
 Universe ScreenSaver::bigBang() const {
-  Universe u;
-  int offsetx = 0;
-  int offsety = 0;
-  int width = (int)(getWindowWidth() / cellSize_ - offsetx * 2);
-  int height = (int)(getWindowHeight() / cellSize_ - offsety * 2);
-  for (int i = 0; i < width * height * BORN_RATE; ++i) {
-    int x = offsetx + rand_(width);
-    int y = offsety + rand_(height);
-    u.addn({ x, y }, CellState::ALIVE);
-  }
-  return u;
+  return Universe::bigBang(getWindowWidth(), getWindowHeight(), BIRTH_RATE, rand_);
 }
 
 CINDER_APP_SCREENSAVER(ScreenSaver, RendererGl)

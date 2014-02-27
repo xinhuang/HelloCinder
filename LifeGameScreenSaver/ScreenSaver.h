@@ -24,16 +24,10 @@ private:
   Universe bigBang() const;
 
 private:
-  const int SCROLL_LINES = 3;
-  const float INIT_CELL_SIZE = 5.f;
-  const float MAX_CELL_SIZE = 20.f;
-  const float MIN_CELL_SIZE = 1.f;
-  const float BORN_RATE = 0.1f;
+  const float BIRTH_RATE = 0.1f;
   const std::chrono::seconds REFRESH_TIME = 300;
 
-  bool suspend_;
-  bool dragging_;
-  float cellSize_;
+  float cellSize_ = 2.f;
   Sysinfo sysinfo_;
   ci::gl::TextureFontRef font_;
   std::function<int(int range)> rand_;
