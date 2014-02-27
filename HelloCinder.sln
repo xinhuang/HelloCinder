@@ -24,6 +24,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LifeGameBenchmark", "LifeGa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LifeGameScreenSaver", "LifeGameScreenSaver\LifeGameScreenSaver.vcxproj", "{C89776CC-FBD4-421F-9B75-754E35166C87}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetworkX", "NetworkX\NetworkX.vcxproj", "{D983AAD6-06EC-4C59-8AC7-CDFB9C0B3CF8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -66,6 +68,10 @@ Global
 		{C89776CC-FBD4-421F-9B75-754E35166C87}.Debug|Win32.Build.0 = Debug|Win32
 		{C89776CC-FBD4-421F-9B75-754E35166C87}.Release|Win32.ActiveCfg = Release|Win32
 		{C89776CC-FBD4-421F-9B75-754E35166C87}.Release|Win32.Build.0 = Release|Win32
+		{D983AAD6-06EC-4C59-8AC7-CDFB9C0B3CF8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D983AAD6-06EC-4C59-8AC7-CDFB9C0B3CF8}.Debug|Win32.Build.0 = Debug|Win32
+		{D983AAD6-06EC-4C59-8AC7-CDFB9C0B3CF8}.Release|Win32.ActiveCfg = Release|Win32
+		{D983AAD6-06EC-4C59-8AC7-CDFB9C0B3CF8}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
