@@ -87,11 +87,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Graph.h" />
+    <ClInclude Include="GraphWidget.h" />
     <ClInclude Include="NetworkXApp.h" />
+    <ClInclude Include="Random.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="GraphWidget.cpp" />
     <ClCompile Include="NetworkXApp.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
