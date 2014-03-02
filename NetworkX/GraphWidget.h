@@ -2,8 +2,9 @@
 
 #include <boost/graph/adjacency_list.hpp>
 
-using UndirectedGraph = boost::adjacency_list<
-    boost::vecS, boost::vecS, boost::undirectedS, boost::no_property, boost::no_property>;
+using UndirectedGraph =
+    boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS,
+                          boost::no_property, boost::no_property>;
 
 using EdgeIterator = boost::graph_traits<UndirectedGraph>::edge_iterator;
 using InEdgeIterator = boost::graph_traits<UndirectedGraph>::in_edge_iterator;
@@ -34,12 +35,12 @@ public:
   ~GraphWidget();
 
   void update();
-  const ci::gl::Texture &render(const ci::Vec2i& offset = {}) const;
+  const ci::gl::Texture &render(const ci::Vec2i &offset = {}) const;
 
   int width() const;
   int height() const;
 
-  void setSize(const ci::Vec2i& size);
+  void setSize(const ci::Vec2i &size);
 
   UndirectedGraph &graph();
 
@@ -48,8 +49,5 @@ private:
   std::unique_ptr<Data> d;
 
   const int M = 100;
-  const float C1 = 2.;
-  const float C2 = 50.;
-  const float C3 = 1;
-  const float C4 = 0.1f;
+  const float VERTEX_RADIUS = 5.f;
 };

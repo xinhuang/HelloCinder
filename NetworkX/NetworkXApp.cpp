@@ -70,7 +70,8 @@ void NetworkXApp::draw() {
 
 void NetworkXApp::keyUp(KeyEvent e) {
   switch (e.getCode()) {
-  case KeyEvent::KEY_a:
+  case KeyEvent::KEY_ESCAPE:
+    quit();
     break;
   }
 }

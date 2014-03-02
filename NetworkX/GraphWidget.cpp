@@ -6,9 +6,9 @@ using namespace ci;
 using namespace boost;
 
 #include <utility>
-#include <unordered_map>
 #include <cassert>
 #include <random>
+#include <unordered_map>
 
 using namespace std;
 
@@ -16,15 +16,99 @@ using namespace std;
 
 struct Vertex {
   Vertex() {}
-  Vertex(const Vec2f &pos) : pos_(pos) {}
+  Vertex(const ci::Vec2f &pos) : pos_(pos) {}
 
   Vertex(const Vertex &v) : pos_(v.pos_), disp_(v.disp_) {}
   Vertex(const Vertex &&v) NOEXCEPT : pos_(std::move(v.pos_)),
                                       disp_(std::move(v.disp_)) {}
 
-  Vec2f pos_;
-  Vec2f disp_;
+  ci::Vec2f pos_;
+  ci::Vec2f disp_;
 };
+
+void spring(const UndirectedGraph &g,
+            std::unordered_map<VertexDescriptor, Vertex> &vertices, int width,
+            int height, int iteration) {
+  if (iteration > 100)
+    return;
+
+  const float C1 = 2.;
+  const float C2 = 50.;
+  const float C3 = 1;
+  const float C4 = 0.1f;
+
+  for (auto &v1 : vertices) {
+    v1.second.disp_ = {};
+    for (const auto &v2 : vertices) {
+      if (v1.first == v2.first)
+        continue;
+      auto distance = v2.second.pos_ - v1.second.pos_;
+      auto length = distance.length();
+      if (length - 0.f < 0.0000001f)
+        length = 1.f;
+      auto r = edge(v1.first, v2.first, g);
+      if (r.second) {
+        v1.second.disp_ += C1 * log10(length / C2) * distance;
+      } else {
+        v1.second.disp_ -= C3 / sqrt(length) * distance;
+      }
+    }
+  }
+
+  for (auto &v : vertices) {
+    auto old = v.second.pos_;
+    v.second.pos_ += C4 * v.second.disp_.normalized() * v.second.disp_.length();
+    if (v.second.pos_.x < 0 || v.second.pos_.x > width)
+      v.second.pos_.x = old.x;
+    if (v.second.pos_.y < 0 || v.second.pos_.y > height)
+      v.second.pos_.y = old.y;
+  }
+}
+
+void
+fruchtermanReingold(const UndirectedGraph &g,
+                    std::unordered_map<VertexDescriptor, Vertex> &vertices, int width, int height, int iteration) {
+  if (iteration > 100)
+    return;
+
+  float k = width * height / static_cast<float>(vertices.size());
+  auto fr = [=](float x) { return k / x; };
+  auto sqrt_k = sqrt(k);
+  auto fa = [=](float x) { return x * x / sqrt_k; };
+  
+  for (auto &v1 : vertices) {
+    v1.second.disp_ = {};
+    for (const auto &v2 : vertices) {
+      if (v1.first == v2.first)
+        continue;
+      auto distance = v2.second.pos_ - v1.second.pos_;
+      auto length = distance.length();
+      Vec2f normalized{
+        distance.x / length, distance.y / length
+      }; // distance.normalized() will calculate length again.
+      v1.second.disp_ -= normalized * fr(length);
+    }
+  }
+
+  for (auto e = edges(g).first; e != edges(g).second; ++e) {
+    auto ud = source(*e, g);
+    auto vd = target(*e, g);
+    assert(vertices.find(ud) != vertices.end());
+    assert(vertices.find(vd) != vertices.end());
+    auto& u = vertices[ud];
+    auto& v = vertices[vd];
+    auto distance = v.pos_ - u.pos_;
+    u.disp_ += distance.normalized() / fa(distance.length());
+    v.disp_ -= distance.normalized() / fa(distance.length());
+  }
+
+  auto temp = 10.f / iteration;
+  for (auto &v : vertices) {
+    v.second.pos_ += v.second.disp_.normalized() * min(v.second.disp_.length(), temp);
+    v.second.pos_.x = min(static_cast<float>(width), max(0.f, v.second.pos_.x));
+    v.second.pos_.y = min(static_cast<float>(height), max(0.f, v.second.pos_.y));
+  }
+}
 
 struct GraphWidget::Data {
   Data() {}
@@ -69,45 +153,21 @@ int GraphWidget::width() const { return d->fbo_.getWidth(); }
 int GraphWidget::height() const { return d->fbo_.getHeight(); }
 
 void GraphWidget::setSize(const Vec2i &size) {
+  if (size == d->fbo_.getSize())
+    return;
   d->fbo_ = gl::Fbo(size.x, size.y);
   d->fbo_updated_ = false;
+  d->i_ = 0;
 }
 
 UndirectedGraph &GraphWidget::graph() { return d->g_; }
 
 void GraphWidget::update() {
-  // if (d->i_ > M)
-  //  return;
   ++d->i_;
   d->fbo_updated_ = false;
 
-  for (auto &v1 : d->vertices_) {
-    v1.second.disp_ = {};
-    for (const auto &v2 : d->vertices_) {
-      if (v1.first == v2.first)
-        continue;
-      auto distance = v2.second.pos_ - v1.second.pos_;
-      auto length = distance.length();
-      if (length - 0.f < 0.0000001f)
-        length = 1.f;
-      auto r = edge(v1.first, v2.first, d->g_);
-      if (r.second) {
-        v1.second.disp_ += C1 * log10(length / C2) * distance;
-      } else {
-        // if (length < 30.f)
-        v1.second.disp_ -= C3 / sqrt(length) * distance;
-      }
-    }
-  }
-
-  for (auto &v : d->vertices_) {
-    auto old = v.second.pos_;
-    v.second.pos_ += C4 * v.second.disp_;
-    if (v.second.pos_.x < 0 || v.second.pos_.x > d->fbo_.getWidth())
-      v.second.pos_.x = old.x;
-    if (v.second.pos_.y < 0 || v.second.pos_.y > d->fbo_.getHeight())
-      v.second.pos_.y = old.y;
-  }
+  //spring(d->g_, d->vertices_, width(), height(), d->i_);
+  fruchtermanReingold(d->g_, d->vertices_, width(), height(), d->i_);
 }
 
 const gl::Texture &GraphWidget::render(const ci::Vec2i &offset) const {
@@ -134,7 +194,7 @@ const gl::Texture &GraphWidget::render(const ci::Vec2i &offset) const {
 
   gl::color(Color::white());
   for (const auto &v : d->vertices_) {
-    gl::drawSolidCircle(v.second.pos_ + offset, 2.f);
+    gl::drawSolidCircle(v.second.pos_ + offset, VERTEX_RADIUS);
   }
 
   d->fbo_.unbindFramebuffer();
