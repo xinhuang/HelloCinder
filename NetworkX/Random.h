@@ -4,17 +4,9 @@
 #include <type_traits>
 
 template <typename T> struct distribution_traits {
-  template <typename T>
-  static typename std::enable_if<std::is_integral<T>::value,
-                          std::uniform_int_distribution<T> >::type
-  dist();
-
-  template <typename T>
-  static typename std::enable_if<std::is_floating_point<T>::value,
-                          std::uniform_real_distribution<T> >::type
-  dist();
-
-  using type = decltype(dist<T>());
+  using type = typename std::conditional<
+      std::is_integral<T>::value, std::uniform_int_distribution<T>,
+      std::uniform_real_distribution<T> >::type;
 };
 
 class Random {
