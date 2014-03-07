@@ -1,116 +1,49 @@
 #pragma once
 
-#include "Cell.h"
 #include "Rule.h"
 
-#include <unordered_set>
-#include <functional>
-#include <iostream>
-#include <functional>
-#include <mutex>
+#include <memory>
 
-#include <concurrent_unordered_set.h>
+#include <cinder/gl/Texture.h>
+
+#include <iosfwd>
+
+struct Point;
 
 class Universe {
-#if defined CONCURRENT_GENERATION
-  using container_t = concurrency::concurrent_unordered_set<Cell, hash<Cell> >;
-#else
-  using container_t = std::unordered_set<Cell, hash<Cell> >;
-#endif
-
 public:
-  Universe() {}
-  Universe(const Universe &u) : rule_(u.rule_), cells_(u.cells_) {}
-  Universe(Universe &&u) : rule_(std::move(u.rule_)), cells_(std::move(u.cells_)) {}
+  Universe();
+  Universe(int width, int height);
+  Universe(Universe &&u);
+  Universe &operator=(Universe &&u);
 
-  Universe &operator=(Universe &&v) {
-    rule_ = std::move(v.rule_);
-    cells_ = std::move(v.cells_);
-    return *this;
-  }
+  ~Universe();
 
-  bool isSilent() const;
-  const Cell &operator[](const Point &pos) const;
+  int size() const;
 
-  void add(const Point &pos, CellState state);
-  void addn(const Point &pos, CellState state);
+  ci::gl::Texture texture();
 
-  void nextGeneration(Universe& u) const;
+  void add(const ci::Vec2i &p, CellState s) {}
 
-  static Universe bigBang(int width, int height, double rate, const std::function<int(int)>& rand);
-  static Universe glider();
+  bool isSilent() const { return true; }
 
-  bool contains(const Cell& cell) const { return cells_.find(cell) != cells_.end(); }
-  bool alive(const Point &pt) const { return !(*this)[pt].isDead(); }
-  size_t size() const { return cells_.size(); }
+  void next(Universe &u);
 
-  void clear() { cells_.clear(); }
-  void swap(Universe& u) { cells_.swap(u.cells_); }
+  bool operator[](const ci::Vec2i &p) const { return false; }
+  bool operator[](const Point &p) const { return (*this)[ci::Vec2i(p.x, p.y)]; }
 
-  class const_iterator {
-  public:
-    const_iterator(const container_t &container) : container_(container) {
-      pointer_ = container_.begin();
-      while (pointer_ != container_.end() && pointer_->isDead()) {
-        ++pointer_;
-      }
-    }
-
-    const_iterator(const const_iterator &v)
-        : container_(v.container_), pointer_(v.pointer_) {}
-
-    const_iterator operator++() {
-      ++pointer_;
-      while (pointer_ != container_.end() && pointer_->isDead()) {
-        ++pointer_;
-      }
-      return *this;
-    }
-
-    friend bool operator!=(const const_iterator &lhs,
-                           const const_iterator &rhs) {
-      return lhs.pointer_ != rhs.pointer_;
-    }
-
-    Cell operator*() const { return *pointer_; }
-    const Cell* operator->() const { return &*pointer_; }
-
-    const_iterator end() const {
-      return const_iterator{ container_, container_.end() };
-    }
-
-  private:
-    const_iterator(const container_t &container,
-                   const container_t::const_iterator &iterator)
-        : container_(container), pointer_(iterator) {}
-
-  private:
-    const container_t &container_;
-    container_t::const_iterator pointer_;
-  };
-
-  const_iterator begin() const {
-    return { cells_ };
-  }
-  const_iterator end() const { return const_iterator(cells_).end(); }
+  void add(const Point &p);
+  void addn(const Point &p) { add(p); }
 
 private:
-  auto erase(const Point& c) ->
-#if defined CONCURRENT_GENERATION
-    decltype(container_t().unsafe_erase(c))
-#else
-    decltype(container_t().erase(c))
-#endif
-    ;
-  void sequentialNextGeneration(Universe& u) const;
-  void parallelNextGeneration(Universe& u) const;
+  Universe(const Universe& u);
+  Universe& operator=(Universe& u);
 
-private:
-  Rule rule_;
-  container_t cells_;
+  int width() const;
+  int height() const;
+
+  struct Data;
+  std::unique_ptr<Data> d;
 };
 
-bool operator==(const Universe &lhs, const Universe &rhs);
-
-std::ostream& operator<<(std::ostream& os, const Universe& u);
-std::istream& operator>>(std::istream& is, Universe& u);
+std::ostream &operator<<(std::ostream &os, const Universe &u);

@@ -7,9 +7,18 @@
 #include <functional>
 #include <deque>
 #include <chrono>
+#include <memory>
 
 #include "Universe.h"
 #include "Sysinfo.h"
+
+namespace GameConfig {
+  const float INIT_CELL_SIZE = 5.f;
+  const int SCROLL_LINES = 3;
+  const float MAX_CELL_SIZE = 20.f;
+  const float MIN_CELL_SIZE = 1.f;
+  const float BORN_RATE = 0.2f;
+}
 
 class LifeGame : public ci::app::AppBasic {
 public:
@@ -33,20 +42,6 @@ private:
   void zoom(float scale);
 
 private:
-  const int SCROLL_LINES = 3;
-  const float INIT_CELL_SIZE = 5.f;
-  const float MAX_CELL_SIZE = 20.f;
-  const float MIN_CELL_SIZE = 1.f;
-  const float BORN_RATE = 0.2f;
-
-  bool suspend_;
-  bool dragging_;
-  float cellSize_;
-  Sysinfo sysinfo_;
-  ci::gl::TextureFontRef font_;
-  std::function<int(int range)> rand_;
-  ci::Vec2f offset_;
-  ci::Vec2f mouseDownOffset_;
-  Universe universe_;
-  Universe back_;
+  struct Data;
+  std::unique_ptr<Data> d;
 };

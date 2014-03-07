@@ -27,8 +27,8 @@ TEST(UniverseTests, survive_if_2_neighbors) {
   Universe now;
   sut.nextGeneration(now);
 
-  auto cell = now[{ 0, 1 }];
-  ASSERT_FALSE(cell.isDead());
+  auto alive = now[{ 0, 1 }];
+  ASSERT_TRUE(alive);
 }
 
 TEST(UniverseTests, birth_if_3_neighbors) {
@@ -61,21 +61,6 @@ TEST(UniverseTests, square_is_a_stable_pattern) {
   expect.add({ 4, 4 }, CellState::DEAD);
 
   ASSERT_TRUE(expect.isSilent());
-}
-
-TEST(UniverseTests, iterator_should_only_traverse_alive_cells) {
-  Universe sut;
-  sut.add({ 0, 0 }, CellState::ALIVE);
-  sut.add({ 0, 1 }, CellState::ALIVE);
-  sut.add({ 0, 2 }, CellState::ALIVE);
-  set<Point> expect{ { 0, 0 }, { 0, 1 }, { 0, 2 } };
-
-  set<Point> locations;
-  for (const auto &cell : sut) {
-    ASSERT_FALSE(cell.isDead());
-    locations.insert(cell.pos());
-  }
-  ASSERT_EQ(expect, locations);
 }
 
 TEST(UniverseTests, empty_university_should_equal) {

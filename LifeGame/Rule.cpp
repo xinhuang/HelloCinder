@@ -48,3 +48,31 @@ Cell Rule::nextGeneration(Cell cell, const Cell &n0, const Cell &n1,
   cell.setState(CellState::DEAD);
   return cell;
 }
+
+bool Rule::nextGeneration(bool cur, bool n0, bool n1, bool n2, bool n3, bool n4,
+                          bool n5, bool n6, bool n7) const {
+  int count = 0;
+  if (n0)
+    ++count;
+  if (n1)
+    ++count;
+  if (n2)
+    ++count;
+  if (n3)
+    ++count;
+  if (n4)
+    ++count;
+  if (n5)
+    ++count;
+  if (n6)
+    ++count;
+  if (n7)
+    ++count;
+  if (count == 2)
+    return cur;
+  else if (count == 3)
+    cur = true;
+  else
+    cur = false;
+  return cur;
+}
