@@ -46,9 +46,6 @@ void LifeGame::setup() {
 }
 
 void LifeGame::draw() {
-  static bool temp = false;
-  if (temp) return;
-  //gl::clear();
   gl::draw(d->now_.texture(), getWindowBounds());
   d->font_->drawString(d->sysinfo_.msg(), getWindowBounds());
 }

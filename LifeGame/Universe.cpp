@@ -67,11 +67,14 @@ void Universe::next(Universe &u) {
 
   fill(dest, dest + cbDestRow * bounds.getHeight(), 0x00);
 
-  for (int r = 1; r < bounds.getHeight() - 1; ++r) {
-    for (int c = 1; c < bounds.getWidth() - 1; ++c) {
+  auto& rule = d->rule_;
+  auto height = bounds.getHeight() - 1;
+  auto width = bounds.getWidth() - 1;
+  for (int r = 1; r < height; ++r) {
+    for (int c = 1; c < width; ++c) {
       auto pixel = dest + r * cbDestRow + cbDestInc * c;
       auto srcpixel = src + r * cbDestRow + cbDestInc * c;
-      if (d->rule_.nextGeneration(
+      if (rule.nextGeneration(
               *srcpixel, *(srcpixel - cbSrcRow - cbSrcInc),
               *(srcpixel - cbSrcRow), *(srcpixel - cbSrcRow + cbSrcInc),
               *(srcpixel - cbSrcInc), *(srcpixel + cbSrcInc),
