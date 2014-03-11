@@ -65,21 +65,31 @@ void Universe::next(Universe &u) {
   auto cbDestRow = u.d->channel_.getRowBytes();
   auto cbDestInc = u.d->channel_.getIncrement();
 
-  fill(dest, dest + cbDestRow * bounds.getHeight(), 0x00);
+  auto height = bounds.getHeight();
+  auto width = bounds.getWidth();
 
-  auto& rule = d->rule_;
-  auto height = bounds.getHeight() - 1;
-  auto width = bounds.getWidth() - 1;
-  for (int r = 1; r < height; ++r) {
-    for (int c = 1; c < width; ++c) {
+  for (int r = 0; r < height; ++r) {
+    *(dest + r *cbDestRow) = 0x00;
+    *(dest + r *cbDestRow + (width - 1) *cbDestInc) = 0x00;
+  }
+  fill(dest, dest + (width - 1) * cbDestInc, 0x00);
+  fill(dest + (height - 1) * cbDestRow,
+       dest + (height - 1) * cbDestRow + (width - 1) * cbDestInc, 0x00);
+
+  auto &rule = d->rule_;
+#pragma omp parallel for
+  for (int r = 1; r < height - 1; ++r) {
+    for (int c = 1; c < width - 1; ++c) {
       auto pixel = dest + r * cbDestRow + cbDestInc * c;
       auto srcpixel = src + r * cbDestRow + cbDestInc * c;
       if (rule.nextGeneration(
-              *srcpixel, *(srcpixel - cbSrcRow - cbSrcInc),
-              *(srcpixel - cbSrcRow), *(srcpixel - cbSrcRow + cbSrcInc),
-              *(srcpixel - cbSrcInc), *(srcpixel + cbSrcInc),
-              *(srcpixel + cbSrcRow - cbSrcInc), *(srcpixel + cbSrcRow),
-              *(srcpixel + cbSrcRow + cbSrcInc))) {
+              *srcpixel != 0, *(srcpixel - cbSrcRow - cbSrcInc) != 0,
+              *(srcpixel - cbSrcRow) != 0,
+              *(srcpixel - cbSrcRow + cbSrcInc) != 0,
+              *(srcpixel - cbSrcInc) != 0, *(srcpixel + cbSrcInc) != 0,
+              *(srcpixel + cbSrcRow - cbSrcInc) != 0,
+              *(srcpixel + cbSrcRow) != 0,
+              *(srcpixel + cbSrcRow + cbSrcInc) != 0)) {
         *pixel = 0xFF;
       } else {
         *pixel = 0x00;
