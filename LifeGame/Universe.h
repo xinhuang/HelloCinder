@@ -35,6 +35,8 @@ public:
   void add(const Point &p);
   void addn(const Point &p) { add(p); }
 
+  static Universe bigBang(int width, int height);
+
 private:
   Universe(const Universe& u);
   Universe& operator=(Universe& u);

@@ -2,6 +2,7 @@
 #include "LifeGame.h"
 
 #include "Universe.h"
+#include "GameConfig.h"
 
 #include <cinder/cinder.h>
 
@@ -10,6 +11,8 @@ using namespace ci::app;
 using namespace ci::gl;
 
 using namespace std;
+
+#include <ipp.h>
 
 struct LifeGame::Data {
   Data() {
@@ -43,6 +46,7 @@ LifeGame::LifeGame() : d(make_unique<Data>()) {}
 void LifeGame::setup() {
   d->font_ = TextureFont::create(Font("Consolas", 20));
   d->createUniverse(getWindowWidth(), getWindowHeight());
+  ippInit();
 }
 
 void LifeGame::draw() {
@@ -170,8 +174,8 @@ void LifeGame::zoom(float scale) {
 }
 
 Universe LifeGame::bigBang() const {
-  int width = (int)(getWindowWidth());
-  int height = (int)(getWindowHeight());
+  int width = getWindowWidth();
+  int height = getWindowHeight();
   Universe u(width, height);
   for (int i = 0; i < width * height * GameConfig::BORN_RATE; ++i) {
     int x = d->rand_(width - 1);

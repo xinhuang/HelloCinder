@@ -41,13 +41,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\dependencies\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\dependencies\include;C:\Program Files (x86)\Intel\Composer XE 2013 SP1\ipp\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>..\dependencies\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
     <TargetExt>.scr</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\dependencies\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\dependencies\include;C:\Program Files (x86)\Intel\Composer XE 2013 SP1\ipp\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>..\dependencies\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
     <TargetExt>.scr</TargetExt>
   </PropertyGroup>
@@ -90,6 +90,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\LifeGame\Cell.h" />
+    <ClInclude Include="..\LifeGame\GameConfig.h" />
+    <ClInclude Include="..\LifeGame\Random.h" />
     <ClInclude Include="..\LifeGame\Rule.h" />
     <ClInclude Include="..\LifeGame\stdafx.h" />
     <ClInclude Include="..\LifeGame\Sysinfo.h" />
