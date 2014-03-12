@@ -12,8 +12,27 @@ using namespace std;
 
 using namespace ci;
 
+#ifdef USE_IPP
 #define _IPP_SEQUENTIAL_STATIC
 #include <ipp.h>
+#else
+
+enum IppStatus {
+  ippStsNoErr,
+  ippStsNullPtrErr,
+  ippStsSizeErr,
+  ippStsStepErr,
+};
+
+struct IppiSize {
+  int width, height;
+};
+
+IppStatus ippiAndC_8u_C1R() {
+  return ippStsNoErr;
+}
+
+#endif
 
 #include "Random.h"
 #include "GameConfig.h"
@@ -22,7 +41,6 @@ struct Universe::Data {
   ~Data() {}
 
   Channel channel_;
-  Rule rule_;
 };
 
 Universe::Universe() : d(make_unique<Data>()) {}
@@ -74,35 +92,33 @@ void Universe::next(Universe &u) {
   auto height = bounds.getHeight();
   auto width = bounds.getWidth();
 
-  for (int r = 0; r < height; ++r) {
-    *(dest + r *cbDestRow) = 0x00;
-    *(dest + r *cbDestRow + (width - 1) *cbDestInc) = 0x00;
+  fill(dest, dest + height * cbDestRow, 0);
+
+#define USE_OPENMP
+#if defined USE_OPENMP
+  static const int x[] = { 1, 1, 0, -1, -1, -1, 0, 1, };
+  static const int y[] = { 0, 1, 1, 1, 0, -1, -1, -1, };
+#pragma omp parallel for
+  for (int r = 1; r < height - 1; ++r) {
+    for (int c = 1; c < width - 1; ++c) {
+      auto pixel = dest + r * cbDestRow + cbDestInc * c;
+      auto srcpixel = src + r * cbSrcRow + cbSrcInc * c;
+      *pixel = 0;
+      for (int i = 0; i < 8; ++i) {
+        auto ptr = srcpixel + x[i] * cbSrcInc + y[i] * cbSrcRow;
+        if (*ptr > 0)
+          ++*pixel;
+      }
+      if (*pixel == 3)
+        *pixel = 0xFF;
+      else if (*pixel == 2)
+        *pixel = *srcpixel;
+      else
+        *pixel = 0x00;
+    }
   }
-  fill(dest, dest + (width - 1) * cbDestInc, 0x00);
-  fill(dest + (height - 1) * cbDestRow,
-       dest + (height - 1) * cbDestRow + (width - 1) * cbDestInc, 0x00);
 
-//  auto &rule = d->rule_;
-//#pragma omp parallel for
-//  for (int r = 1; r < height - 1; ++r) {
-//    for (int c = 1; c < width - 1; ++c) {
-//      auto pixel = dest + r * cbDestRow + cbDestInc * c;
-//      auto srcpixel = src + r * cbDestRow + cbDestInc * c;
-//      if (rule.nextGeneration(
-//              *srcpixel != 0, *(srcpixel - cbSrcRow - cbSrcInc) != 0,
-//              *(srcpixel - cbSrcRow) != 0,
-//              *(srcpixel - cbSrcRow + cbSrcInc) != 0,
-//              *(srcpixel - cbSrcInc) != 0, *(srcpixel + cbSrcInc) != 0,
-//              *(srcpixel + cbSrcRow - cbSrcInc) != 0,
-//              *(srcpixel + cbSrcRow) != 0,
-//              *(srcpixel + cbSrcRow + cbSrcInc) != 0)) {
-//        *pixel = 0xFF;
-//      } else {
-//        *pixel = 0x00;
-//      }
-//    }
-//  }
-
+#else
   const auto stride = cbSrcRow;
   IppiSize roi = { stride - 2, height - 2 };
 
@@ -140,13 +156,14 @@ void Universe::next(Universe &u) {
   //ippiRGBToGray_8u_C3C1R(dest, stride, dest, stride, { width, height });
 
   ippsFree(temp);
+#endif
 }
 
 int Universe::width() const { return d->channel_.getWidth(); }
 
 int Universe::height() const { return d->channel_.getHeight(); }
 
-void Universe::add(const Point &p) {
+void Universe::add(const Vec2i &p) {
   assert(p.x < width() && p.x >= 0);
   assert(p.y < height() && p.y >= 0);
   d->channel_.setValue({ p.x, p.y }, 0xFF);
@@ -157,7 +174,7 @@ Universe Universe::bigBang(int width, int height) {
   for (int i = 0; i < width * height * GameConfig::BORN_RATE; ++i) {
     int x = Random::next<int>(width - 1);
     int y = Random::next<int>(height - 1);
-    u.addn({ x, y });
+    u.add({ x, y });
   }
   return u;
 }

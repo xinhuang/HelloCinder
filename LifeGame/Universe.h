@@ -1,11 +1,9 @@
 #pragma once
 
-#include "Rule.h"
-
-#include <memory>
 
 #include <cinder/gl/Texture.h>
 
+#include <memory>
 #include <iosfwd>
 
 struct Point;
@@ -23,17 +21,11 @@ public:
 
   ci::gl::Texture texture();
 
-  void add(const ci::Vec2i &p, CellState s) {}
-
   bool isSilent() const { return true; }
 
   void next(Universe &u);
 
-  bool operator[](const ci::Vec2i &p) const { return false; }
-  bool operator[](const Point &p) const { return (*this)[ci::Vec2i(p.x, p.y)]; }
-
-  void add(const Point &p);
-  void addn(const Point &p) { add(p); }
+  void add(const ci::Vec2i &p);
 
   static Universe bigBang(int width, int height);
 

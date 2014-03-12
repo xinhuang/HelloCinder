@@ -28,8 +28,7 @@ public:
   void mouseWheel(ci::app::MouseEvent e) override;
 
 private:
-  Point screenToUniverse(const ci::Vec2i &v) const;
-  ci::Color color(const Cell &cell) const;
+  ci::Vec2i screenToUniverse(const ci::Vec2i &v) const;
   Universe bigBang() const;
   void zoom(float scale);
 

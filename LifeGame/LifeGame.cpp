@@ -3,6 +3,7 @@
 
 #include "Universe.h"
 #include "GameConfig.h"
+#include "Random.h"
 
 #include <cinder/cinder.h>
 
@@ -12,19 +13,15 @@ using namespace ci::gl;
 
 using namespace std;
 
+#ifdef USE_IPP
 #include <ipp.h>
+#else
+void ippInit() {}
+#endif
 
 struct LifeGame::Data {
-  Data() {
-    auto engine = mt19937{ random_device()() };
-    rand_ = [=](int range) mutable {
-      auto idist = uniform_int_distribution<int>(0, range);
-      return idist(engine);
-    };
-  }
-
   void createUniverse(int width, int height) {
-    now_ = Universe(width, height);
+    now_ = Universe::bigBang(width, height);
     next_ = Universe(width, height);
   }
 
@@ -33,7 +30,6 @@ struct LifeGame::Data {
   float cellSize_ = GameConfig::INIT_CELL_SIZE;
   Sysinfo sysinfo_;
   ci::gl::TextureFontRef font_;
-  std::function<int(int range)> rand_;
   ci::Vec2f offset_;
   ci::Vec2f mouseDownOffset_;
 
@@ -63,11 +59,6 @@ void LifeGame::update() {
 
     d->sysinfo_.onPostGen(d->now_);
   }
-}
-
-Color LifeGame::color(const Cell &cell) const {
-  Color yellow{ Color::hex(0xFFFF00) };
-  return cell.isDead() ? Color::black() : yellow;
 }
 
 void LifeGame::keyUp(KeyEvent e) {
@@ -122,7 +113,7 @@ void LifeGame::keyDown(KeyEvent e) {
   }
 }
 
-Point LifeGame::screenToUniverse(const Vec2i &v) const {
+Vec2i LifeGame::screenToUniverse(const Vec2i &v) const {
   return {(int)((v.x - d->offset_.x) / d->cellSize_),
           (int)((v.y - d->offset_.y) / d->cellSize_) };
 }
@@ -151,8 +142,7 @@ void LifeGame::mouseDown(MouseEvent e) {
     }
   } else if (e.isRight()) {
     auto pt = screenToUniverse(e.getPos());
-    if (!d->now_[pt])
-      d->now_.add(pt);
+    d->now_.add(pt);
   }
 }
 
@@ -178,9 +168,9 @@ Universe LifeGame::bigBang() const {
   int height = getWindowHeight();
   Universe u(width, height);
   for (int i = 0; i < width * height * GameConfig::BORN_RATE; ++i) {
-    int x = d->rand_(width - 1);
-    int y = d->rand_(height - 1);
-    u.addn({ x, y });
+    int x = Random::next<int>(width - 1);
+    int y = Random::next<int>(height - 1);
+    u.add({ x, y });
   }
   return u;
 }

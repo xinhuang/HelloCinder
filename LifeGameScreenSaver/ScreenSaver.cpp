@@ -28,19 +28,20 @@ ScreenSaver::ScreenSaver() {
 
 void ScreenSaver::setup() {
   font_ = TextureFont::create(Font("Consolas", 20));
-  now_ = bigBang();
-  next_ = Universe(getWindowWidth(), getWindowHeight());
+  now_ = Universe::bigBang(getWindowWidth(), getWindowHeight());
+  next_ = Universe::bigBang(getWindowWidth(), getWindowHeight());
   sysinfo_.init(now_);
 }
 
 void ScreenSaver::draw() {
-  gl::draw(now_.texture(), getWindowBounds());
+  gl::draw(now_.texture());
   font_->drawString(sysinfo_.msg(), getWindowBounds());
 }
 
 void ScreenSaver::update() {
   if (sysinfo_.elapsed() >= REFRESH_TIME) {
-    now_ = bigBang();
+    now_ = Universe::bigBang(getWindowWidth(), getWindowHeight());
+    next_ = Universe::bigBang(getWindowWidth(), getWindowHeight());
     sysinfo_.init(now_);
   } else {
     sysinfo_.onPreGen(now_);
@@ -50,15 +51,6 @@ void ScreenSaver::update() {
 
     sysinfo_.onPostGen(now_);
   }
-}
-
-Color ScreenSaver::color(const Cell &cell) const {
-  Color yellow{ Color::hex(0xFFFF00) };
-  return cell.isDead() ? Color::black() : yellow;
-}
-
-Universe ScreenSaver::bigBang() const {
-  return Universe::bigBang(getWindowWidth(), getWindowHeight());
 }
 
 CINDER_APP_SCREENSAVER(ScreenSaver, RendererGl)
