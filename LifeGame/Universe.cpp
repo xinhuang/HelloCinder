@@ -103,41 +103,44 @@ void Universe::next(Universe &u) {
 //    }
 //  }
 
-  const auto stride = cbSrcRow;
-  IppiSize roi = { stride - 2, height - 2 };
+  next(src, cbSrcRow, dest, cbDestRow, { width - 2, height - 2 });
+}
 
-  ippiAndC_8u_C1R(src, stride, 1, src, stride, { width, height });      // map 255 -> 1
+void Universe::next(uint8_t* src, int srcStride, uint8_t* dest, int destStride, const ci::Vec2i& _roi) const {
+  IppiSize roi = { _roi.x, _roi.y };
+
+  const int width = roi.width + 2;
+  const int height = roi.height + 2;
+
+  ippiAndC_8u_C1R(src, srcStride, 1, src, srcStride, roi);      // map 255 -> 1
 
   auto temp = ippsMalloc_8u(width * height);
 
   // fill dest with zero
-  ippiSet_8u_C1R(0, temp, stride, { width, height });
-  ippiSet_8u_C1R(0, dest, stride, roi);
+  ippiSet_8u_C1R(0, temp, srcStride, roi);
+  ippiSet_8u_C1R(0, dest, destStride, roi);
 
-  int offset = stride + 1 * cbSrcInc;
+  int offset = srcStride + 1;
 
   int x[] = { 1, 1, 0, -1, -1, -1, 0, 1, };
   int y[] = { 0, 1, 1, 1, 0, -1, -1, -1, };
   for (int i = 0; i < 8; ++i) {
     // add src to dest with offset [x, y]
-    auto ptr = src + offset + x[i] * cbSrcInc + y[i] * stride;
-    ippiAdd_8u_C1RSfs(ptr, stride, dest + offset, stride, dest + offset, stride, roi, 0);
+    auto ptr = src + offset + x[i] * 1 + y[i] * srcStride;
+    ippiAdd_8u_C1RSfs(ptr, srcStride, dest + offset, destStride, dest + offset, destStride, roi, 0);
   }
 
-  ippiCopy_8u_C1R(dest, stride, temp, stride, roi);
+  ippiCopy_8u_C1R(dest, destStride, temp, srcStride, roi);
 
   // map 2 -> 1
-  ippiCompareC_8u_C1R(temp, stride, 2, temp, stride, { width, height }, ippCmpEq);
-  ippiAnd_8u_C1R(src, stride, temp, stride, temp, stride, { width, height });
+  ippiCompareC_8u_C1R(temp, srcStride, 2, temp, srcStride, roi, ippCmpEq);
+  ippiAnd_8u_C1R(src, srcStride, temp, srcStride, temp, srcStride, roi);
 
   // map 3 -> 1
-  ippiCompareC_8u_C1R(dest, stride, 3, dest, stride, { width, height }, ippCmpEq);
+  ippiCompareC_8u_C1R(dest, destStride, 3, dest, destStride, roi, ippCmpEq);
 
   // combine 3s and 2s
-  ippiOr_8u_C1R(temp, stride, dest, stride, dest, stride, { width, height });
-
-  // map 1 to 255
-  //ippiRGBToGray_8u_C3C1R(dest, stride, dest, stride, { width, height });
+  ippiOr_8u_C1R(temp, srcStride, dest, destStride, dest, destStride, roi);
 
   ippsFree(temp);
 }

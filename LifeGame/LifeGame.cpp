@@ -24,7 +24,7 @@ struct LifeGame::Data {
   }
 
   void createUniverse(int width, int height) {
-    now_ = Universe(width, height);
+    now_ = Universe::bigBang(width, height);
     next_ = Universe(width, height);
   }
 

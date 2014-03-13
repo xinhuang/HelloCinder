@@ -44,6 +44,8 @@ private:
   int width() const;
   int height() const;
 
+  void next(uint8_t* src, int srcStride, uint8_t* dest, int destStride, const ci::Vec2i& roi) const;
+
   struct Data;
   std::unique_ptr<Data> d;
 };
