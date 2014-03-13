@@ -36,7 +36,7 @@ IppStatus ippInit() { return ippStsNoErr; }
 IppStatus ippiAndC_8u_C1R(const uint8_t *pSrc, int srcStep, const uint8_t value,
                           uint8_t *pDst, int dstStep, IppiSize roiSize) {
   for (int r = 0; r < roiSize.height; ++r) {
-    auto srcptr = pSrc+ r * srcStep;
+    auto srcptr = pSrc + r * srcStep;
     auto dstptr = pDst + r * dstStep;
     for (int c = 0; c < roiSize.width; ++c) {
       dstptr[c] = srcptr[c] & value;
@@ -101,7 +101,7 @@ IppStatus ippiCopy_8u_C1R(const uint8_t *pSrc, int srcStep, uint8_t *pDst,
   for (int r = 0; r < roiSize.height; ++r) {
     auto srcptr = pSrc + r * srcStep;
     auto dstptr = pDst + r * dstStep;
-    memcpy(dstptr, srcptr, sizeof(uint8_t)* roiSize.width);
+    memcpy(dstptr, srcptr, sizeof(uint8_t) * roiSize.width);
   }
   return ippStsNoErr;
 }
