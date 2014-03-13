@@ -12,14 +12,10 @@
 class ScreenSaver : public ci::app::AppScreenSaver {
 public:
   ScreenSaver();
-  void setup() final;
 
+  void setup() final;
   void draw() final;
   void update() final;
-
-private:
-  ci::Color color(const Cell &cell) const;
-  Universe bigBang() const;
 
 private:
   const std::chrono::seconds REFRESH_TIME = { 300 };

@@ -22,7 +22,6 @@ struct Universe::Data {
   ~Data() {}
 
   Channel channel_;
-  Rule rule_;
 };
 
 Universe::Universe() : d(make_unique<Data>()) {}
@@ -149,7 +148,7 @@ int Universe::width() const { return d->channel_.getWidth(); }
 
 int Universe::height() const { return d->channel_.getHeight(); }
 
-void Universe::add(const Point &p) {
+void Universe::add(const Vec2i &p) {
   assert(p.x < width() && p.x >= 0);
   assert(p.y < height() && p.y >= 0);
   d->channel_.setValue({ p.x, p.y }, 0xFF);
@@ -160,7 +159,7 @@ Universe Universe::bigBang(int width, int height) {
   for (int i = 0; i < width * height * GameConfig::BORN_RATE; ++i) {
     int x = Random::next<int>(width - 1);
     int y = Random::next<int>(height - 1);
-    u.addn({ x, y });
+    u.add({ x, y });
   }
   return u;
 }

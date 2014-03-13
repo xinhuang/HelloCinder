@@ -15,12 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\LifeGame\Cell.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LifeGame\Rule.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\LifeGame\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -41,12 +35,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\LifeGame\Cell.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\LifeGame\Rule.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\LifeGame\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
