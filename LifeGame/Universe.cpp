@@ -80,28 +80,29 @@ void Universe::next(Universe &u) {
   fill(dest + (height - 1) * cbDestRow,
        dest + (height - 1) * cbDestRow + (width - 1) * cbDestInc, 0x00);
 
-//  auto &rule = d->rule_;
-//#pragma omp parallel for
-//  for (int r = 1; r < height - 1; ++r) {
-//    for (int c = 1; c < width - 1; ++c) {
-//      auto pixel = dest + r * cbDestRow + cbDestInc * c;
-//      auto srcpixel = src + r * cbDestRow + cbDestInc * c;
-//      if (rule.nextGeneration(
-//              *srcpixel != 0, *(srcpixel - cbSrcRow - cbSrcInc) != 0,
-//              *(srcpixel - cbSrcRow) != 0,
-//              *(srcpixel - cbSrcRow + cbSrcInc) != 0,
-//              *(srcpixel - cbSrcInc) != 0, *(srcpixel + cbSrcInc) != 0,
-//              *(srcpixel + cbSrcRow - cbSrcInc) != 0,
-//              *(srcpixel + cbSrcRow) != 0,
-//              *(srcpixel + cbSrcRow + cbSrcInc) != 0)) {
-//        *pixel = 0xFF;
-//      } else {
-//        *pixel = 0x00;
-//      }
-//    }
-//  }
+  static const int x[] = { 1, 1, 0, -1, -1, -1, 0, 1, };
+  static const int y[] = { 0, 1, 1, 1, 0, -1, -1, -1, };
+#pragma omp parallel for
+  for (int r = 1; r < height - 1; ++r) {
+    for (int c = 1; c < width - 1; ++c) {
+      auto pixel = dest + r * cbDestRow + cbDestInc * c;
+      auto srcpixel = src + r * cbSrcRow + cbSrcInc * c;
+      *pixel = 0;
+      for (int i = 0; i < 8; ++i) {
+        auto ptr = srcpixel + x[i] * cbSrcInc + y[i] * cbSrcRow;
+        if (*ptr > 0)
+          ++*pixel;
+      }
+      if (*pixel == 3)
+        *pixel = 0xFF;
+      else if (*pixel == 2)
+        *pixel = *srcpixel;
+      else
+        *pixel = 0x00;
+    }
+  }
 
-  next(src, cbSrcRow, dest, cbDestRow, { width - 2, height - 2 });
+  //next(src, cbSrcRow, dest, cbDestRow, { width - 2, height - 2 });
 }
 
 void Universe::next(uint8_t* src, int srcStride, uint8_t* dest, int destStride, const ci::Vec2i& _roi) const {
