@@ -12,8 +12,7 @@ using namespace std;
 
 using namespace ci;
 
-#define _IPP_SEQUENTIAL_STATIC
-#include <ipp.h>
+#include "vax.h"
 
 #include "Random.h"
 #include "GameConfig.h"

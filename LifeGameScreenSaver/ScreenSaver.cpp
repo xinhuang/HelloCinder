@@ -1,3 +1,5 @@
+#include "ScreenSaver.h"
+
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
@@ -10,7 +12,9 @@
 #include <map>
 #include <random>
 
-#include "ScreenSaver.h"
+using namespace std;
+
+#include "../LifeGame/vax.h"
 
 #include <cinder/cinder.h>
 
@@ -20,11 +24,6 @@
 using namespace ci;
 using namespace ci::app;
 using namespace ci::gl;
-
-#define _IPP_SEQUENTIAL_STATIC
-#include <ipp.h>
-
-using namespace std;
 
 ScreenSaver::ScreenSaver() {
 }

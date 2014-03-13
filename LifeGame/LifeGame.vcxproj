@@ -95,6 +95,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Sysinfo.h" />
     <ClInclude Include="Universe.h" />
+    <ClInclude Include="vax.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LifeGame.cpp" />
@@ -103,6 +104,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Universe.cpp" />
+    <ClCompile Include="vax.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

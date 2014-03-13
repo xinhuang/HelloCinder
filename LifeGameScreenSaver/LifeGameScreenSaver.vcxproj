@@ -96,11 +96,13 @@
     <ClInclude Include="..\LifeGame\stdafx.h" />
     <ClInclude Include="..\LifeGame\Sysinfo.h" />
     <ClInclude Include="..\LifeGame\Universe.h" />
+    <ClInclude Include="..\LifeGame\vax.h" />
     <ClInclude Include="ScreenSaver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\LifeGame\stdafx.cpp" />
     <ClCompile Include="..\LifeGame\Universe.cpp" />
+    <ClCompile Include="..\LifeGame\vax.cpp" />
     <ClCompile Include="ScreenSaver.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
