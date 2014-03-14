@@ -29,7 +29,7 @@ void aligned_free(void *ptr) {
   delete origin;
 }
 
-#if !defined USE_IPP
+#if !defined NO_PRIVATE_IPP
 
 IppStatus ippInit() { return ippStsNoErr; }
 

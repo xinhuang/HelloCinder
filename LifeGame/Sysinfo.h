@@ -6,6 +6,8 @@
 
 class Universe;
 
+#include <cinder/app/App.h>
+
 class Sysinfo {
   const size_t MAX_GEN_COST = 10;
   size_t ngen_ = 0;
@@ -43,10 +45,10 @@ public:
     timestamp_ = std::chrono::steady_clock::now();
   }
 
-  std::string msg() const {
+  std::string msg(const ci::app::App& app) const {
     std::ostringstream oss;
-    oss << "#GEN \t" << ngen_ << std::endl << "SIZE \t" << size_ << std::endl;
-    oss << "FPS \t" << fps_;
+    oss << "#GEN \t" << ngen_ << std::endl << "SIZE \t" << size_ << std::endl
+        << "FPS \t" << app.getAverageFps();
     return oss.str();
   }
 };

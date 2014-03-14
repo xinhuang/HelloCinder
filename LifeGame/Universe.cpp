@@ -14,6 +14,12 @@ using namespace ci;
 
 #include "vax.h"
 
+#include "tbb/task_scheduler_init.h"
+#include "tbb/blocked_range.h"
+#include "tbb/parallel_for.h"
+
+using namespace tbb;
+
 #include "Random.h"
 #include "GameConfig.h"
 
@@ -73,16 +79,16 @@ void Universe::next(Universe &u) {
   auto width = bounds.getWidth();
 
   for (int r = 0; r < height; ++r) {
-    *(dest + r *cbDestRow) = 0x00;
-    *(dest + r *cbDestRow + (width - 1) *cbDestInc) = 0x00;
+    *(src + r *cbSrcRow) = 0x00;
+    *(src + r *cbSrcRow + (width - 1) *cbSrcInc) = 0x00;
   }
-  fill(dest, dest + (width - 1) * cbDestInc, 0x00);
-  fill(dest + (height - 1) * cbDestRow,
-       dest + (height - 1) * cbDestRow + (width - 1) * cbDestInc, 0x00);
+  fill(src, src + (width - 1) * cbSrcInc, 0x00);
+  fill(src + (height - 1) * cbSrcRow,
+       src + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc, 0xFF);
 
 //  static const int x[] = { 1, 1, 0, -1, -1, -1, 0, 1, };
 //  static const int y[] = { 0, 1, 1, 1, 0, -1, -1, -1, };
-////#pragma omp parallel for
+//#pragma omp parallel for
 //  for (int r = 1; r < height - 1; ++r) {
 //    for (int c = 1; c < width - 1; ++c) {
 //      auto pixel = dest + r * cbDestRow + cbDestInc * c;
@@ -102,7 +108,27 @@ void Universe::next(Universe &u) {
 //    }
 //  }
 
-  next(src, cbSrcRow, dest, cbDestRow, { width - 2, height - 2 });
+  ippiAndC_8u_C1R(src, cbSrcRow, 1, src, cbSrcRow, { width, height });  // map 0xFF -> 1
+  ippiSet_8u_C1R(0, dest, cbDestRow, { width, height });
+
+  const int step = 1;
+#pragma omp parallel for
+  for (int r = 1; r < height - 1; r += step) {
+      auto srcblock = src + r * cbSrcRow + cbSrcInc;
+      auto destBlock = dest + r * cbDestRow + cbDestInc;
+      next(srcblock, cbSrcRow, destBlock, cbDestRow, { width - 2, step });
+  }
+
+  //auto block = blocked_range<int>(1, height - 1);
+  //parallel_for(block, [&](const blocked_range<int> &range) {
+  //  auto srcblock = src + range.begin() * cbSrcRow + cbSrcInc;
+  //  auto destBlock = dest + range.begin() * cbDestRow + cbDestInc;
+  //  next(srcblock, cbSrcRow, destBlock, cbDestRow, { width - 2, range.end() - range.begin() });
+  //});
+
+  //auto srcblock = src + cbSrcRow + cbSrcInc;
+  //auto destblock = dest + cbDestRow + cbDestInc;
+  //next(srcblock, cbSrcRow, destblock, cbDestRow, { width - 2, height - 2 });
 }
 
 void Universe::next(uint8_t* src, int srcStride, uint8_t* dest, int destStride, const ci::Vec2i& _roi) const {
@@ -110,16 +136,9 @@ void Universe::next(uint8_t* src, int srcStride, uint8_t* dest, int destStride, 
 
   const int width = roi.width + 2;
   const int height = roi.height + 2;
-
-  ippiAndC_8u_C1R(src, srcStride, 1, src, srcStride, roi);      // map 255 -> 1
-
   auto temp = ippsMalloc_8u(width * height);
 
-  // fill dest with zero
-  ippiSet_8u_C1R(0, temp, srcStride, roi);
-  ippiSet_8u_C1R(0, dest, destStride, roi);
-
-  int offset = srcStride + 1;
+  int offset = 1;
 
   int x[] = { 1, 1, 0, -1, -1, -1, 0, 1, };
   int y[] = { 0, 1, 1, 1, 0, -1, -1, -1, };
@@ -131,11 +150,11 @@ void Universe::next(uint8_t* src, int srcStride, uint8_t* dest, int destStride, 
 
   ippiCopy_8u_C1R(dest, destStride, temp, srcStride, roi);
 
-  // map 2 -> 1
+  // map 2 -> 255
   ippiCompareC_8u_C1R(temp, srcStride, 2, temp, srcStride, roi, ippCmpEq);
   ippiAnd_8u_C1R(src, srcStride, temp, srcStride, temp, srcStride, roi);
 
-  // map 3 -> 1
+  // map 3 -> 255
   ippiCompareC_8u_C1R(dest, destStride, 3, dest, destStride, roi, ippCmpEq);
 
   // combine 3s and 2s

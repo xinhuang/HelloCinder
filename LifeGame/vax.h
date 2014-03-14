@@ -11,6 +11,8 @@ void aligned_free(void *ptr);
 
 #include <ipp.h>
 
+#define NO_PRIVATE_IPP
+
 #else
 
 enum IppStatus {

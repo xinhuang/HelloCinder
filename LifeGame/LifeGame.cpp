@@ -6,6 +6,7 @@
 #include "Random.h"
 
 #include <cinder/cinder.h>
+#include <cinder/Font.h>
 
 using namespace ci;
 using namespace ci::app;
@@ -13,7 +14,12 @@ using namespace ci::gl;
 
 using namespace std;
 
+#include <omp.h>
 #include "vax.h"
+
+#include <tbb/task_scheduler_init.h>
+
+using namespace tbb;
 
 struct LifeGame::Data {
   void createUniverse(int width, int height) {
@@ -25,7 +31,7 @@ struct LifeGame::Data {
   bool dragging_ = false;
   float cellSize_ = GameConfig::INIT_CELL_SIZE;
   Sysinfo sysinfo_;
-  ci::gl::TextureFontRef font_;
+  ci::Font font_;
   ci::Vec2f offset_;
   ci::Vec2f mouseDownOffset_;
 
@@ -36,14 +42,19 @@ struct LifeGame::Data {
 LifeGame::LifeGame() : d(make_unique<Data>()) {}
 
 void LifeGame::setup() {
-  d->font_ = TextureFont::create(Font("Consolas", 20));
+  d->font_ = Font("Helvetica", 16);
   d->createUniverse(getWindowWidth(), getWindowHeight());
+  gl::disableVerticalSync();
+  setFrameRate(99999.f);
+
   ippInit();
+  task_scheduler_init init(4);
+  omp_set_num_threads(4);
 }
 
 void LifeGame::draw() {
   gl::draw(d->now_.texture(), getWindowBounds());
-  d->font_->drawString(d->sysinfo_.msg(), getWindowBounds());
+  gl::drawString(d->sysinfo_.msg(*this), { 0.f, 0.f }, Color::white(), d->font_);
 }
 
 void LifeGame::update() {
