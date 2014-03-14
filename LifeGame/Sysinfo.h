@@ -30,6 +30,11 @@ public:
     }
   }
 
+  std::chrono::seconds elapsed() const {
+    auto now = std::chrono::steady_clock::now();
+    return std::chrono::duration_cast<std::chrono::seconds>(now - timestamp_);
+  }
+
   void init(const Universe& u) {
     ngen_ = 0;
     count_ = 0;
