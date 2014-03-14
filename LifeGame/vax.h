@@ -6,8 +6,9 @@
 void *aligned_malloc(int size, int alignment);
 void aligned_free(void *ptr);
 
-#if defined USE_IPP
-#define _IPP_SEQUENTIAL_STATIC
+#if defined _IPP_PARALLEL_STATIC || defined _IPP_PARALLEL_DYNAMIC ||           \
+    defined _IPP_SEQUENTIAL_STATIC || defined _IPP_SEQUENTIAL_DYNAMIC
+
 #include <ipp.h>
 
 #else

@@ -13,12 +13,7 @@ using namespace ci::gl;
 
 using namespace std;
 
-#ifdef USE_IPP
-#define _IPP_SEQUENTIAL_STATIC
-#include <ipp.h>
-#else
-void ippInit() {}
-#endif
+#include "vax.h"
 
 struct LifeGame::Data {
   void createUniverse(int width, int height) {
