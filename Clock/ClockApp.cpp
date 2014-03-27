@@ -14,6 +14,10 @@ void ClockApp::prepareSettings(Settings *settings) {
 
 void ClockApp::setup() {
   _font = TextureFont::create(Font("Consolas", 20));
+
+  auto screenSize = Display::getMainDisplay()->getBounds().getSize();
+  auto pos = screenSize - getWindowSize() - Vec2i{30, 30};
+  setWindowPos(pos);
 }
 
 void ClockApp::draw() {

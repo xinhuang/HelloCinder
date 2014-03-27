@@ -7,6 +7,7 @@
 #include <functional>
 #include <deque>
 #include <chrono>
+#include <memory>
 
 #include "Universe.h"
 #include "Sysinfo.h"
@@ -27,26 +28,11 @@ public:
   void mouseWheel(ci::app::MouseEvent e) override;
 
 private:
-  Point screenToUniverse(const ci::Vec2i &v) const;
-  ci::Color color(const Cell &cell) const;
+  ci::Vec2i screenToUniverse(const ci::Vec2i &v) const;
   Universe bigBang() const;
   void zoom(float scale);
 
 private:
-  const int SCROLL_LINES = 3;
-  const float INIT_CELL_SIZE = 5.f;
-  const float MAX_CELL_SIZE = 20.f;
-  const float MIN_CELL_SIZE = 1.f;
-  const float BORN_RATE = 0.2f;
-
-  bool suspend_;
-  bool dragging_;
-  float cellSize_;
-  Sysinfo sysinfo_;
-  ci::gl::TextureFontRef font_;
-  std::function<int(int range)> rand_;
-  ci::Vec2f offset_;
-  ci::Vec2f mouseDownOffset_;
-  Universe universe_;
-  Universe back_;
+  struct Data;
+  std::unique_ptr<Data> d;
 };
