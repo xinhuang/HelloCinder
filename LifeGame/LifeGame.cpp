@@ -17,9 +17,9 @@ using namespace std;
 #include <omp.h>
 #include "vax.h"
 
-#include <tbb/task_scheduler_init.h>
+//#include <tbb/task_scheduler_init.h>
 
-using namespace tbb;
+//using namespace tbb;
 
 struct LifeGame::Data {
   void createUniverse(int width, int height) {
@@ -48,7 +48,7 @@ void LifeGame::setup() {
   setFrameRate(99999.f);
 
   ippInit();
-  task_scheduler_init init(4);
+  //task_scheduler_init init(4);
   omp_set_num_threads(4);
 }
 

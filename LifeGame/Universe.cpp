@@ -14,11 +14,11 @@ using namespace ci;
 
 #include "vax.h"
 
-#include "tbb/task_scheduler_init.h"
-#include "tbb/blocked_range.h"
-#include "tbb/parallel_for.h"
-
-using namespace tbb;
+//#include "tbb/task_scheduler_init.h"
+//#include "tbb/blocked_range.h"
+//#include "tbb/parallel_for.h"
+//
+//using namespace tbb;
 
 #include "Random.h"
 #include "GameConfig.h"
