@@ -22,26 +22,22 @@ using namespace std;
 //using namespace tbb;
 
 struct LifeGame::Data {
-  void createUniverse(int width, int height) {
-    now_ = Universe::bigBang(width, height);
-  }
-
   bool suspend_ = false;
   bool dragging_ = false;
   float cellSize_ = GameConfig::INIT_CELL_SIZE;
-  Sysinfo sysinfo_;
   ci::Font font_;
   ci::Vec2f offset_;
   ci::Vec2f mouseDownOffset_;
 
-  Universe now_;
+  UniverseWrapper<Universe> u_;
+  Sysinfo<decltype(u_)> sysinfo_;
 };
 
 LifeGame::LifeGame() : d(make_unique<Data>()) {}
 
 void LifeGame::setup() {
   d->font_ = Font("Helvetica", 16);
-  d->createUniverse(getWindowWidth(), getWindowHeight());
+  d->u_ = bigBang<>(getWindowWidth(), getWindowHeight());
   gl::disableVerticalSync();
   setFrameRate(99999.f);
 
@@ -51,7 +47,7 @@ void LifeGame::setup() {
 }
 
 void LifeGame::draw() {
-  gl::draw(d->now_.texture(), getWindowBounds());
+  gl::draw(d->u_.render(), getWindowBounds());
 
   TextBox label;
   label.setFont(d->font_);
@@ -61,19 +57,19 @@ void LifeGame::draw() {
 
 void LifeGame::update() {
   if (!d->suspend_) {
-    d->sysinfo_.onPreGen(d->now_);
+    d->sysinfo_.onPreGen(d->u_);
 
-    d->now_.next();
+    d->u_.next();
 
-    d->sysinfo_.onPostGen(d->now_);
+    d->sysinfo_.onPostGen(d->u_);
   }
 }
 
 void LifeGame::keyUp(KeyEvent e) {
   switch (e.getCode()) {
   case KeyEvent::KEY_RETURN:
-    d->now_ = bigBang();
-    d->sysinfo_.init(d->now_);
+    d->u_ = bigBang<>(getWindowWidth(), getWindowHeight());
+    d->sysinfo_.init(d->u_);
     d->offset_ = {};
     break;
 
@@ -86,7 +82,7 @@ void LifeGame::keyUp(KeyEvent e) {
     break;
 
   case KeyEvent::KEY_c:
-    d->now_ = {};
+    d->u_ = {};
     break;
 
   case KeyEvent::KEY_f:
@@ -133,7 +129,7 @@ void LifeGame::mouseUp(MouseEvent e) {
 
 void LifeGame::mouseDrag(MouseEvent e) {
   if (e.isRightDown()) {
-    d->now_.add(screenToUniverse(e.getPos()));
+    d->u_.add(screenToUniverse(e.getPos()));
     return;
   }
 
@@ -150,7 +146,7 @@ void LifeGame::mouseDown(MouseEvent e) {
     }
   } else if (e.isRight()) {
     auto pt = screenToUniverse(e.getPos());
-    d->now_.add(pt);
+    d->u_.add(pt);
   }
 }
 
@@ -169,18 +165,6 @@ void LifeGame::zoom(float scale) {
     d->cellSize_ = GameConfig::MIN_CELL_SIZE;
   if (d->cellSize_ > GameConfig::MAX_CELL_SIZE)
     d->cellSize_ = GameConfig::MAX_CELL_SIZE;
-}
-
-Universe LifeGame::bigBang() const {
-  int width = getWindowWidth();
-  int height = getWindowHeight();
-  Universe u(width, height);
-  for (int i = 0; i < width * height * GameConfig::BORN_RATE; ++i) {
-    int x = Random::next<int>(width - 1);
-    int y = Random::next<int>(height - 1);
-    u.add({ x, y });
-  }
-  return u;
 }
 
 CINDER_APP_BASIC(LifeGame, RendererGl)

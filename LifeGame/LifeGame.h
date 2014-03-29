@@ -29,7 +29,6 @@ public:
 
 private:
   ci::Vec2i screenToUniverse(const ci::Vec2i &v) const;
-  Universe bigBang() const;
   void zoom(float scale);
 
 private:

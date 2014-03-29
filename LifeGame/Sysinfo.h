@@ -8,6 +8,7 @@ class Universe;
 
 #include <cinder/app/App.h>
 
+template <typename U>
 class Sysinfo {
   const size_t MAX_GEN_COST = 10;
   size_t ngen_ = 0;
@@ -17,9 +18,9 @@ class Sysinfo {
   size_t fps_ = 0;
 
 public:
-  void onPreGen(const Universe &u) {}
+  void onPreGen(const U &u) {}
 
-  void onPostGen(const Universe& u) {
+  void onPostGen(const U& u) {
     ++ngen_;
     ++count_;
     size_ = u.size();
@@ -37,7 +38,7 @@ public:
     return std::chrono::duration_cast<std::chrono::seconds>(now - timestamp_);
   }
 
-  void init(const Universe& u) {
+  void init(const U& u) {
     ngen_ = 0;
     count_ = 0;
     fps_ = 0;
