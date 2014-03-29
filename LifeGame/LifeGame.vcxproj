@@ -97,14 +97,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="GameConfig.h" />
+    <ClInclude Include="GpuGlslUniverse.h" />
     <ClInclude Include="LifeGame.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="Resources.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Sysinfo.h" />
     <ClInclude Include="Universe.h" />
     <ClInclude Include="vax.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GpuGlslUniverse.cpp" />
     <ClCompile Include="LifeGame.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -112,6 +115,13 @@
     </ClCompile>
     <ClCompile Include="Universe.cpp" />
     <ClCompile Include="vax.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ShaderLifeGame.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\LifeGame_frag.glsl" />
+    <None Include="resources\PassThru_vert.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

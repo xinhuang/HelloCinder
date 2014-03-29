@@ -2,6 +2,7 @@
 #include "LifeGame.h"
 
 #include "Universe.h"
+#include "GpuGlslUniverse.h"
 #include "GameConfig.h"
 #include "Random.h"
 
@@ -38,6 +39,7 @@ struct LifeGame::Data {
 };
 
 LifeGame::LifeGame() : d(make_unique<Data>()) {
+  d->creators_.push_back(bigBang<GpuGlslUniverse>);
   d->creators_.push_back(bigBang<CpuLoopUniverse>);
   d->creators_.push_back(bigBang<CpuLoopOmpUniverse>);
   d->creators_.push_back(bigBang<CpuIppUniverse>);
@@ -65,7 +67,10 @@ void LifeGame::createUniverse(int width, int height) {
 }
 
 void LifeGame::draw() {
-  gl::draw(d->u_->render(), getWindowBounds());
+  auto tex = d->u_->render();
+  gl::setViewport(tex.getBounds());
+  gl::setMatricesWindow(tex.getSize());
+  gl::draw(tex, getWindowBounds());
 
   TextBox label;
   label.setFont(d->font_);

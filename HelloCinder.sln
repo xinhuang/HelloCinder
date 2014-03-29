@@ -28,8 +28,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetworkX", "NetworkX\Networ
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "2048", "2048\2048.vcxproj", "{C563FF5D-CFC1-4DF5-A4B3-FBAFE57242F3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShaderLifeGame", "ShaderLifeGame\ShaderLifeGame.vcxproj", "{9F99F19C-F5E5-4CFF-9469-EC912FA5CCD5}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -80,10 +78,6 @@ Global
 		{C563FF5D-CFC1-4DF5-A4B3-FBAFE57242F3}.Debug|Win32.Build.0 = Debug|Win32
 		{C563FF5D-CFC1-4DF5-A4B3-FBAFE57242F3}.Release|Win32.ActiveCfg = Release|Win32
 		{C563FF5D-CFC1-4DF5-A4B3-FBAFE57242F3}.Release|Win32.Build.0 = Release|Win32
-		{9F99F19C-F5E5-4CFF-9469-EC912FA5CCD5}.Debug|Win32.ActiveCfg = Debug|Win32
-		{9F99F19C-F5E5-4CFF-9469-EC912FA5CCD5}.Debug|Win32.Build.0 = Debug|Win32
-		{9F99F19C-F5E5-4CFF-9469-EC912FA5CCD5}.Release|Win32.ActiveCfg = Release|Win32
-		{9F99F19C-F5E5-4CFF-9469-EC912FA5CCD5}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
