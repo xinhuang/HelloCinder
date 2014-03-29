@@ -6,14 +6,17 @@
 #include <cinder/app/AppBasic.h>
 
 class ShaderLifeGameApp : public ci::app::AppBasic {
-public:
-  void setup();
-  void keyDown(ci::app::KeyEvent event);
-
-  void draw();
-
-  ci::gl::Fbo ping;
-  ci::gl::Fbo pong;
+  int ifbo = 0;
+  ci::gl::Fbo fbos[2];
   ci::gl::TextureRef mTexture;
   ci::gl::GlslProgRef mShader;
+
+  void init();
+  static ci::gl::Texture createUniverse(int width, int height);
+
+public:
+  void setup() final;
+  void keyUp(ci::app::KeyEvent event) final;
+
+  void draw() final;
 };
