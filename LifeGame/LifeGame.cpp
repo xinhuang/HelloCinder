@@ -52,7 +52,11 @@ void LifeGame::setup() {
 
 void LifeGame::draw() {
   gl::draw(d->now_.texture(), getWindowBounds());
-  gl::drawString(d->sysinfo_.msg(*this), { 0.f, 0.f }, Color::white(), d->font_);
+
+  TextBox label;
+  label.setFont(d->font_);
+  label.setText(d->sysinfo_.msg(*this));
+  gl::draw(gl::Texture(label.render()));
 }
 
 void LifeGame::update() {
