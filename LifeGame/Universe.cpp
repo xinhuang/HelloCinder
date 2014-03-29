@@ -50,73 +50,67 @@ Universe::Universe(const Universe &u) : d(make_unique<Data>()) {
   d->channel_ = u.d->channel_.clone();
 }
 
-Universe &Universe::operator=(Universe &u) {
-  d->channel_ = u.d->channel_.clone();
-  return *this;
-}
-
 Universe::~Universe() {}
 
 int Universe::size() const { return width() * height(); }
 
 gl::Texture Universe::texture() { return gl::Texture(d->channel_); }
 
-void Universe::next(Universe &u) {
-  if (!(d->channel_.getBounds() == u.d->channel_.getBounds()))
-    u = Universe(*this);
+void Universe::next(ci::Channel& src, ci::Channel &dst) const {
+  assert(src.getBounds() == dst.getBounds());
 
-  const auto &bounds = d->channel_.getBounds();
+  const auto &bounds = src.getBounds();
 
-  auto src = d->channel_.getData();
-  auto cbSrcRow = d->channel_.getRowBytes();
-  auto cbSrcInc = d->channel_.getIncrement();
+  auto pSrcData = src.getData();
+  auto cbSrcRow = src.getRowBytes();
+  auto cbSrcInc = src.getIncrement();
 
-  auto dest = u.d->channel_.getData();
-  auto cbDestRow = u.d->channel_.getRowBytes();
-  auto cbDestInc = u.d->channel_.getIncrement();
+  auto pDstData = dst.getData();
+  auto cbDestRow = dst.getRowBytes();
+  auto cbDestInc = dst.getIncrement();
 
   auto height = bounds.getHeight();
   auto width = bounds.getWidth();
 
   for (int r = 0; r < height; ++r) {
-    *(src + r *cbSrcRow) = 0x00;
-    *(src + r *cbSrcRow + (width - 1) *cbSrcInc) = 0x00;
+    *(pSrcData + r *cbSrcRow) = 0x00;
+    *(pSrcData + r *cbSrcRow + (width - 1) *cbSrcInc) = 0x00;
   }
-  fill(src, src + (width - 1) * cbSrcInc, 0x00);
-  fill(src + (height - 1) * cbSrcRow,
-       src + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc, 0xFF);
+  fill(pSrcData, pSrcData + (width - 1) * cbSrcInc, 0x00);
+  fill(pSrcData + (height - 1) * cbSrcRow,
+    pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc, 0xFF);
 
-//  static const int x[] = { 1, 1, 0, -1, -1, -1, 0, 1, };
-//  static const int y[] = { 0, 1, 1, 1, 0, -1, -1, -1, };
-//#pragma omp parallel for
-//  for (int r = 1; r < height - 1; ++r) {
-//    for (int c = 1; c < width - 1; ++c) {
-//      auto pixel = dest + r * cbDestRow + cbDestInc * c;
-//      auto srcpixel = src + r * cbSrcRow + cbSrcInc * c;
-//      *pixel = 0;
-//      for (int i = 0; i < 8; ++i) {
-//        auto ptr = srcpixel + x[i] * cbSrcInc + y[i] * cbSrcRow;
-//        if (*ptr > 0)
-//          ++*pixel;
-//      }
-//      if (*pixel == 3)
-//        *pixel = 0xFF;
-//      else if (*pixel == 2)
-//        *pixel = *srcpixel;
-//      else
-//        *pixel = 0x00;
-//    }
-//  }
+  //  static const int x[] = { 1, 1, 0, -1, -1, -1, 0, 1, };
+  //  static const int y[] = { 0, 1, 1, 1, 0, -1, -1, -1, };
+  //#pragma omp parallel for
+  //  for (int r = 1; r < height - 1; ++r) {
+  //    for (int c = 1; c < width - 1; ++c) {
+  //      auto pixel = dest + r * cbDestRow + cbDestInc * c;
+  //      auto srcpixel = src + r * cbSrcRow + cbSrcInc * c;
+  //      *pixel = 0;
+  //      for (int i = 0; i < 8; ++i) {
+  //        auto ptr = srcpixel + x[i] * cbSrcInc + y[i] * cbSrcRow;
+  //        if (*ptr > 0)
+  //          ++*pixel;
+  //      }
+  //      if (*pixel == 3)
+  //        *pixel = 0xFF;
+  //      else if (*pixel == 2)
+  //        *pixel = *srcpixel;
+  //      else
+  //        *pixel = 0x00;
+  //    }
+  //  }
 
-  ippiAndC_8u_C1R(src, cbSrcRow, 1, src, cbSrcRow, { width, height });  // map 0xFF -> 1
-  ippiSet_8u_C1R(0, dest, cbDestRow, { width, height });
+  ippiAndC_8u_C1R(pSrcData, cbSrcRow, 1, pSrcData, cbSrcRow, { width, height });  // map 0xFF -> 1
+  ippiSet_8u_C1R(0, pDstData, cbDestRow, { width, height });
 
   const int step = 1;
 #pragma omp parallel for
   for (int r = 1; r < height - 1; r += step) {
-      auto srcblock = src + r * cbSrcRow + cbSrcInc;
-      auto destBlock = dest + r * cbDestRow + cbDestInc;
-      next(srcblock, cbSrcRow, destBlock, cbDestRow, { width - 2, step });
+    auto srcblock = pSrcData + r * cbSrcRow + cbSrcInc;
+    auto destBlock = pDstData + r * cbDestRow + cbDestInc;
+    next(srcblock, cbSrcRow, destBlock, cbDestRow, { width - 2, step });
   }
 
   //auto block = blocked_range<int>(1, height - 1);
@@ -129,6 +123,10 @@ void Universe::next(Universe &u) {
   //auto srcblock = src + cbSrcRow + cbSrcInc;
   //auto destblock = dest + cbDestRow + cbDestInc;
   //next(srcblock, cbSrcRow, destblock, cbDestRow, { width - 2, height - 2 });
+}
+
+void Universe::next(Universe &u) {
+  next(d->channel_, u.d->channel_);
 }
 
 void Universe::next(uint8_t* src, int srcStride, uint8_t* dest, int destStride, const ci::Vec2i& _roi) const {

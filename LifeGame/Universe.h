@@ -21,21 +21,19 @@ public:
 
   ci::gl::Texture texture();
 
-  bool isSilent() const { return true; }
-
   void next(Universe &u);
 
   void add(const ci::Vec2i &p);
+
+  int width() const;
+  int height() const;
 
   static Universe bigBang(int width, int height);
 
 private:
   Universe(const Universe& u);
-  Universe& operator=(Universe& u);
 
-  int width() const;
-  int height() const;
-
+  void next(ci::Channel& src, ci::Channel &dst) const;
   void next(uint8_t* src, int srcStride, uint8_t* dest, int destStride, const ci::Vec2i& roi) const;
 
   struct Data;

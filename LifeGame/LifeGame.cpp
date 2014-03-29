@@ -72,6 +72,7 @@ void LifeGame::keyUp(KeyEvent e) {
   switch (e.getCode()) {
   case KeyEvent::KEY_RETURN:
     d->now_ = bigBang();
+    d->next_ = Universe(d->now_.width(), d->now_.height());
     d->sysinfo_.init(d->now_);
     d->offset_ = {};
     break;
