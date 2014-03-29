@@ -26,17 +26,37 @@ using namespace ci;
 struct Universe::Data {
   ~Data() {}
 
-  Channel channel_;
+  Channel channels_[2];
+
+  Channel& src() {
+    assert(current_ < sizeof(channels_) / sizeof(channels_[0]));
+    return channels_[current_];
+  }
+
+  Channel& dst() {
+    assert(current_ < sizeof(channels_) / sizeof(channels_[0]));
+    return channels_[1 - current_];
+  }
+
+  void flip() { current_ = (current_ + 1) % 2; }
+
+  void init(Channel& c, int width, int height) const {
+    c = Channel(width, height);
+
+    auto dest = c.getData();
+    const auto &bounds = c.getBounds();
+    fill(dest, dest + c.getRowBytes() * bounds.getHeight(), 0x00);
+  }
+
+private:
+  int current_ = 0;
 };
 
 Universe::Universe() : d(make_unique<Data>()) {}
 
 Universe::Universe(int width, int height) : Universe() {
-  d->channel_ = Channel(width, height);
-
-  auto dest = d->channel_.getData();
-  const auto &bounds = d->channel_.getBounds();
-  fill(dest, dest + d->channel_.getRowBytes() * bounds.getHeight(), 0x00);
+  d->init(d->channels_[0], width, height);
+  d->init(d->channels_[1], width, height);
 }
 
 Universe::Universe(Universe &&u) : d(move(u.d)) {}
@@ -46,15 +66,16 @@ Universe &Universe::operator=(Universe &&u) {
   return *this;
 }
 
-Universe::Universe(const Universe &u) : d(make_unique<Data>()) {
-  d->channel_ = u.d->channel_.clone();
-}
-
 Universe::~Universe() {}
 
 int Universe::size() const { return width() * height(); }
 
-gl::Texture Universe::texture() { return gl::Texture(d->channel_); }
+gl::Texture Universe::texture() { return gl::Texture(d->src()); }
+
+void Universe::next() {
+  next(d->src(), d->dst());
+  d->flip();
+}
 
 void Universe::next(ci::Channel& src, ci::Channel &dst) const {
   assert(src.getBounds() == dst.getBounds());
@@ -125,10 +146,6 @@ void Universe::next(ci::Channel& src, ci::Channel &dst) const {
   //next(srcblock, cbSrcRow, destblock, cbDestRow, { width - 2, height - 2 });
 }
 
-void Universe::next(Universe &u) {
-  next(d->channel_, u.d->channel_);
-}
-
 void Universe::next(uint8_t* src, int srcStride, uint8_t* dest, int destStride, const ci::Vec2i& _roi) const {
   IppiSize roi = { _roi.x, _roi.y };
 
@@ -161,14 +178,14 @@ void Universe::next(uint8_t* src, int srcStride, uint8_t* dest, int destStride, 
   ippsFree(temp);
 }
 
-int Universe::width() const { return d->channel_.getWidth(); }
+int Universe::width() const { return d->src().getWidth(); }
 
-int Universe::height() const { return d->channel_.getHeight(); }
+int Universe::height() const { return d->src().getHeight(); }
 
 void Universe::add(const Vec2i &p) {
   assert(p.x < width() && p.x >= 0);
   assert(p.y < height() && p.y >= 0);
-  d->channel_.setValue({ p.x, p.y }, 0xFF);
+  d->src().setValue({ p.x, p.y }, 0xFF);
 }
 
 Universe Universe::bigBang(int width, int height) {

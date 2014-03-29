@@ -24,7 +24,6 @@ using namespace std;
 struct LifeGame::Data {
   void createUniverse(int width, int height) {
     now_ = Universe::bigBang(width, height);
-    next_ = Universe(width, height);
   }
 
   bool suspend_ = false;
@@ -36,7 +35,6 @@ struct LifeGame::Data {
   ci::Vec2f mouseDownOffset_;
 
   Universe now_;
-  Universe next_;
 };
 
 LifeGame::LifeGame() : d(make_unique<Data>()) {}
@@ -61,8 +59,7 @@ void LifeGame::update() {
   if (!d->suspend_) {
     d->sysinfo_.onPreGen(d->now_);
 
-    d->now_.next(d->next_);
-    swap(d->now_, d->next_);
+    d->now_.next();
 
     d->sysinfo_.onPostGen(d->now_);
   }
@@ -72,7 +69,6 @@ void LifeGame::keyUp(KeyEvent e) {
   switch (e.getCode()) {
   case KeyEvent::KEY_RETURN:
     d->now_ = bigBang();
-    d->next_ = Universe(d->now_.width(), d->now_.height());
     d->sysinfo_.init(d->now_);
     d->offset_ = {};
     break;

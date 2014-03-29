@@ -21,7 +21,7 @@ public:
 
   ci::gl::Texture texture();
 
-  void next(Universe &u);
+  void next();
 
   void add(const ci::Vec2i &p);
 
@@ -31,8 +31,6 @@ public:
   static Universe bigBang(int width, int height);
 
 private:
-  Universe(const Universe& u);
-
   void next(ci::Channel& src, ci::Channel &dst) const;
   void next(uint8_t* src, int srcStride, uint8_t* dest, int destStride, const ci::Vec2i& roi) const;
 
