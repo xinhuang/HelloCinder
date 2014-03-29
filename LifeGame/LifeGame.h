@@ -28,6 +28,7 @@ public:
   void mouseWheel(ci::app::MouseEvent e) override;
 
 private:
+  void createUniverse(int width, int height);
   ci::Vec2i screenToUniverse(const ci::Vec2i &v) const;
   void zoom(float scale);
 

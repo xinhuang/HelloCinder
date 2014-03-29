@@ -7,38 +7,41 @@
 
 struct Point;
 
-template <typename T>
-class UniverseWrapper {
-  std::unique_ptr<T> u_;
+class IUniverse {
 public:
-  UniverseWrapper() : u_(std::make_unique<T>()) {}
-  UniverseWrapper(int width, int height) : u_(std::make_unique<T>(width, height)) {}
-
-  UniverseWrapper& operator=(T&& v) {
-    u_ = std::make_unique<T>(std::forward<T>(v));
-    return *this;
-  }
-
-  void next() { u_->next(); }
-  void add(const ci::Vec2i &p) { u_->add(p); }
-  int width() const { return u_->width(); }
-  int height() const { return u_->height(); }
-  int size() const { return u_->size(); }
-  ci::gl::Texture render() const { return u_->render(); }
+  virtual ~IUniverse() {}
+  virtual std::string name() const = 0;
+  virtual void next() = 0;
+  virtual void add(const ci::Vec2i &p) = 0;
+  virtual int width() const = 0;
+  virtual int height() const = 0;
+  virtual int size() const = 0;
+  virtual ci::gl::Texture render() const = 0;
 };
 
-class Universe {
-public:
-  Universe();
-  Universe(int width, int height);
-  Universe(Universe &&u);
-  Universe &operator=(Universe &&u);
+template <typename T>
+std::unique_ptr<T> bigBang(int width, int height) {
+  std::unique_ptr<T> u = std::make_unique<T>(width, height);
+  for (int i = 0; i < width * height * GameConfig::BORN_RATE; ++i) {
+    int x = Random::next<int>(width - 1);
+    int y = Random::next<int>(height - 1);
+    u->add({ x, y });
+  }
+  return u;
+}
 
-  ~Universe();
+class AbstractCpuUniverse : public IUniverse {
+public:
+  AbstractCpuUniverse();
+  AbstractCpuUniverse(int width, int height);
+  AbstractCpuUniverse(AbstractCpuUniverse &&u);
+  AbstractCpuUniverse &operator=(AbstractCpuUniverse &&u);
+
+  ~AbstractCpuUniverse();
 
   int size() const;
 
-  ci::gl::Texture texture() const ;
+  ci::gl::Texture texture() const;
   ci::gl::Texture render() const { return texture(); }
 
   void next();
@@ -48,9 +51,9 @@ public:
   int width() const;
   int height() const;
 
+protected:
+  virtual void next(ci::Channel &src, ci::Channel &dst) const = 0;
 
-private:
-  void next(ci::Channel &src, ci::Channel &dst) const;
   void nextLoop(ci::Channel &src, ci::Channel &dst) const;
   void nextLoopOmp(ci::Channel &src, ci::Channel &dst) const;
   void nextIpp(ci::Channel &src, ci::Channel &dst) const;
@@ -63,13 +66,65 @@ private:
   std::unique_ptr<Data> d;
 };
 
-template <typename T = Universe>
-T bigBang(int width, int height) {
-  T u(width, height);
-  for (int i = 0; i < width * height * GameConfig::BORN_RATE; ++i) {
-    int x = Random::next<int>(width - 1);
-    int y = Random::next<int>(height - 1);
-    u.add({ x, y });
+class CpuLoopUniverse : public AbstractCpuUniverse {
+public:
+  CpuLoopUniverse(int width, int height) : AbstractCpuUniverse(width, height) {}
+
+  std::string name() const { return "CPU Loop"; }
+
+protected:
+  void next(ci::Channel &src, ci::Channel &dst) const final {
+    nextLoop(src, dst);
   }
-  return u;
-}
+};
+
+class CpuLoopOmpUniverse : public AbstractCpuUniverse {
+public:
+  CpuLoopOmpUniverse(int width, int height)
+      : AbstractCpuUniverse(width, height) {}
+
+  std::string name() const { return "CPU Loop with OpenMP"; }
+
+protected:
+  void next(ci::Channel &src, ci::Channel &dst) const final {
+    nextLoopOmp(src, dst);
+  }
+};
+
+class CpuIppUniverse : public AbstractCpuUniverse {
+public:
+  CpuIppUniverse(int width, int height) : AbstractCpuUniverse(width, height) {}
+
+  std::string name() const { return "CPU IPP"; }
+
+protected:
+  void next(ci::Channel &src, ci::Channel &dst) const final {
+    nextIpp(src, dst);
+  }
+};
+
+class CpuIppOmpUniverse : public AbstractCpuUniverse {
+public:
+  CpuIppOmpUniverse(int width, int height)
+      : AbstractCpuUniverse(width, height) {}
+
+  std::string name() const { return "CPU IPP with OpenMP"; }
+
+protected:
+  void next(ci::Channel &src, ci::Channel &dst) const final {
+    nextIppOmp(src, dst);
+  }
+};
+
+class CpuIppTbbUniverse : public AbstractCpuUniverse {
+public:
+  CpuIppTbbUniverse(int width, int height)
+      : AbstractCpuUniverse(width, height) {}
+
+  std::string name() const { return "CPU IPP with TBB"; }
+
+protected:
+  void next(ci::Channel &src, ci::Channel &dst) const final {
+    nextIppTbb(src, dst);
+  }
+};

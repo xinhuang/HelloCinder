@@ -4,11 +4,8 @@
 #include <sstream>
 #include <chrono>
 
-class Universe;
-
 #include <cinder/app/App.h>
 
-template <typename U>
 class Sysinfo {
   const size_t MAX_GEN_COST = 10;
   size_t ngen_ = 0;
@@ -16,11 +13,12 @@ class Sysinfo {
   std::chrono::steady_clock::time_point timestamp_;
   size_t count_ = 0;
   size_t fps_ = 0;
+  std::string strategy_;
 
 public:
-  void onPreGen(const U &u) {}
+  void onPreGen(const IUniverse &u) {}
 
-  void onPostGen(const U& u) {
+  void onPostGen(const IUniverse& u) {
     ++ngen_;
     ++count_;
     size_ = u.size();
@@ -38,18 +36,20 @@ public:
     return std::chrono::duration_cast<std::chrono::seconds>(now - timestamp_);
   }
 
-  void init(const U& u) {
+  void init(const IUniverse& u) {
     ngen_ = 0;
     count_ = 0;
     fps_ = 0;
     size_ = u.size();
     timestamp_ = std::chrono::steady_clock::now();
+    strategy_ = u.name();
   }
 
   std::string msg(const ci::app::App& app) const {
     std::ostringstream oss;
     oss << "#GEN \t" << ngen_ << std::endl << "SIZE \t" << size_ << std::endl
-        << "FPS \t" << app.getAverageFps();
+        << "FPS \t" << app.getAverageFps() << std::endl
+        << "Strategy \t" << strategy_;
     return oss.str();
   }
 };

@@ -23,7 +23,7 @@ using namespace ci;
 #include "Random.h"
 #include "GameConfig.h"
 
-struct Universe::Data {
+struct AbstractCpuUniverse::Data {
   ~Data() {}
 
   Channel channels_[2];
@@ -52,36 +52,32 @@ private:
   int current_ = 0;
 };
 
-Universe::Universe() : d(make_unique<Data>()) {}
+AbstractCpuUniverse::AbstractCpuUniverse() : d(make_unique<Data>()) {}
 
-Universe::Universe(int width, int height) : Universe() {
+AbstractCpuUniverse::AbstractCpuUniverse(int width, int height) : AbstractCpuUniverse() {
   d->init(d->channels_[0], width, height);
   d->init(d->channels_[1], width, height);
 }
 
-Universe::Universe(Universe &&u) : d(move(u.d)) {}
+AbstractCpuUniverse::AbstractCpuUniverse(AbstractCpuUniverse &&u) : d(move(u.d)) {}
 
-Universe &Universe::operator=(Universe &&u) {
+AbstractCpuUniverse &AbstractCpuUniverse::operator=(AbstractCpuUniverse &&u) {
   swap(d, u.d);
   return *this;
 }
 
-Universe::~Universe() {}
+AbstractCpuUniverse::~AbstractCpuUniverse() {}
 
-int Universe::size() const { return width() * height(); }
+int AbstractCpuUniverse::size() const { return width() * height(); }
 
-gl::Texture Universe::texture() const { return gl::Texture(d->src()); }
+gl::Texture AbstractCpuUniverse::texture() const { return gl::Texture(d->src()); }
 
-void Universe::next() {
+void AbstractCpuUniverse::next() {
   next(d->src(), d->dst());
   d->flip();
 }
 
-void Universe::next(ci::Channel &src, ci::Channel &dst) const {
-  nextLoopOmp(src, dst);
-}
-
-void Universe::nextLoop(ci::Channel &src, ci::Channel &dst) const {
+void AbstractCpuUniverse::nextLoop(ci::Channel &src, ci::Channel &dst) const {
   assert(src.getBounds() == dst.getBounds());
 
   const auto &bounds = src.getBounds();
@@ -127,7 +123,7 @@ void Universe::nextLoop(ci::Channel &src, ci::Channel &dst) const {
   }
 }
 
-void Universe::nextLoopOmp(ci::Channel &src, ci::Channel &dst) const {
+void AbstractCpuUniverse::nextLoopOmp(ci::Channel &src, ci::Channel &dst) const {
   assert(src.getBounds() == dst.getBounds());
 
   const auto &bounds = src.getBounds();
@@ -174,7 +170,7 @@ void Universe::nextLoopOmp(ci::Channel &src, ci::Channel &dst) const {
   }
 }
 
-void Universe::nextIpp(ci::Channel &src, ci::Channel &dst) const {
+void AbstractCpuUniverse::nextIpp(ci::Channel &src, ci::Channel &dst) const {
   assert(src.getBounds() == dst.getBounds());
 
   const auto &bounds = src.getBounds();
@@ -210,7 +206,7 @@ void Universe::nextIpp(ci::Channel &src, ci::Channel &dst) const {
   }
 }
 
-void Universe::nextIppOmp(ci::Channel &src, ci::Channel &dst) const {
+void AbstractCpuUniverse::nextIppOmp(ci::Channel &src, ci::Channel &dst) const {
   assert(src.getBounds() == dst.getBounds());
 
   const auto &bounds = src.getBounds();
@@ -247,7 +243,7 @@ void Universe::nextIppOmp(ci::Channel &src, ci::Channel &dst) const {
   }
 }
 
-void Universe::nextIppTbb(ci::Channel &src, ci::Channel &dst) const {
+void AbstractCpuUniverse::nextIppTbb(ci::Channel &src, ci::Channel &dst) const {
 #if defined USE_TBB
   assert(src.getBounds() == dst.getBounds());
 
@@ -292,7 +288,7 @@ void Universe::nextIppTbb(ci::Channel &src, ci::Channel &dst) const {
 #endif // USE_TBB
 }
 
-void Universe::next(uint8_t *src, int srcStride, uint8_t *dest, int destStride,
+void AbstractCpuUniverse::next(uint8_t *src, int srcStride, uint8_t *dest, int destStride,
                     const ci::Vec2i &_roi) const {
   IppiSize roi = { _roi.x, _roi.y };
 
@@ -326,11 +322,11 @@ void Universe::next(uint8_t *src, int srcStride, uint8_t *dest, int destStride,
   ippsFree(temp);
 }
 
-int Universe::width() const { return d->src().getWidth(); }
+int AbstractCpuUniverse::width() const { return d->src().getWidth(); }
 
-int Universe::height() const { return d->src().getHeight(); }
+int AbstractCpuUniverse::height() const { return d->src().getHeight(); }
 
-void Universe::add(const Vec2i &p) {
+void AbstractCpuUniverse::add(const Vec2i &p) {
   assert(p.x < width() && p.x >= 0);
   assert(p.y < height() && p.y >= 0);
   d->src().setValue({ p.x, p.y }, 0xFF);

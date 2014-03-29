@@ -12,6 +12,8 @@ using namespace ci;
 using namespace ci::app;
 using namespace ci::gl;
 
+#include <vector>
+
 using namespace std;
 
 #include <omp.h>
@@ -29,25 +31,41 @@ struct LifeGame::Data {
   ci::Vec2f offset_;
   ci::Vec2f mouseDownOffset_;
 
-  UniverseWrapper<Universe> u_;
-  Sysinfo<decltype(u_)> sysinfo_;
+  int iuniverse_ = 0;
+  vector<function<unique_ptr<IUniverse>(int, int)> > creators_;
+  unique_ptr<IUniverse> u_;
+  Sysinfo sysinfo_;
 };
 
-LifeGame::LifeGame() : d(make_unique<Data>()) {}
+LifeGame::LifeGame() : d(make_unique<Data>()) {
+  d->creators_.push_back(bigBang<CpuLoopUniverse>);
+  d->creators_.push_back(bigBang<CpuLoopOmpUniverse>);
+  d->creators_.push_back(bigBang<CpuIppUniverse>);
+  d->creators_.push_back(bigBang<CpuIppOmpUniverse>);
+#if defined USE_TBB
+  d->creators_.push_back(bigBang<CpuIppTbbUniverse>);
+#endif // USE_TBB
+}
 
 void LifeGame::setup() {
   d->font_ = Font("Helvetica", 16);
-  d->u_ = bigBang<>(getWindowWidth(), getWindowHeight());
   gl::disableVerticalSync();
   setFrameRate(99999.f);
 
+  createUniverse(getWindowWidth(), getWindowHeight());
+
   ippInit();
   //task_scheduler_init init(4);
-  omp_set_num_threads(4);
+}
+
+void LifeGame::createUniverse(int width, int height) {
+  d->u_ = d->creators_[d->iuniverse_](width, height);
+  d->sysinfo_.init(*(d->u_));
+  d->offset_ = {};
 }
 
 void LifeGame::draw() {
-  gl::draw(d->u_.render(), getWindowBounds());
+  gl::draw(d->u_->render(), getWindowBounds());
 
   TextBox label;
   label.setFont(d->font_);
@@ -57,20 +75,26 @@ void LifeGame::draw() {
 
 void LifeGame::update() {
   if (!d->suspend_) {
-    d->sysinfo_.onPreGen(d->u_);
-
-    d->u_.next();
-
-    d->sysinfo_.onPostGen(d->u_);
+    d->sysinfo_.onPreGen(*(d->u_));
+    d->u_->next();
+    d->sysinfo_.onPostGen(*(d->u_));
   }
 }
 
 void LifeGame::keyUp(KeyEvent e) {
   switch (e.getCode()) {
   case KeyEvent::KEY_RETURN:
-    d->u_ = bigBang<>(getWindowWidth(), getWindowHeight());
-    d->sysinfo_.init(d->u_);
-    d->offset_ = {};
+    createUniverse(getWindowWidth(), getWindowHeight());
+    break;
+
+  case KeyEvent::KEY_RIGHT:
+    d->iuniverse_ = (d->iuniverse_ + 1) % d->creators_.size();
+    createUniverse(getWindowWidth(), getWindowHeight());
+    break;
+
+  case KeyEvent::KEY_LEFT:
+    d->iuniverse_ = (d->iuniverse_ - 1) % d->creators_.size();
+    createUniverse(getWindowWidth(), getWindowHeight());
     break;
 
   case KeyEvent::KEY_ESCAPE:
@@ -129,7 +153,7 @@ void LifeGame::mouseUp(MouseEvent e) {
 
 void LifeGame::mouseDrag(MouseEvent e) {
   if (e.isRightDown()) {
-    d->u_.add(screenToUniverse(e.getPos()));
+    d->u_->add(screenToUniverse(e.getPos()));
     return;
   }
 
@@ -146,7 +170,7 @@ void LifeGame::mouseDown(MouseEvent e) {
     }
   } else if (e.isRight()) {
     auto pt = screenToUniverse(e.getPos());
-    d->u_.add(pt);
+    d->u_->add(pt);
   }
 }
 
