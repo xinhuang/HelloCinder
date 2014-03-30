@@ -22,7 +22,7 @@ using namespace std;
 
 //#include <tbb/task_scheduler_init.h>
 
-//using namespace tbb;
+// using namespace tbb;
 
 struct LifeGame::Data {
   bool suspend_ = false;
@@ -57,7 +57,7 @@ void LifeGame::setup() {
   createUniverse(getWindowWidth(), getWindowHeight());
 
   ippInit();
-  //task_scheduler_init init(4);
+  // task_scheduler_init init(4);
 }
 
 void LifeGame::createUniverse(int width, int height) {

@@ -54,12 +54,14 @@ private:
 
 AbstractCpuUniverse::AbstractCpuUniverse() : d(make_unique<Data>()) {}
 
-AbstractCpuUniverse::AbstractCpuUniverse(int width, int height) : AbstractCpuUniverse() {
+AbstractCpuUniverse::AbstractCpuUniverse(int width, int height)
+    : AbstractCpuUniverse() {
   d->init(d->channels_[0], width, height);
   d->init(d->channels_[1], width, height);
 }
 
-AbstractCpuUniverse::AbstractCpuUniverse(AbstractCpuUniverse &&u) : d(move(u.d)) {}
+AbstractCpuUniverse::AbstractCpuUniverse(AbstractCpuUniverse &&u)
+    : d(move(u.d)) {}
 
 AbstractCpuUniverse &AbstractCpuUniverse::operator=(AbstractCpuUniverse &&u) {
   swap(d, u.d);
@@ -70,7 +72,9 @@ AbstractCpuUniverse::~AbstractCpuUniverse() {}
 
 int AbstractCpuUniverse::size() const { return width() * height(); }
 
-gl::Texture AbstractCpuUniverse::texture() const { return gl::Texture(d->src()); }
+gl::Texture AbstractCpuUniverse::texture() const {
+  return gl::Texture(d->src());
+}
 
 void AbstractCpuUniverse::next() {
   next(d->src(), d->dst());
@@ -107,23 +111,32 @@ void AbstractCpuUniverse::nextLoop(ci::Channel &src, ci::Channel &dst) const {
     for (int c = 1; c < width - 1; ++c) {
       auto pixel = pDstData + r * cbDestRow + cbDestInc * c;
       auto srcpixel = pSrcData + r * cbSrcRow + cbSrcInc * c;
-      *pixel = 0;
+      int count = 0;
       for (int i = 0; i < 8; ++i) {
         auto ptr = srcpixel + x[i] * cbSrcInc + y[i] * cbSrcRow;
-        if (*ptr > 0)
-          ++*pixel;
+        if (*ptr == 0xFF)
+          ++count;
       }
-      if (*pixel == 3)
+
+      switch (count) {
+      case 3:
         *pixel = 0xFF;
-      else if (*pixel == 2)
+        break;
+
+      case 2:
         *pixel = *srcpixel;
-      else
+        break;
+
+      default:
         *pixel = 0x00;
+        break;
+      }
     }
   }
 }
 
-void AbstractCpuUniverse::nextLoopOmp(ci::Channel &src, ci::Channel &dst) const {
+void AbstractCpuUniverse::nextLoopOmp(ci::Channel &src,
+                                      ci::Channel &dst) const {
   assert(src.getBounds() == dst.getBounds());
 
   const auto &bounds = src.getBounds();
@@ -272,24 +285,24 @@ void AbstractCpuUniverse::nextIppTbb(ci::Channel &src, ci::Channel &dst) const {
                   { width, height }); // map 0xFF -> 1
   ippiSet_8u_C1R(0, pDstData, cbDestRow, { width, height });
 
-  // auto block = blocked_range<int>(1, height - 1);
-  // parallel_for(block, [&](const blocked_range<int> &range) {
-  //  auto srcblock = src + range.begin() * cbSrcRow + cbSrcInc;
-  //  auto destBlock = dest + range.begin() * cbDestRow + cbDestInc;
-  //  next(srcblock, cbSrcRow, destBlock, cbDestRow, { width - 2, range.end() -
-  // range.begin() });
-  //});
+// auto block = blocked_range<int>(1, height - 1);
+// parallel_for(block, [&](const blocked_range<int> &range) {
+//  auto srcblock = src + range.begin() * cbSrcRow + cbSrcInc;
+//  auto destBlock = dest + range.begin() * cbDestRow + cbDestInc;
+//  next(srcblock, cbSrcRow, destBlock, cbDestRow, { width - 2, range.end() -
+// range.begin() });
+//});
 
-  // auto srcblock = src + cbSrcRow + cbSrcInc;
-  // auto destblock = dest + cbDestRow + cbDestInc;
-  // next(srcblock, cbSrcRow, destblock, cbDestRow, { width - 2, height - 2 });
+// auto srcblock = src + cbSrcRow + cbSrcInc;
+// auto destblock = dest + cbDestRow + cbDestInc;
+// next(srcblock, cbSrcRow, destblock, cbDestRow, { width - 2, height - 2 });
 #else
   throw exception("TBB not availible");
 #endif // USE_TBB
 }
 
-void AbstractCpuUniverse::next(uint8_t *src, int srcStride, uint8_t *dest, int destStride,
-                    const ci::Vec2i &_roi) const {
+void AbstractCpuUniverse::next(uint8_t *src, int srcStride, uint8_t *dest,
+                               int destStride, const ci::Vec2i &_roi) const {
   IppiSize roi = { _roi.x, _roi.y };
 
   const int width = roi.width + 2;
