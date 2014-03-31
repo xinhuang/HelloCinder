@@ -98,7 +98,7 @@ void LifeGame::keyUp(KeyEvent e) {
     break;
 
   case KeyEvent::KEY_LEFT:
-    d->iuniverse_ = (d->iuniverse_ - 1) % d->creators_.size();
+    d->iuniverse_ = (d->iuniverse_ + d->creators_.size() - 1) % d->creators_.size();
     createUniverse(getWindowWidth(), getWindowHeight());
     break;
 
