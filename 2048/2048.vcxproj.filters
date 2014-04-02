@@ -23,6 +23,9 @@
     <ClInclude Include="Game2048App.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
