@@ -14,8 +14,11 @@ using namespace ci::app;
 using namespace std;
 
 struct Piece {
+  bool removed = false;
   int value;
   Vec2i pos;
+
+  Piece(int v, const Vec2i& p) : value(v), pos(p) {}
 };
 
 struct Game2048App::Data {
@@ -73,28 +76,63 @@ void Game2048App::draw() {
   }
 }
 
-// TODO: sort according to movement direction first
-// TODO: move until dead end
-bool Game2048App::moveAll(const ci::Vec2i &offset) {
+// TODO: prevent consective merge
+bool Game2048App::moveAll(const ci::Vec2i &dir) {
   bool moved = false;
-  for (auto &iter = begin(d->pieces); iter != end(d->pieces); ++iter) {
-    auto& p = *iter;
-    auto pos = p.pos + offset;
-    if (pos.x < 0 || pos.x > 4 || pos.y < 0 || pos.y > 4)
-      continue;
-    if (!isOccupied(pos)) {
-      p.pos = pos;
-      moved = true;
-      continue;
-    }
-    auto& comb = at(pos);
-    if (comb.value == p.value) {
-      comb.value *= 2;
-      iter = d->pieces.erase(iter);
-      moved = true;
+  auto xs = buildTraversals(4, dir.x);
+  auto ys = buildTraversals(4, dir.y);
+
+  for (auto x : xs) {
+    for (auto y : ys) {
+      auto* piece = at({ x, y });
+      if (piece == nullptr)
+        continue;
+      moved = moveToFurthest(*piece, dir) || moved;
+      auto iter = remove_if(begin(d->pieces), end(d->pieces), [&](const Piece& p) { return p.removed; });
+      d->pieces.erase(iter, end(d->pieces));
     }
   }
-  return moved; 
+  return moved;
+}
+
+bool Game2048App::moveToFurthest(Piece& p, const Vec2i& dir) {
+  bool moved = false;
+  do {
+    auto pos = p.pos + dir;
+    if (pos.x < 0 || pos.y < 0 || pos.x >= 4 || pos.y >= 4)
+      return moved;
+    auto* dst = at(pos);
+    if (dst && dst->value != p.value && !dst->removed)
+      return moved;
+
+    if (dst == nullptr || dst->removed) {
+      p.pos = pos;
+    } else {
+      dst->removed = true;
+      p.pos = pos;
+      p.value *= 2;
+    }
+    moved = true;
+  } while (true);
+  return moved;
+}
+
+void Game2048App::clear(const ci::Vec2i& pos) {
+  assert(isOccupied(pos));
+
+  auto iter = find_if(begin(d->pieces), end(d->pieces),
+    [&](const Piece &p) { return p.pos == pos; });
+  d->pieces.erase(iter);
+}
+
+vector<int> Game2048App::buildTraversals(int max, int dir) const {
+  vector<int> r;
+  for (int i = 0; i < max; ++i) {
+    r.push_back(i);
+  }
+  if (dir == 1)
+    r = { rbegin(r), rend(r) };
+  return r;
 }
 
 void Game2048App::spawn() {
@@ -103,7 +141,7 @@ void Game2048App::spawn() {
 
   int value = 2;
   if (Random::next(1, 10) <= 3) {
-    value = 4;
+    //value = 4;
   }
   auto freeSpaces = getFreeSpaces();
   int ifs = Random::next(freeSpaces.size() - 1);
@@ -123,9 +161,12 @@ vector<Vec2i> Game2048App::getFreeSpaces() const {
   return freeSpaces;
 }
 
-Piece &Game2048App::at(const ci::Vec2i &pos) {
-  return *find_if(begin(d->pieces), end(d->pieces),
+Piece *Game2048App::at(const ci::Vec2i &pos) {
+  auto iter = find_if(begin(d->pieces), end(d->pieces),
                   [&](const Piece &p) { return p.pos == pos; });
+  if (iter == end(d->pieces))
+    return nullptr;
+  return &*iter;
 }
 
 bool Game2048App::isOccupied(const Vec2i &pos) const {

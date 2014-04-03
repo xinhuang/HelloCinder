@@ -20,12 +20,15 @@ public:
 
 private:
   void spawn();
-  bool moveAll(const ci::Vec2i& offset);
+  bool moveAll(const ci::Vec2i& dir);
   void drawBoard(const ci::Vec2f& pos, const ci::Vec2f& size) const;
   void drawPiece(const ci::Vec2f& pos, int value, float width, float height) const;
   std::vector<ci::Vec2i> getFreeSpaces() const;
   bool isOccupied(const ci::Vec2i& pos) const;
-  Piece& at(const ci::Vec2i& pos);
+  Piece* at(const ci::Vec2i& pos);
+  void clear(const ci::Vec2i& pos);
+  std::vector<int> buildTraversals(int max, int dir) const;
+  bool moveToFurthest(Piece& p, const ci::Vec2i& dir);
 
 private:
   struct Data;
