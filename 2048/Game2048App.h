@@ -25,10 +25,11 @@ private:
   void drawPiece(const ci::Vec2f& pos, int value, float width, float height) const;
   std::vector<ci::Vec2i> getFreeSpaces() const;
   bool isOccupied(const ci::Vec2i& pos) const;
-  Piece* at(const ci::Vec2i& pos);
+  std::unique_ptr<Piece>& at(const ci::Vec2i& pos);
+  const std::unique_ptr<Piece>& at(const ci::Vec2i& pos) const;
   void clear(const ci::Vec2i& pos);
   std::vector<int> buildTraversals(int max, int dir) const;
-  bool moveToFurthest(Piece& p, const ci::Vec2i& dir);
+  bool moveToFurthest(ci::Vec2i pos, const ci::Vec2i& dir);
 
 private:
   struct Data;
