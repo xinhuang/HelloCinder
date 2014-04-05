@@ -88,9 +88,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game2048App.cpp" />
+    <ClCompile Include="PieceRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Config.h" />
     <ClInclude Include="Game2048App.h" />
+    <ClInclude Include="Piece.h" />
+    <ClInclude Include="PieceRenderer.h" />
     <ClInclude Include="Random.h" />
   </ItemGroup>
   <ItemGroup>

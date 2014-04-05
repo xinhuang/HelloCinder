@@ -3,9 +3,7 @@
 #include "Random.h"
 
 #include <cinder/gl/gl.h>
-#include <cinder/gl/fbo.h>
 #include <cinder/gl/Texture.h>
-#include <cinder/Text.h>
 
 using namespace ci;
 using namespace ci::app;
@@ -14,45 +12,9 @@ using namespace ci::app;
 
 using namespace std;
 
-class Piece {
-  mutable gl::Fbo fbo;
-public:
-  unique_ptr<Piece> merged;
-  int value;
-  Vec2i pos;
-
-  Piece(int v, const Vec2i &p) : value(v), pos(p) {}
-  Piece(Piece &&p) : value(p.value), pos(p.pos), merged(move(p.merged)) {}
-
-  gl::Texture render(float width, float height, ci::Font &font) const {
-    if (!fbo || fbo.getWidth() != static_cast<int>(width) || fbo.getHeight() != static_cast<int>(height))
-      fbo = gl::Fbo(static_cast<int>(width), static_cast<int>(height), true);
-
-    fbo.bindFramebuffer();
-    gl::setViewport({ 0, 0, (int)width, (int)height });
-    gl::setMatricesWindow({(int)width, (int)height }, false);
-    gl::clear(Color::hex(0xFFFFFFFF));
-    Rectf pieceRect = { 0.f, 0.f, width, height };
-    gl::color(Color::hex(0xDDDDDD00));
-    gl::drawSolidRoundedRect(pieceRect, 5.f);
-    TextBox tbox = TextBox()
-                       .alignment(TextBox::CENTER)
-                       .size(Vec2f(width, height))
-                       .font(font)
-                       .text(to_string(value));
-    tbox.setColor(Color(1.0f, 0.65f, 0.35f));
-    tbox.setBackgroundColor(ColorA(1, 1, 1, 0));
-    gl::enableAlphaBlending();
-    gl::draw(tbox.render());
-    gl::disableAlphaBlending();
-    fbo.unbindFramebuffer();
-    return fbo.getTexture();
-  }
-};
-
-namespace Config {
-const int SIZE = 4;
-}
+#include "Piece.h"
+#include "PieceRenderer.h"
+#include "Config.h"
 
 struct Game2048App::Data {
   vector<unique_ptr<Piece> > pieces =
@@ -225,7 +187,7 @@ bool Game2048App::isOccupied(const Vec2i &pos) const {
 void Game2048App::drawPiece(const ci::Vec2f &pos, const Piece &piece,
                             float width, float height) const {
   Rectf pieceRect = { pos, pos + Vec2f{ width, height } };
-  auto tex = piece.render(width, height, d->font);
+  auto tex = PieceRenderer::instance().render(piece, { (int)width, (int)height });
   gl::enableAlphaBlending();
   gl::color(Color::white());
   gl::setViewport(getWindowBounds());
