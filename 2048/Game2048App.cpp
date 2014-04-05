@@ -3,6 +3,7 @@
 #include "Random.h"
 
 #include <cinder/gl/gl.h>
+#include <cinder/gl/fbo.h>
 #include <cinder/gl/Texture.h>
 #include <cinder/Text.h>
 
@@ -13,21 +14,49 @@ using namespace ci::app;
 
 using namespace std;
 
-struct Piece {
+class Piece {
+  mutable gl::Fbo fbo;
+public:
   unique_ptr<Piece> merged;
   int value;
   Vec2i pos;
 
-  Piece(int v, const Vec2i& p) : value(v), pos(p) {}
-  Piece(Piece&& p) : value(p.value), pos(p.pos), merged(move(p.merged)) {}
+  Piece(int v, const Vec2i &p) : value(v), pos(p) {}
+  Piece(Piece &&p) : value(p.value), pos(p.pos), merged(move(p.merged)) {}
+
+  gl::Texture render(float width, float height, ci::Font &font) const {
+    if (!fbo || fbo.getWidth() != static_cast<int>(width) || fbo.getHeight() != static_cast<int>(height))
+      fbo = gl::Fbo(static_cast<int>(width), static_cast<int>(height), true);
+
+    fbo.bindFramebuffer();
+    gl::setViewport({ 0, 0, (int)width, (int)height });
+    gl::setMatricesWindow({(int)width, (int)height }, false);
+    gl::clear(Color::hex(0xFFFFFFFF));
+    Rectf pieceRect = { 0.f, 0.f, width, height };
+    gl::color(Color::hex(0xDDDDDD00));
+    gl::drawSolidRoundedRect(pieceRect, 5.f);
+    TextBox tbox = TextBox()
+                       .alignment(TextBox::CENTER)
+                       .size(Vec2f(width, height))
+                       .font(font)
+                       .text(to_string(value));
+    tbox.setColor(Color(1.0f, 0.65f, 0.35f));
+    tbox.setBackgroundColor(ColorA(1, 1, 1, 0));
+    gl::enableAlphaBlending();
+    gl::draw(tbox.render());
+    gl::disableAlphaBlending();
+    fbo.unbindFramebuffer();
+    return fbo.getTexture();
+  }
 };
 
 namespace Config {
-  const int SIZE = 4;
+const int SIZE = 4;
 }
 
 struct Game2048App::Data {
-  vector<unique_ptr<Piece>> pieces = vector<unique_ptr<Piece>>(Config::SIZE * Config::SIZE);
+  vector<unique_ptr<Piece> > pieces =
+      vector<unique_ptr<Piece> >(Config::SIZE * Config::SIZE);
   Font font;
 };
 
@@ -77,10 +106,10 @@ void Game2048App::draw() {
   drawBoard(boardPos, boardSize);
 
   for (const auto &piece : d->pieces) {
-    if (!piece) 
+    if (!piece)
       continue;
     auto pos = boardPos + static_cast<Vec2f>(piece->pos) * (width / 4.f);
-    drawPiece(pos, piece->value, width / 4, width / 4);
+    drawPiece(pos, *piece, width / Config::SIZE, width / Config::SIZE);
   }
 }
 
@@ -91,14 +120,14 @@ bool Game2048App::moveAll(const ci::Vec2i &dir) {
 
   for (auto x : xs) {
     for (auto y : ys) {
-      auto& piece = at({ x, y });
-      if (!piece) 
+      auto &piece = at({ x, y });
+      if (!piece)
         continue;
       moved = moveToFurthest({ x, y }, dir) || moved;
     }
   }
 
-  for (auto& p : d->pieces) {
+  for (auto &p : d->pieces) {
     if (!p)
       continue;
     if (p->merged) {
@@ -110,15 +139,15 @@ bool Game2048App::moveAll(const ci::Vec2i &dir) {
   return moved;
 }
 
-bool Game2048App::moveToFurthest(Vec2i srcpos, const Vec2i& dir) {
+bool Game2048App::moveToFurthest(Vec2i srcpos, const Vec2i &dir) {
   bool moved = false;
   do {
     auto dstpos = srcpos + dir;
     if (dstpos.x < 0 || dstpos.y < 0 || dstpos.x >= 4 || dstpos.y >= 4)
       return moved;
-    auto& src = at(srcpos);
+    auto &src = at(srcpos);
     assert(src);
-    auto& dst = at(dstpos);
+    auto &dst = at(dstpos);
     if (dst && (dst->value != src->value || dst->merged))
       return moved;
 
@@ -135,8 +164,8 @@ bool Game2048App::moveToFurthest(Vec2i srcpos, const Vec2i& dir) {
   return moved;
 }
 
-void Game2048App::clear(const ci::Vec2i& pos) {
-  auto& p = at(pos);
+void Game2048App::clear(const ci::Vec2i &pos) {
+  auto &p = at(pos);
   assert(p);
   p.reset();
 }
@@ -175,39 +204,39 @@ vector<Vec2i> Game2048App::getFreeSpaces() const {
   return freeSpaces;
 }
 
-unique_ptr<Piece>& Game2048App::at(const ci::Vec2i &pos) {
-  assert(pos.x < Config::SIZE && pos.y < Config::SIZE && pos.x >= 0 && pos.y >= 0);
+unique_ptr<Piece> &Game2048App::at(const ci::Vec2i &pos) {
+  assert(pos.x < Config::SIZE && pos.y < Config::SIZE && pos.x >= 0 &&
+         pos.y >= 0);
   return d->pieces[pos.y * Config::SIZE + pos.x];
 }
 
-const unique_ptr<Piece>& Game2048App::at(const ci::Vec2i &pos) const {
-  assert(pos.x < Config::SIZE && pos.y < Config::SIZE && pos.x >= 0 && pos.y >= 0);
+const unique_ptr<Piece> &Game2048App::at(const ci::Vec2i &pos) const {
+  assert(pos.x < Config::SIZE && pos.y < Config::SIZE && pos.x >= 0 &&
+         pos.y >= 0);
   return d->pieces[pos.y * Config::SIZE + pos.x];
 }
 
 bool Game2048App::isOccupied(const Vec2i &pos) const {
-  assert(pos.x < Config::SIZE && pos.y < Config::SIZE && pos.x >= 0 && pos.y >= 0);
+  assert(pos.x < Config::SIZE && pos.y < Config::SIZE && pos.x >= 0 &&
+         pos.y >= 0);
   return d->pieces[pos.y * Config::SIZE + pos.x] != nullptr;
 }
 
-void Game2048App::drawPiece(const ci::Vec2f &pos, int value, float width,
-                            float height) const {
+void Game2048App::drawPiece(const ci::Vec2f &pos, const Piece &piece,
+                            float width, float height) const {
   Rectf pieceRect = { pos, pos + Vec2f{ width, height } };
-  gl::color(Color::hex(0xDDDDDD00));
-  gl::drawSolidRoundedRect(pieceRect, 5.f);
-  TextBox tbox = TextBox()
-                     .alignment(TextBox::CENTER)
-                     .size(Vec2f(width, height))
-                     .font(d->font)
-                     .text(to_string(value));
-  tbox.setColor(Color(1.0f, 0.65f, 0.35f));
-  tbox.setBackgroundColor(ColorA(1, 1, 1, 0));
+  auto tex = piece.render(width, height, d->font);
   gl::enableAlphaBlending();
-  gl::draw(gl::Texture(tbox.render()), pieceRect);
+  gl::color(Color::white());
+  gl::setViewport(getWindowBounds());
+  gl::setMatricesWindow(getWindowSize());
+  gl::draw(tex, pieceRect);
   gl::disableAlphaBlending();
 }
 
 void Game2048App::drawBoard(const ci::Vec2f &pos, const ci::Vec2f &size) const {
+  gl::setViewport(getWindowBounds());
+  gl::setMatricesWindow(getWindowSize());
   gl::color(Color::white());
   gl::drawSolidRoundedRect({ pos, pos + size }, 5.f);
 }

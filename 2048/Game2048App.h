@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 
-struct Piece;
+class Piece;
 
 class Game2048App : public ci::app::AppBasic {
 public:
@@ -22,7 +22,7 @@ private:
   void spawn();
   bool moveAll(const ci::Vec2i& dir);
   void drawBoard(const ci::Vec2f& pos, const ci::Vec2f& size) const;
-  void drawPiece(const ci::Vec2f& pos, int value, float width, float height) const;
+  void drawPiece(const ci::Vec2f& pos, const Piece& piece, float width, float height) const;
   std::vector<ci::Vec2i> getFreeSpaces() const;
   bool isOccupied(const ci::Vec2i& pos) const;
   std::unique_ptr<Piece>& at(const ci::Vec2i& pos);
