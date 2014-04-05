@@ -27,6 +27,7 @@ Game2048App::Game2048App() : d(make_unique<Data>()) {}
 Game2048App::~Game2048App() {}
 
 void Game2048App::setup() {
+  setFrameRate(20);
   d->font = Font("Arial", 60);
   spawn();
   spawn();
