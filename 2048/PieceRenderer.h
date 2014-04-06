@@ -21,5 +21,5 @@ public:
     return pr;
   }
 
-  ci::gl::Texture &render(const Piece &p, const ci::Vec2i &size);
+  void PieceRenderer::draw(const Piece& p, ci::Rectf rect);
 };

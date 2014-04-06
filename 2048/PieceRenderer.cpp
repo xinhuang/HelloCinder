@@ -48,7 +48,8 @@ PieceRenderer::PieceRenderer() : d(make_unique<Data>()) {
 
 PieceRenderer::~PieceRenderer() {}
 
-gl::Texture &PieceRenderer::render(const Piece &p, const ci::Vec2i &size) {
+void PieceRenderer::draw(const Piece& p, Rectf rect) {
+  const auto& size = rect.getSize();
   gl::TextureRef tex;
 
   auto iter = d->texs.find(p.value);
@@ -59,18 +60,12 @@ gl::Texture &PieceRenderer::render(const Piece &p, const ci::Vec2i &size) {
 
   if (p.state == PieceState::Spawn) {
     Vec2i newSize = size / 4 * (4 - p.count);
-    Rectf rect((size - newSize) / 2.f, newSize);
-    d->fbo.bindFramebuffer();
-    gl::setViewport({ 0, 0, size.x, size.y });
-    gl::setMatricesWindow(size, false);
-    gl::clear(Color::hex(0xFFFFFFFF));
-    gl::color(Color::white());
-    gl::draw(tex, rect);
-    d->fbo.unbindFramebuffer();
+    Vec2i newPos = rect.getUpperLeft() + (rect.getSize() - newSize) / 2;
+    rect = { newPos, newPos + newSize };
     p.count--;
     if (p.count == 0)
       p.state = PieceState::Still;
-    return d->fbo.getTexture();
   }
-  return *tex;
+  gl::color(Color::white()); 
+  gl::draw(tex, rect);
 }

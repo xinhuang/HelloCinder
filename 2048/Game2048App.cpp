@@ -187,13 +187,12 @@ bool Game2048App::isOccupied(const Vec2i &pos) const {
 
 void Game2048App::drawPiece(const ci::Vec2f &pos, const Piece &piece,
                             float width, float height) const {
-  Rectf pieceRect = { pos, pos + Vec2f{ width, height } };
-  auto tex = PieceRenderer::instance().render(piece, { (int)width, (int)height });
+  Rectf rect = { pos, pos + Vec2f{ width, height } };
   gl::enableAlphaBlending();
   gl::color(Color::white());
   gl::setViewport(getWindowBounds());
   gl::setMatricesWindow(getWindowSize());
-  gl::draw(tex, pieceRect);
+  PieceRenderer::instance().draw(piece, rect);
   gl::disableAlphaBlending();
 }
 
