@@ -87,13 +87,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Environment.cpp" />
     <ClCompile Include="Game2048App.cpp" />
     <ClCompile Include="PieceRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Config.h" />
+    <ClInclude Include="Environment.h" />
     <ClInclude Include="Game2048App.h" />
+    <ClInclude Include="IRenderable.h" />
     <ClInclude Include="Piece.h" />
+    <ClInclude Include="PieceAnimation.h" />
     <ClInclude Include="PieceRenderer.h" />
     <ClInclude Include="Random.h" />
   </ItemGroup>

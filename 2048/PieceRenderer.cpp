@@ -1,6 +1,7 @@
 #include "PieceRenderer.h"
 
 #include "Piece.h"
+#include "Config.h"
 
 #include <cinder/Text.h>
 #include <cinder/Font.h>
@@ -24,7 +25,7 @@ struct PieceRenderer::Data {
     gl::setViewport({ 0, 0, size.x, size.y });
     gl::setMatricesWindow(size, false);
     gl::clear(Color::hex(0xFFFFFFFF));
-    gl::color(Color::hex(0xDDDDDD00));
+    gl::color(Color::hex(Config::BK_COLOR));
     Rectf rect = { 0.f, 0.f, (float)size.x, (float)size.y };
     gl::drawSolidRoundedRect(rect, 5.f);
     TextBox tbox =
@@ -68,4 +69,28 @@ void PieceRenderer::draw(const Piece& p, Rectf rect) {
   }
   gl::color(Color::white()); 
   gl::draw(tex, rect);
+}
+
+void PieceRenderer::draw(const int value, ci::Rectf rect) {
+  const auto& size = rect.getSize();
+  gl::TextureRef tex;
+
+  auto iter = d->texs.find(value);
+  if (iter == d->texs.end())
+    tex = d->newTexture(value, size);
+  else
+    tex = iter->second;
+
+  gl::color(Color::white());
+  gl::draw(tex, rect);
+}
+
+ci::gl::TextureRef PieceRenderer::render(const int value, const ci::Vec2f& size) {
+  gl::TextureRef tex;
+  auto iter = d->texs.find(value);
+  if (iter == d->texs.end())
+    tex = d->newTexture(value, size);
+  else
+    tex = iter->second;
+  return tex;
 }

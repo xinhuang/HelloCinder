@@ -1,6 +1,10 @@
 #include "Game2048App.h"
 
+#include "Environment.h"
 #include "Random.h"
+#include "Piece.h"
+#include "Config.h"
+#include "PieceAnimation.h"
 
 #include <cinder/gl/gl.h>
 #include <cinder/gl/Texture.h>
@@ -12,22 +16,55 @@ using namespace ci::app;
 
 using namespace std;
 
-#include "Piece.h"
-#include "PieceRenderer.h"
-#include "Config.h"
+class Cell {
+  const ci::Vec2i pos_;
+  std::unique_ptr<Piece> piece_;
+  std::unique_ptr<IRenderable> animation_;
+
+public:
+  Cell(const ci::Vec2i &position) : pos_(position) {
+    animation_ = std::make_unique<EmptyCellAnimation>();
+  }
+
+  const std::unique_ptr<Piece> &piece() const { return piece_; }
+  const ci::Vec2i &pos() const { return pos_; }
+
+  void draw(const ci::Rectf &rect) { animation_->draw(rect); }
+  void place(std::unique_ptr<Piece> &&p) {
+    piece_ = std::move(p);
+    animation_ = std::make_unique<PlacePieceAnimation>(*piece_);
+  }
+  void moveTo(Cell &cell) {
+    cell.piece_ = std::move(piece_);
+    cell.animation_ = std::make_unique<MovePieceAnimation>(*cell.piece_);
+    animation_ = std::make_unique<EmptyCellAnimation>();
+  }
+  void mergeTo(Cell &cell) {
+    cell.piece_->merged = std::move(piece_);
+    cell.animation_ = std::make_unique<MergeAnimation>(*cell.piece_);
+    animation_ = std::make_unique<EmptyCellAnimation>();
+  }
+};
 
 struct Game2048App::Data {
-  vector<unique_ptr<Piece> > pieces =
-      vector<unique_ptr<Piece> >(Config::SIZE * Config::SIZE);
+  vector<unique_ptr<Cell> > cells;
   Font font;
 };
 
-Game2048App::Game2048App() : d(make_unique<Data>()) {}
+Game2048App::Game2048App() : d(make_unique<Data>()) {
+  for (int c = 0; c < Config::SIZE; ++c)
+    for (int r = 0; r < Config::SIZE; ++r)
+      d->cells.push_back(make_unique<Cell>(Vec2i{ r, c }));
+}
 
 Game2048App::~Game2048App() {}
 
 void Game2048App::setup() {
-  setFrameRate(20);
+  setFrameRate(30);
+  float width =
+      static_cast<float>(min(getWindowHeight(), getWindowWidth())) - 14;
+  Environment::instance().setCellSize(
+      { width / Config::SIZE, width / Config::SIZE });
   d->font = Font("Arial", 60);
   spawn();
   spawn();
@@ -62,35 +99,50 @@ void Game2048App::draw() {
 
   float width =
       static_cast<float>(min(getWindowHeight(), getWindowWidth())) - 14;
+  float height = width;
   Vec2f boardPos{(getWindowWidth() - width) / 2.f,
                  (getWindowHeight() - width) / 2.f, };
 
   Vec2f boardSize{ width, width, };
   drawBoard(boardPos, boardSize);
 
-  for (const auto &piece : d->pieces) {
-    if (!piece)
-      continue;
-    auto pos = boardPos + static_cast<Vec2f>(piece->pos) * (width / 4.f);
-    drawPiece(pos, *piece, width / Config::SIZE, width / Config::SIZE);
+  for (const auto &cell : d->cells) {
+    auto pos =
+        boardPos + static_cast<Vec2f>(cell->pos()) * (width / Config::SIZE);
+    Rectf rect = { pos,
+                   pos + Vec2f{ width / Config::SIZE, height / Config::SIZE } };
+    gl::enableAlphaBlending();
+    gl::color(Color::white());
+    gl::setViewport(getWindowBounds());
+    gl::setMatricesWindow(getWindowSize());
+    cell->draw(rect);
+    gl::disableAlphaBlending();
   }
+}
+
+void Game2048App::resize() {
+  float width =
+      static_cast<float>(min(getWindowHeight(), getWindowWidth())) - 14;
+  Environment::instance().setCellSize(
+      { width / Config::SIZE, width / Config::SIZE });
 }
 
 bool Game2048App::moveAll(const ci::Vec2i &dir) {
   bool moved = false;
-  auto xs = buildTraversals(4, dir.x);
-  auto ys = buildTraversals(4, dir.y);
+  auto xs = buildTraversals(Config::SIZE, dir.x);
+  auto ys = buildTraversals(Config::SIZE, dir.y);
 
   for (auto x : xs) {
     for (auto y : ys) {
-      auto &piece = at({ x, y });
-      if (!piece)
+      auto &p = at({ x, y })->piece();
+      if (!p)
         continue;
       moved = moveToFurthest({ x, y }, dir) || moved;
     }
   }
 
-  for (auto &p : d->pieces) {
+  for (auto &c : d->cells) {
+    auto &p = c->piece();
     if (!p)
       continue;
     if (p->merged) {
@@ -108,17 +160,17 @@ bool Game2048App::moveToFurthest(Vec2i srcpos, const Vec2i &dir) {
     auto dstpos = srcpos + dir;
     if (dstpos.x < 0 || dstpos.y < 0 || dstpos.x >= 4 || dstpos.y >= 4)
       return moved;
-    auto &src = at(srcpos);
+    auto &src = at(srcpos)->piece();
     assert(src);
-    auto &dst = at(dstpos);
+    auto &dst = at(dstpos)->piece();
     if (dst && (dst->value != src->value || dst->merged))
       return moved;
 
     src->pos = dstpos;
     if (!dst) {
-      dst = move(src);
+      at(srcpos)->moveTo(*at(dstpos));
     } else {
-      dst->merged = move(src);
+      at(srcpos)->mergeTo(*at(dstpos));
       return true;
     }
     moved = true;
@@ -152,7 +204,7 @@ void Game2048App::spawn() {
   assert(freeSpaces.size() > 0);
   int ifs = Random::next(freeSpaces.size() - 1);
   auto pos = freeSpaces[ifs];
-  at(pos) = make_unique<Piece>(value, pos);
+  at(pos)->place(make_unique<Piece>(value, pos));
 }
 
 vector<Vec2i> Game2048App::getFreeSpaces() const {
@@ -167,22 +219,22 @@ vector<Vec2i> Game2048App::getFreeSpaces() const {
   return freeSpaces;
 }
 
-unique_ptr<Piece> &Game2048App::at(const ci::Vec2i &pos) {
+unique_ptr<Cell> &Game2048App::at(const ci::Vec2i &pos) {
   assert(pos.x < Config::SIZE && pos.y < Config::SIZE && pos.x >= 0 &&
          pos.y >= 0);
-  return d->pieces[pos.y * Config::SIZE + pos.x];
+  return d->cells[pos.y * Config::SIZE + pos.x];
 }
 
-const unique_ptr<Piece> &Game2048App::at(const ci::Vec2i &pos) const {
+const unique_ptr<Cell> &Game2048App::at(const ci::Vec2i &pos) const {
   assert(pos.x < Config::SIZE && pos.y < Config::SIZE && pos.x >= 0 &&
          pos.y >= 0);
-  return d->pieces[pos.y * Config::SIZE + pos.x];
+  return d->cells[pos.y * Config::SIZE + pos.x];
 }
 
 bool Game2048App::isOccupied(const Vec2i &pos) const {
   assert(pos.x < Config::SIZE && pos.y < Config::SIZE && pos.x >= 0 &&
          pos.y >= 0);
-  return d->pieces[pos.y * Config::SIZE + pos.x] != nullptr;
+  return d->cells[pos.y * Config::SIZE + pos.x]->piece() != nullptr;
 }
 
 void Game2048App::drawPiece(const ci::Vec2f &pos, const Piece &piece,
