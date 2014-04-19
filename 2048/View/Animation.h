@@ -2,7 +2,9 @@
 
 #include "IRenderable.h"
 #include "PieceRenderer.h"
-#include "Piece.h"
+
+// TODO: view should not talk to model
+#include "../Model/Piece.h"
 
 #include <memory>
 

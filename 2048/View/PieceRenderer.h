@@ -6,6 +6,7 @@
 #include <cinder/gl/Texture.h>
 #include <cinder/gl/Fbo.h>
 
+// TODO: should be cell renderer
 class Piece;
 
 class PieceRenderer {

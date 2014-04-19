@@ -87,21 +87,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="Environment.cpp" />
-    <ClCompile Include="Game2048App.cpp" />
-    <ClCompile Include="PieceRenderer.cpp" />
+    <ClCompile Include="Presenter\Environment.cpp" />
+    <ClCompile Include="Presenter\Game2048App.cpp" />
+    <ClCompile Include="View\Animation.cpp" />
+    <ClCompile Include="View\PieceRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Animation.h" />
-    <ClInclude Include="Config.h" />
-    <ClInclude Include="Environment.h" />
-    <ClInclude Include="Game2048App.h" />
-    <ClInclude Include="IRenderable.h" />
-    <ClInclude Include="Piece.h" />
-    <ClInclude Include="PieceAnimation.h" />
-    <ClInclude Include="PieceRenderer.h" />
+    <ClInclude Include="Model\Piece.h" />
+    <ClInclude Include="Presenter\Cell.h" />
+    <ClInclude Include="Presenter\Config.h" />
+    <ClInclude Include="Presenter\Environment.h" />
+    <ClInclude Include="Presenter\Game2048App.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="View\Animation.h" />
+    <ClInclude Include="View\IRenderable.h" />
+    <ClInclude Include="View\PieceAnimation.h" />
+    <ClInclude Include="View\PieceRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

@@ -1,7 +1,8 @@
 #include "PieceRenderer.h"
 
-#include "Piece.h"
-#include "Config.h"
+// TODO: FIXME
+#include "../Model/Piece.h"
+#include "../Presenter/Config.h"
 
 #include <cinder/Text.h>
 #include <cinder/Font.h>
