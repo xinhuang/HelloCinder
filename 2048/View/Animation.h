@@ -3,9 +3,6 @@
 #include "IRenderable.h"
 #include "PieceRenderer.h"
 
-// TODO: view should not talk to model
-#include "../Model/Piece.h"
-
 #include <memory>
 
 #include <cinder/gl/Texture.h>

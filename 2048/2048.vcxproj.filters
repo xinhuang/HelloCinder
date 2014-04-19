@@ -31,6 +31,9 @@
     <ClCompile Include="View\PieceRenderer.cpp">
       <Filter>View</Filter>
     </ClCompile>
+    <ClCompile Include="Presenter\Cell.cpp">
+      <Filter>Presenter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Random.h">
@@ -54,14 +57,14 @@
     <ClInclude Include="View\IRenderable.h">
       <Filter>View</Filter>
     </ClInclude>
-    <ClInclude Include="View\PieceAnimation.h">
-      <Filter>View</Filter>
-    </ClInclude>
     <ClInclude Include="View\PieceRenderer.h">
       <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="Presenter\Cell.h">
       <Filter>Presenter</Filter>
+    </ClInclude>
+    <ClInclude Include="View\CellAnimation.h">
+      <Filter>View</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

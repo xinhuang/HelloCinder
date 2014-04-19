@@ -1,12 +1,12 @@
 #include "Game2048App.h"
 
+#include "../Model/Piece.h"
+
 #include "Config.h"
 #include "Environment.h"
 #include "Cell.h"
 
 #include "../Util/Random.h"
-#include "../Model/Piece.h"
-#include "../View/PieceAnimation.h"
 
 #include <cinder/gl/gl.h>
 #include <cinder/gl/Texture.h>

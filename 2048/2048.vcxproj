@@ -87,6 +87,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Presenter\Cell.cpp" />
     <ClCompile Include="Presenter\Environment.cpp" />
     <ClCompile Include="Presenter\Game2048App.cpp" />
     <ClCompile Include="View\Animation.cpp" />
@@ -101,7 +102,7 @@
     <ClInclude Include="Random.h" />
     <ClInclude Include="View\Animation.h" />
     <ClInclude Include="View\IRenderable.h" />
-    <ClInclude Include="View\PieceAnimation.h" />
+    <ClInclude Include="View\CellAnimation.h" />
     <ClInclude Include="View\PieceRenderer.h" />
   </ItemGroup>
   <ItemGroup>
