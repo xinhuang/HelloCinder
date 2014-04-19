@@ -237,17 +237,6 @@ bool Game2048App::isOccupied(const Vec2i &pos) const {
   return d->cells[pos.y * Config::SIZE + pos.x]->piece() != nullptr;
 }
 
-void Game2048App::drawPiece(const ci::Vec2f &pos, const Piece &piece,
-                            float width, float height) const {
-  Rectf rect = { pos, pos + Vec2f{ width, height } };
-  gl::enableAlphaBlending();
-  gl::color(Color::white());
-  gl::setViewport(getWindowBounds());
-  gl::setMatricesWindow(getWindowSize());
-  PieceRenderer::instance().draw(piece, rect);
-  gl::disableAlphaBlending();
-}
-
 void Game2048App::drawBoard(const ci::Vec2f &pos, const ci::Vec2f &size) const {
   gl::setViewport(getWindowBounds());
   gl::setMatricesWindow(getWindowSize());

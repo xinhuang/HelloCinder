@@ -59,14 +59,6 @@ void PieceRenderer::draw(const Piece& p, Rectf rect) {
   else
     tex = iter->second;
 
-  if (p.state == PieceState::Spawn) {
-    Vec2i newSize = size / 4 * (4 - p.count);
-    Vec2i newPos = rect.getUpperLeft() + (rect.getSize() - newSize) / 2;
-    rect = { newPos, newPos + newSize };
-    p.count--;
-    if (p.count == 0)
-      p.state = PieceState::Still;
-  }
   gl::color(Color::white()); 
   gl::draw(tex, rect);
 }

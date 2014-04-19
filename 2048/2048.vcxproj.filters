@@ -1,60 +1,61 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="View">
+      <UniqueIdentifier>{ecfc81da-dc1e-49eb-a0f4-e4e9b57a4f04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Presenter">
+      <UniqueIdentifier>{e6965e3f-8b43-4020-9503-4772d0d7c78c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{59f452f4-906f-4aec-984a-f43430d9ba26}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Game2048App.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Animation.cpp">
+      <Filter>View</Filter>
     </ClCompile>
     <ClCompile Include="PieceRenderer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>View</Filter>
     </ClCompile>
-    <ClCompile Include="Animation.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Game2048App.cpp">
+      <Filter>Presenter</Filter>
     </ClCompile>
     <ClCompile Include="Environment.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Presenter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game2048App.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Random.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PieceRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Piece.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Animation.h">
-      <Filter>Header Files</Filter>
+      <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="IRenderable.h">
-      <Filter>Header Files</Filter>
+      <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="PieceAnimation.h">
-      <Filter>Header Files</Filter>
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="PieceRenderer.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="Piece.h">
+      <Filter>Presenter</Filter>
+    </ClInclude>
+    <ClInclude Include="Game2048App.h">
+      <Filter>Presenter</Filter>
     </ClInclude>
     <ClInclude Include="Environment.h">
-      <Filter>Header Files</Filter>
+      <Filter>Presenter</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Presenter</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
