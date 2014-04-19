@@ -21,12 +21,18 @@ public:
 };
 
 class MoveCellAnimation : public IRenderable {
-  int value;
+  Animation animation_;
 
 public:
-  MoveCellAnimation(const Cell &from, const Cell &to) { value = from.value(); }
+  MoveCellAnimation(const Cell &from, const Cell &to) {
+    auto value = to.value();
+    auto tex = PieceRenderer::instance().render(
+        value, Environment::instance().cellSize());
+    auto delta = Environment::instance().distance(from.pos(), to.pos());
+    animation_ = Animation().moveBy(tex, delta, 3).reverse();
+  }
   void draw(const ci::Rectf &rect) final {
-    PieceRenderer::instance().draw(value, rect);
+    animation_.draw(rect);
   }
 };
 

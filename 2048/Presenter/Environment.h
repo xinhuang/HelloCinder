@@ -20,4 +20,6 @@ public:
 
   const ci::Vec2f& cellSize() const;
   void setCellSize(const ci::Vec2f& size);
+
+  ci::Vec2f distance(const ci::Vec2i& from, const ci::Vec2i& to) const;
 };

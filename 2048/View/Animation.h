@@ -19,7 +19,10 @@ public:
   Animation(Animation &&other);
   Animation &operator=(Animation &&other);
 
+  Animation &&reverse();
+
   Animation &&zoom(ci::gl::TextureRef& tex, float beginScale, float endScale, int nframes);
+  Animation &&moveBy(ci::gl::TextureRef& tex, const ci::Vec2f& offset, int nframes);
 
   void draw(const ci::Rectf &rect) override;
 };
