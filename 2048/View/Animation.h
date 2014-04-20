@@ -14,15 +14,27 @@ class Animation : public IRenderable {
 
 public:
   Animation();
+  Animation(std::unique_ptr<IRenderable> &&frame);
+  Animation(const Animation &other);
+  Animation &operator=(const Animation &other);
   ~Animation() override;
 
-  Animation(Animation &&other);
-  Animation &operator=(Animation &&other);
-
-  Animation &&reverse();
-
-  Animation &&zoom(ci::gl::TextureRef& tex, float beginScale, float endScale, int nframes);
-  Animation &&moveBy(ci::gl::TextureRef& tex, const ci::Vec2f& offset, int nframes);
-
   void draw(const ci::Rectf &rect) override;
+
+  Animation &reverse();
+
+  friend Animation &operator+=(Animation &anim,
+                                std::shared_ptr<IRenderable> &&value);
+  template <typename T>
+  friend Animation &operator+=(Animation &anim, std::unique_ptr<T> &&value) {
+    auto p = std::shared_ptr<IRenderable>(value.release());
+    return anim += move(p);
+  }
+  friend Animation operator+(Animation lhs, const Animation &rhs);
+  friend Animation& operator+=(Animation& anim, const Animation &value);
+  friend Animation operator*(Animation lhs, const Animation &rhs);
+  friend Animation& operator*=(Animation& anim, const Animation &value);
 };
+
+Animation scaleBy(ci::gl::TextureRef &tex, float from, float to, int nframe);
+Animation moveBy(ci::gl::TextureRef &tex, const ci::Vec2f &offset, int nframe);

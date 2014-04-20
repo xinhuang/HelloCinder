@@ -126,29 +126,29 @@ bool Game2048App::moveAll(const ci::Vec2i &dir) {
   return moved;
 }
 
-bool Game2048App::moveToFurthest(Vec2i srcpos, const Vec2i &dir) {
-  bool moved = false;
-  do {
-    auto dstpos = srcpos + dir;
-    if (dstpos.x < 0 || dstpos.y < 0 || dstpos.x >= 4 || dstpos.y >= 4)
-      return moved;
-    auto &src = at(srcpos)->piece();
-    assert(src);
-    auto &dst = at(dstpos)->piece();
-    if (dst && (dst->value != src->value || dst->merged))
-      return moved;
-
-    src->pos = dstpos;
-    if (!dst) {
-      at(srcpos)->moveTo(*at(dstpos));
-    } else {
-      at(srcpos)->mergeTo(*at(dstpos));
-      return true;
-    }
-    moved = true;
-    srcpos = dstpos;
-  } while (true);
-  return moved;
+bool Game2048App::moveToFurthest(Vec2i src, const Vec2i &dir) {
+  auto within_boundary = [](const Vec2i &pos) {
+    return pos.x >= 0 && pos.y >= 0 && pos.x < Config::SIZE &&
+           pos.y < Config::SIZE;
+  };
+  auto this_value = at(src)->value();
+  auto dst = src + dir;
+  for (; within_boundary(dst); dst += dir) {
+    auto& cell = at(dst);
+    if (!cell->piece())
+      continue;
+    if (cell->value() != this_value || cell->piece()->merged)
+      break;
+  }
+  dst -= dir;
+  if (src != dst) {
+    if (!at(dst)->piece())
+      at(src)->moveTo(*at(dst));
+    else
+      at(src)->mergeTo(*at(dst));
+    return true;
+  }
+  return false;
 }
 
 void Game2048App::clear(const ci::Vec2i &pos) {

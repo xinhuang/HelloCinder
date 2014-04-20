@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../View/IRenderable.h"
+#include "../View/Animation.h"
 
 #include <memory>
 
@@ -9,7 +10,7 @@ class Piece;
 class Cell {
   const ci::Vec2i pos_;
   std::unique_ptr<Piece> piece_;
-  std::unique_ptr<IRenderable> animation_;
+  Animation animation_;
 
 public:
   Cell(const ci::Vec2i &position);

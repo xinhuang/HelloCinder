@@ -10,6 +10,11 @@ public:
   virtual void draw(const ci::Rectf &rect) = 0;
 };
 
+class NullRenderer : public IRenderable {
+public:
+  void draw(const ci::Rectf &rect) final {}
+};
+
 class TextureRenderer : public IRenderable {
   ci::gl::TextureRef tex_;
   ci::Vec2f offset_;

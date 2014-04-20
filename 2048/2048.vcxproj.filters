@@ -34,6 +34,9 @@
     <ClCompile Include="Presenter\Cell.cpp">
       <Filter>Presenter</Filter>
     </ClCompile>
+    <ClCompile Include="View\CellAnimation.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Random.h">

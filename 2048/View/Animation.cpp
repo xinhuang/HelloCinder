@@ -9,42 +9,32 @@ using namespace std;
 
 struct Animation::Data {
   size_t iframe = 0;
-  vector<unique_ptr<IRenderable> > frames;
+  vector<shared_ptr<IRenderable> > frames;
+  vector<Animation> animations;
 };
 
 Animation::Animation() : d(make_unique<Data>()) {}
 
-Animation::~Animation() {}
+Animation::Animation(unique_ptr<IRenderable> &&frame) : Animation() {
+  (*this) += move(frame);
+}
 
-Animation::Animation(Animation &&other) { d = move(other.d); }
+Animation::Animation(const Animation &other) : Animation() {
+  *this = other;
+}
 
-Animation &Animation::operator=(Animation &&other) {
-  d = move(other.d);
+Animation &Animation::operator=(const Animation &other) {
+  d->iframe = other.d->iframe;
+  d->frames = other.d->frames;
+  d->animations = other.d->animations;
   return *this;
 }
 
-Animation &&Animation::zoom(gl::TextureRef &tex, float beginScale,
-                            float endScale, int nframes) {
-
-  float scale = beginScale;
-  float stepScale = (endScale - beginScale) / nframes;
-  for (int i = 0; i < nframes - 1; ++i) {
-    auto f = unique_ptr<IRenderable>(new TextureRenderer(tex, scale));
-    d->frames.push_back(move(f));
-    scale += stepScale;
-  }
-  auto f = unique_ptr<IRenderable>(new TextureRenderer(tex, endScale));
-  d->frames.push_back(move(f));
-
-  return move(*this);
-}
-
-Animation &&Animation::reverse() {
-  std::reverse(begin(d->frames), end(d->frames));
-  return move(*this);
-}
+Animation::~Animation() {}
 
 void Animation::draw(const ci::Rectf &rect) {
+  for_each(d->animations.begin(), d->animations.end(),
+           [&](Animation& anim) { anim.draw(rect); });
   if (d->frames.size() == 0)
     return;
   if (d->iframe < d->frames.size()) {
@@ -55,15 +45,56 @@ void Animation::draw(const ci::Rectf &rect) {
   }
 }
 
-Animation &&Animation::moveBy(ci::gl::TextureRef &tex, const ci::Vec2f &offset,
-                              int nframes) {
-  Vec2f step = offset / static_cast<float>(nframes);
-  for (int i = 0; i < nframes - 1; ++i) {
-    auto f = make_unique<TextureRenderer>(tex, step * i);
-    d->frames.emplace_back(f.release());
-  }
-  auto f = make_unique<TextureRenderer>(tex, offset);
-  d->frames.emplace_back(f.release());
+Animation &Animation::reverse() {
+  std::reverse(begin(d->frames), end(d->frames));
+  return *this;
+}
 
-  return move(*this);
+Animation &operator+=(Animation &anim, std::shared_ptr<IRenderable> &&value) {
+  anim.d->frames.push_back(move(value));
+  return anim;
+}
+
+Animation operator+(Animation sum, const Animation &rhs) {
+  return sum += rhs;
+}
+
+Animation& operator+=(Animation& anim, const Animation &value) {
+  anim.d->frames.insert(anim.d->frames.end(), value.d->frames.begin(),
+    value.d->frames.end());
+  return anim;
+}
+
+Animation operator*(Animation product, const Animation &rhs) {
+  return product *= rhs;
+}
+
+Animation& operator*=(Animation& anim, const Animation &value) {
+  anim.d->animations.push_back(value);
+  return anim;
+}
+
+Animation scaleBy(ci::gl::TextureRef &tex, float from, float to, int nframe) {
+  Animation anim;
+  float scale = from;
+  float stepScale = (to - from) / nframe;
+  for (int i = 0; i < nframe - 1; ++i) {
+    anim += make_unique<TextureRenderer>(tex, scale);
+    scale += stepScale;
+  }
+  anim += make_unique<TextureRenderer>(tex, to);
+
+  return anim;
+}
+
+Animation moveBy(ci::gl::TextureRef &tex, const ci::Vec2f &offset,
+                  int nframe) {
+  Animation anim;
+  Vec2f step = offset / static_cast<float>(nframe);
+  for (int i = 0; i < nframe - 1; ++i) {
+    anim += make_unique<TextureRenderer>(tex, step * i);
+  }
+  anim += make_unique<TextureRenderer>(tex, offset);
+
+  return move(anim);
 }
