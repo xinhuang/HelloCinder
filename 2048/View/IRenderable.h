@@ -21,7 +21,7 @@ class TextureRenderer : public IRenderable {
   float scale_ = 1.f;
 
 public:
-  TextureRenderer(ci::gl::TextureRef &tex, float scale)
+  TextureRenderer(ci::gl::TextureRef &tex, float scale = 1.f)
       : tex_(tex), scale_(scale) {}
   TextureRenderer(ci::gl::TextureRef &tex, const ci::Vec2f &offset)
       : tex_(tex), offset_(offset) {}

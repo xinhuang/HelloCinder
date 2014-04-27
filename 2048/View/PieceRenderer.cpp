@@ -10,6 +10,7 @@
 using namespace ci;
 
 #include <unordered_map>
+#include <cassert>
 
 using namespace std;
 
@@ -25,17 +26,28 @@ struct PieceRenderer::Data {
     fbo.bindFramebuffer();
     gl::setViewport({ 0, 0, size.x, size.y });
     gl::setMatricesWindow(size, false);
-    gl::clear(Color::hex(0xFFFFFFFF));
-    gl::color(Color::hex(Config::BK_COLOR));
+    gl::enableAlphaBlending();
+    gl::clear(ColorA(1, 1, 1, 0));
+
+    assert(value >= 0);
+    size_t color_index = value;
+    if (color_index >= sizeof(Config::CELL_COLORS) / sizeof(Config::CELL_COLORS[0]))
+      color_index = sizeof(Config::CELL_COLORS) / Config::CELL_COLORS[0] - 1;
+    auto bk_color = Config::CELL_COLORS[color_index];
+    auto fore_color = Config::FORE_COLORS[color_index];
+
+    gl::color(Color::hex(bk_color));
     Rectf rect = { 0.f, 0.f, (float)size.x, (float)size.y };
     gl::drawSolidRoundedRect(rect, 5.f);
-    TextBox tbox =
-      TextBox().alignment(TextBox::CENTER).size(size).font(font).text(
-      to_string(value));
-    tbox.setColor(Color(1.0f, 0.65f, 0.35f));
-    tbox.setBackgroundColor(ColorA(1, 1, 1, 0));
-    gl::enableAlphaBlending();
-    gl::draw(tbox.render());
+
+    if (value > 0) {
+      TextBox tbox =
+        TextBox().alignment(TextBox::CENTER).size(size).font(font).text(
+        to_string(1 << value));
+      tbox.setColor(Color::hex(fore_color));
+      tbox.setBackgroundColor(ColorA(1, 1, 1, 0));
+      gl::draw(tbox.render());
+    }
     gl::disableAlphaBlending();
     fbo.unbindFramebuffer();
     auto tex = fbo.getTexture();

@@ -9,7 +9,8 @@ ci::gl::TextureRef getTex(int value) {
 }
 
 Animation emptyCellAnimation() {
-  return Animation{ make_unique<NullRenderer>() };
+  auto tex = getTex(0);
+  return Animation{ make_unique<TextureRenderer>(tex) };
 }
 
 Animation placePieceAnimation(int value) {
@@ -24,7 +25,7 @@ Animation movePieceAnimation(const Cell &src, const Cell &dst) {
 }
 
 Animation promotionPieceAnimation(int level) {
-  auto tex = getTex(level * 2);
+  auto tex = getTex(level + 1);
   return scaleBy(tex, 1.f, 1.03f, 3) + scaleBy(tex, 1.03f, 1.f, 3);
 }
 

@@ -23,15 +23,14 @@ struct Game2048App::Data {
   Font font;
 };
 
-Game2048App::Game2048App() : d(make_unique<Data>()) {
-  for (int c = 0; c < Config::SIZE; ++c)
-    for (int r = 0; r < Config::SIZE; ++r)
-      d->cells.push_back(make_unique<Cell>(Vec2i{ r, c }));
-}
+Game2048App::Game2048App() : d(make_unique<Data>()) {}
 
 Game2048App::~Game2048App() {}
 
 void Game2048App::setup() {
+  for (int c = 0; c < Config::SIZE; ++c)
+    for (int r = 0; r < Config::SIZE; ++r)
+      d->cells.push_back(make_unique<Cell>(Vec2i{ r, c }));
   setFrameRate(30);
   d->font = Font("Arial", 60);
   spawn();
@@ -71,7 +70,7 @@ void Game2048App::keyUp(ci::app::KeyEvent e) {
 void Game2048App::update() {}
 
 void Game2048App::draw() {
-  gl::clear();
+  gl::clear(Color::hex(Config::BK_COLOR));
 
   drawBoard(Scene::boardRect());
 
@@ -101,7 +100,7 @@ bool Game2048App::moveAll(const ci::Vec2i &dir) {
     if (!p)
       continue;
     if (p->merged) {
-      p->value *= 2;
+      p->value++;
       p->merged = nullptr;
     }
   }
@@ -151,9 +150,9 @@ vector<int> Game2048App::buildTraversals(int max, int dir) const {
 }
 
 void Game2048App::spawn() {
-  int value = 2;
+  int value = 1;
   if (Random::next(1, 10) <= 3) {
-    value = 4;
+    value = 2;
   }
   auto freeSpaces = getFreeSpaces();
   assert(freeSpaces.size() > 0);
@@ -192,10 +191,10 @@ bool Game2048App::isOccupied(const Vec2i &pos) const {
   return d->cells[pos.y * Config::SIZE + pos.x]->piece() != nullptr;
 }
 
-void Game2048App::drawBoard(const Rectf& rect) const {
+void Game2048App::drawBoard(const Rectf &rect) const {
   gl::setViewport(getWindowBounds());
   gl::setMatricesWindow(getWindowSize());
-  gl::color(Color::white());
+  gl::color(Color::hex(Config::BOARD_COLOR));
   gl::drawSolidRoundedRect(rect, 5.f);
 }
 
