@@ -33,10 +33,6 @@ Game2048App::~Game2048App() {}
 
 void Game2048App::setup() {
   setFrameRate(30);
-  float width =
-      static_cast<float>(min(getWindowHeight(), getWindowWidth())) - 14;
-  Environment::instance().setCellSize(
-      { width / Config::SIZE, width / Config::SIZE });
   d->font = Font("Arial", 60);
   spawn();
   spawn();
@@ -48,19 +44,27 @@ void Game2048App::keyUp(ci::app::KeyEvent e) {
   case KeyEvent::KEY_LEFT:
     offset = { -1, 0 };
     break;
+
   case KeyEvent::KEY_RIGHT:
     offset = { 1, 0 };
     break;
+
   case KeyEvent::KEY_UP:
     offset = { 0, -1 };
     break;
+
   case KeyEvent::KEY_DOWN:
     offset = { 0, 1 };
     break;
+
+  case KeyEvent::KEY_ESCAPE:
+    quit();
+    return;
+
   default:
     return;
   }
-  if (moveAll(offset))
+  if (offset != Vec2i{} && moveAll(offset))
     spawn();
 }
 
@@ -69,20 +73,16 @@ void Game2048App::update() {}
 void Game2048App::draw() {
   gl::clear();
 
-  float width =
-      static_cast<float>(min(getWindowHeight(), getWindowWidth())) - 14;
-  float height = width;
-  Vec2f boardPos{(getWindowWidth() - width) / 2.f,
-                 (getWindowHeight() - width) / 2.f, };
+  float board_width = Environment::instance().boardWidth();
+  float board_height = Environment::instance().boardWidth();
+  Vec2f boardPos = Environment::instance().boardPos();
 
-  Vec2f boardSize{ width, width, };
+  Vec2f boardSize{ board_width, board_width, };
   drawBoard(boardPos, boardSize);
 
   for (const auto &cell : d->cells) {
-    auto pos =
-        boardPos + static_cast<Vec2f>(cell->pos()) * (width / Config::SIZE);
-    Rectf rect = { pos,
-                   pos + Vec2f{ width / Config::SIZE, height / Config::SIZE } };
+    auto pos = Environment::instance().cellPos(cell->coord());
+    Rectf rect = { pos, pos + Environment::instance().cellSize() };
     gl::enableAlphaBlending();
     gl::color(Color::white());
     gl::setViewport(getWindowBounds());
@@ -92,12 +92,7 @@ void Game2048App::draw() {
   }
 }
 
-void Game2048App::resize() {
-  float width =
-      static_cast<float>(min(getWindowHeight(), getWindowWidth())) - 14;
-  Environment::instance().setCellSize(
-      { width / Config::SIZE, width / Config::SIZE });
-}
+void Game2048App::resize() {}
 
 bool Game2048App::moveAll(const ci::Vec2i &dir) {
   bool moved = false;
@@ -134,7 +129,7 @@ bool Game2048App::moveToFurthest(Vec2i src, const Vec2i &dir) {
   auto this_value = at(src)->value();
   auto dst = src + dir;
   for (; within_boundary(dst); dst += dir) {
-    auto& cell = at(dst);
+    auto &cell = at(dst);
     if (!cell->piece())
       continue;
     if (cell->value() != this_value || cell->piece()->merged)

@@ -8,7 +8,7 @@
 class Piece;
 
 class Cell {
-  const ci::Vec2i pos_;
+  const ci::Vec2i coord_;
   std::unique_ptr<Piece> piece_;
   Animation animation_;
 
@@ -16,7 +16,7 @@ public:
   Cell(const ci::Vec2i &position);
 
   const std::unique_ptr<Piece> &piece() const;
-  const ci::Vec2i &pos() const;
+  const ci::Vec2i &coord() const;
 
   void draw(const ci::Rectf &rect);
   void place(std::unique_ptr<Piece> &&p);

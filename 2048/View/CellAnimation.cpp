@@ -18,7 +18,7 @@ Animation placePieceAnimation(int value) {
 
 Animation movePieceAnimation(const Cell &src, const Cell &dst) {
   auto tex = getTex(dst.value());
-  auto delta = Environment::instance().distance(src.pos(), dst.pos());
+  auto delta = Environment::instance().distance(src.coord(), dst.coord());
   return moveBy(tex, delta, 3).reverse();
 }
 

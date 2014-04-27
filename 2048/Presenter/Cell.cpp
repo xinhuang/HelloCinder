@@ -5,13 +5,13 @@
 
 using namespace std;
 
-Cell::Cell(const ci::Vec2i &position) : pos_(position) {
+Cell::Cell(const ci::Vec2i &position) : coord_(position) {
   animation_ = emptyCellAnimation();
 }
 
 const std::unique_ptr<Piece> &Cell::piece() const { return piece_; }
 
-const ci::Vec2i &Cell::pos() const { return pos_; }
+const ci::Vec2i &Cell::coord() const { return coord_; }
 
 void Cell::draw(const ci::Rectf &rect) { animation_.draw(rect); }
 
