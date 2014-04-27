@@ -25,7 +25,7 @@ ci::Vec2f Scene::distance(const ci::Vec2i &from, const ci::Vec2i &to) {
          (cellSize() + Vec2f(data()->borderSize, data()->borderSize));
 }
 
-const ci::Vec2f Scene::cellPos(const ci::Vec2i &coord) {
+ci::Vec2f Scene::cellPos(const ci::Vec2i &coord) {
   return boardPos() + static_cast<Vec2f>(coord) * cellSize();
 }
 

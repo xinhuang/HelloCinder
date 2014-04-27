@@ -23,7 +23,7 @@ public:
 private:
   void spawn();
   bool moveAll(const ci::Vec2i& dir);
-  void drawBoard(const ci::Vec2f& pos, const ci::Vec2f& size) const;
+  void drawBoard(const ci::Rectf& rect) const;
   std::vector<ci::Vec2i> getFreeSpaces() const;
   bool isOccupied(const ci::Vec2i& pos) const;
 

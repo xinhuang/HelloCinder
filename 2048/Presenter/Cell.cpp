@@ -3,6 +3,13 @@
 #include "../View/CellAnimation.h"
 #include "../Model/Piece.h"
 
+#include <cinder/app/app.h>
+#include <cinder/gl/gl.h>
+#include <cinder/gl/Texture.h>
+
+using namespace ci;
+using namespace ci::app;
+
 using namespace std;
 
 Cell::Cell(const ci::Vec2i &position) : coord_(position) {
@@ -13,7 +20,13 @@ const std::unique_ptr<Piece> &Cell::piece() const { return piece_; }
 
 const ci::Vec2i &Cell::coord() const { return coord_; }
 
-void Cell::draw(const ci::Rectf &rect) { animation_.draw(rect); }
+void Cell::draw(const ci::Rectf &rect) {
+  gl::enableAlphaBlending();
+  gl::color(Color::white());
+  gl::setViewport(getWindowBounds());
+  animation_.draw(rect);
+  gl::disableAlphaBlending();
+}
 
 void Cell::place(std::unique_ptr<Piece> &&p) {
   assert(!piece_);

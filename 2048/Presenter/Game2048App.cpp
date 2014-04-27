@@ -73,22 +73,10 @@ void Game2048App::update() {}
 void Game2048App::draw() {
   gl::clear();
 
-  float board_width = Scene::boardWidth();
-  float board_height = Scene::boardWidth();
-  Vec2f boardPos = Scene::boardPos();
-
-  Vec2f boardSize{ board_width, board_width, };
-  drawBoard(boardPos, boardSize);
+  drawBoard(Scene::boardRect());
 
   for (const auto &cell : d->cells) {
-    auto pos = Scene::cellPos(cell->coord());
-    Rectf rect = { pos, pos + Scene::cellSize() };
-    gl::enableAlphaBlending();
-    gl::color(Color::white());
-    gl::setViewport(getWindowBounds());
-    gl::setMatricesWindow(getWindowSize());
-    cell->draw(rect);
-    gl::disableAlphaBlending();
+    cell->draw(Scene::cellRect(cell->coord()));
   }
 }
 
@@ -204,11 +192,11 @@ bool Game2048App::isOccupied(const Vec2i &pos) const {
   return d->cells[pos.y * Config::SIZE + pos.x]->piece() != nullptr;
 }
 
-void Game2048App::drawBoard(const ci::Vec2f &pos, const ci::Vec2f &size) const {
+void Game2048App::drawBoard(const Rectf& rect) const {
   gl::setViewport(getWindowBounds());
   gl::setMatricesWindow(getWindowSize());
   gl::color(Color::white());
-  gl::drawSolidRoundedRect({ pos, pos + size }, 5.f);
+  gl::drawSolidRoundedRect(rect, 5.f);
 }
 
 CINDER_APP_BASIC(Game2048App, RendererGl);

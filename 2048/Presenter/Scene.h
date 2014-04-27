@@ -15,13 +15,17 @@ class Scene {
     static Scene env;
     return env;
   }
-  static std::unique_ptr<Data>& data() { return instance().d; }
+  static std::unique_ptr<Data> &data() { return instance().d; }
 
 public:
   ~Scene();
 
   static ci::Vec2f cellSize();
-  static const ci::Vec2f cellPos(const ci::Vec2i &coord);
+  static ci::Vec2f cellPos(const ci::Vec2i &coord);
+  static ci::Rectf cellRect(const ci::Vec2i &coord) {
+    auto pos = cellPos(coord);
+    return { pos, pos + cellSize() };
+  }
 
   static ci::Vec2f distance(const ci::Vec2i &from, const ci::Vec2i &to);
 
@@ -32,6 +36,7 @@ public:
     return { boardWidth(), boardHeight() };
   }
   static ci::Rectf boardRect() {
-    return { boardPos(), boardSize() };
+    auto pos = boardPos();
+    return { pos, pos + boardSize() };
   };
 };
