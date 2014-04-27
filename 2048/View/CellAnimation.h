@@ -3,7 +3,6 @@
 #include "Animation.h"
 
 #include "../Presenter/Cell.h"
-#include "../Presenter/Environment.h"
 
 ci::gl::TextureRef getTex(int value);
 Animation placePieceAnimation(int value);

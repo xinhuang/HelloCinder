@@ -19,9 +19,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Presenter\Environment.cpp">
-      <Filter>Presenter</Filter>
-    </ClCompile>
     <ClCompile Include="Presenter\Game2048App.cpp">
       <Filter>Presenter</Filter>
     </ClCompile>
@@ -37,15 +34,15 @@
     <ClCompile Include="View\CellAnimation.cpp">
       <Filter>View</Filter>
     </ClCompile>
+    <ClCompile Include="Presenter\Scene.cpp">
+      <Filter>Presenter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Random.h">
       <Filter>Util</Filter>
     </ClInclude>
     <ClInclude Include="Presenter\Config.h">
-      <Filter>Presenter</Filter>
-    </ClInclude>
-    <ClInclude Include="Presenter\Environment.h">
       <Filter>Presenter</Filter>
     </ClInclude>
     <ClInclude Include="Presenter\Game2048App.h">
@@ -68,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="View\CellAnimation.h">
       <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="Presenter\Scene.h">
+      <Filter>Presenter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

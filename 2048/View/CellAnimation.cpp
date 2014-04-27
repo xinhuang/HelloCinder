@@ -1,10 +1,11 @@
 #include "CellAnimation.h"
+#include "../Presenter/Scene.h"
 
 using namespace std;
 
 ci::gl::TextureRef getTex(int value) {
   return PieceRenderer::instance().render(value,
-                                          Environment::instance().cellSize());
+                                          Scene::cellSize());
 }
 
 Animation emptyCellAnimation() {
@@ -18,7 +19,7 @@ Animation placePieceAnimation(int value) {
 
 Animation movePieceAnimation(const Cell &src, const Cell &dst) {
   auto tex = getTex(dst.value());
-  auto delta = Environment::instance().distance(src.coord(), dst.coord());
+  auto delta = Scene::distance(src.coord(), dst.coord());
   return moveBy(tex, delta, 3).reverse();
 }
 

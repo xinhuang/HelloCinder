@@ -3,7 +3,7 @@
 #include "../Model/Piece.h"
 
 #include "Config.h"
-#include "Environment.h"
+#include "Scene.h"
 #include "Cell.h"
 
 #include "../Util/Random.h"
@@ -73,16 +73,16 @@ void Game2048App::update() {}
 void Game2048App::draw() {
   gl::clear();
 
-  float board_width = Environment::instance().boardWidth();
-  float board_height = Environment::instance().boardWidth();
-  Vec2f boardPos = Environment::instance().boardPos();
+  float board_width = Scene::boardWidth();
+  float board_height = Scene::boardWidth();
+  Vec2f boardPos = Scene::boardPos();
 
   Vec2f boardSize{ board_width, board_width, };
   drawBoard(boardPos, boardSize);
 
   for (const auto &cell : d->cells) {
-    auto pos = Environment::instance().cellPos(cell->coord());
-    Rectf rect = { pos, pos + Environment::instance().cellSize() };
+    auto pos = Scene::cellPos(cell->coord());
+    Rectf rect = { pos, pos + Scene::cellSize() };
     gl::enableAlphaBlending();
     gl::color(Color::white());
     gl::setViewport(getWindowBounds());
