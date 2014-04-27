@@ -1,11 +1,12 @@
 #include "CellAnimation.h"
 #include "../Presenter/Scene.h"
 
+#include "CellRenderer.h"
+
 using namespace std;
 
 ci::gl::TextureRef getTex(int value) {
-  return PieceRenderer::instance().render(value,
-                                          Scene::cellSize());
+  return CellRenderer::instance().render(value, Scene::cellSize());
 }
 
 Animation emptyCellAnimation() {

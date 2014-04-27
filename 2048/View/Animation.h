@@ -1,7 +1,6 @@
 #pragma once
 
 #include "IRenderable.h"
-#include "PieceRenderer.h"
 
 #include <memory>
 

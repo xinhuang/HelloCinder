@@ -1,9 +1,8 @@
-#include "PieceRenderer.h"
+#include "CellRenderer.h"
 
-// TODO: FIXME
-#include "../Model/Piece.h"
 #include "../Presenter/Config.h"
 
+#include <cinder/gl/Fbo.h>
 #include <cinder/Text.h>
 #include <cinder/Font.h>
 
@@ -14,7 +13,7 @@ using namespace ci;
 
 using namespace std;
 
-struct PieceRenderer::Data {
+struct CellRenderer::Data {
   gl::Fbo fbo;
   Font font;
   unordered_map<int, gl::TextureRef> texs;
@@ -56,27 +55,13 @@ struct PieceRenderer::Data {
   }
 };
 
-PieceRenderer::PieceRenderer() : d(make_unique<Data>()) {
+CellRenderer::CellRenderer() : d(make_unique<Data>()) {
   d->font = Font("Arial", 60);
 }
 
-PieceRenderer::~PieceRenderer() {}
+CellRenderer::~CellRenderer() {}
 
-void PieceRenderer::draw(const Piece& p, Rectf rect) {
-  const auto& size = rect.getSize();
-  gl::TextureRef tex;
-
-  auto iter = d->texs.find(p.value);
-  if (iter == d->texs.end())
-    tex = d->newTexture(p.value, size);
-  else
-    tex = iter->second;
-
-  gl::color(Color::white()); 
-  gl::draw(tex, rect);
-}
-
-void PieceRenderer::draw(const int value, ci::Rectf rect) {
+void CellRenderer::draw(const int value, ci::Rectf rect) {
   const auto& size = rect.getSize();
   gl::TextureRef tex;
 
@@ -90,7 +75,7 @@ void PieceRenderer::draw(const int value, ci::Rectf rect) {
   gl::draw(tex, rect);
 }
 
-ci::gl::TextureRef PieceRenderer::render(const int value, const ci::Vec2f& size) {
+ci::gl::TextureRef CellRenderer::render(const int value, const ci::Vec2f& size) {
   gl::TextureRef tex;
   auto iter = d->texs.find(value);
   if (iter == d->texs.end())
