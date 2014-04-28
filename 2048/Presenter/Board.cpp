@@ -53,17 +53,17 @@ void Board::draw(const Rectf &rect) {
   }
 }
 
-bool Board::moveAll(const ci::Vec2i &dir) {
+bool Board::slide(const ci::Vec2i &dir) {
   bool moved = false;
-  auto xs = buildTraversals(width(), dir.x);
-  auto ys = buildTraversals(height(), dir.y);
+  auto xs = traversal(width(), dir.x);
+  auto ys = traversal(height(), dir.y);
 
   for (auto x : xs) {
     for (auto y : ys) {
       auto &p = at({ x, y }).piece();
       if (!p)
         continue;
-      moved = moveToFurthest({ x, y }, dir) || moved;
+      moved = slide({ x, y }, dir) || moved;
     }
   }
 
@@ -80,7 +80,7 @@ bool Board::moveAll(const ci::Vec2i &dir) {
   return moved;
 }
 
-bool Board::moveToFurthest(Vec2i src, const Vec2i &dir) {
+bool Board::slide(Vec2i src, const Vec2i &dir) {
   auto within_boundary = [this](const Vec2i &pos) {
     return pos.x >= 0 && pos.y >= 0 && pos.x < width() && pos.y < height();
   };
@@ -104,7 +104,7 @@ bool Board::moveToFurthest(Vec2i src, const Vec2i &dir) {
   return false;
 }
 
-vector<int> Board::buildTraversals(int max, int dir) const {
+vector<int> Board::traversal(int max, int dir) const {
   vector<int> r;
   for (int i = 0; i < max; ++i) {
     r.push_back(i);
@@ -119,14 +119,14 @@ void Board::spawn() {
   if (Random::next(1, 10) <= 3) {
     value = 2;
   }
-  auto freeSpaces = getFreeSpaces();
+  auto freeSpaces = freespaces();
   assert(freeSpaces.size() > 0);
   int ifs = Random::next(freeSpaces.size() - 1);
   auto pos = freeSpaces[ifs];
   at(pos).place(make_unique<Piece>(value));
 }
 
-vector<Vec2i> Board::getFreeSpaces() const {
+vector<Vec2i> Board::freespaces() const {
   vector<Vec2i> freeSpaces;
   for (int r = 0; r < 4; ++r) {
     for (int c = 0; c < 4; ++c) {

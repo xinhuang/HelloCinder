@@ -14,6 +14,11 @@ class Board {
 
   Cell& at(const ci::Vec2i& coord);
   const Cell &at(const ci::Vec2i &coord) const;
+  void place(const ci::Vec2i& coord, std::unique_ptr<Piece>&& p);
+  bool slide(ci::Vec2i src, const ci::Vec2i &dir);
+  std::vector<int> traversal(int max, int dir) const;
+  std::vector<ci::Vec2i> freespaces() const;
+  bool isOccupied(const ci::Vec2i& coord) const;
 
 public:
   Board();
@@ -25,13 +30,8 @@ public:
   int width() const;
   int height() const;
 
-  void place(const ci::Vec2i& coord, std::unique_ptr<Piece>&& p);
-  bool moveAll(const ci::Vec2i &dir);
-  bool moveToFurthest(ci::Vec2i src, const ci::Vec2i &dir);
-  std::vector<int> buildTraversals(int max, int dir) const;
+  bool slide(const ci::Vec2i &dir);
   void spawn();
-  std::vector<ci::Vec2i> getFreeSpaces() const;
-  bool isOccupied(const ci::Vec2i& coord) const;
 
   void draw(const ci::Rectf& rect);
 };

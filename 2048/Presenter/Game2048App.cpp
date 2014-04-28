@@ -59,7 +59,7 @@ void Game2048App::keyUp(ci::app::KeyEvent e) {
   default:
     return;
   }
-  if (offset != Vec2i{} && d->board.moveAll(offset))
+  if (offset != Vec2i{} && d->board.slide(offset))
     d->board.spawn();
 }
 

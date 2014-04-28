@@ -7,7 +7,6 @@
 
 #include <memory>
 
-
 class Cell {
   const ci::Vec2i coord_;
   std::unique_ptr<Piece> piece_;
