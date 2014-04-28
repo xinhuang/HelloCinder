@@ -14,7 +14,7 @@ using namespace ci::app;
 using namespace std;
 
 Cell::Cell(const ci::Vec2i &coord) : coord_(coord) {
-  animation_ = emptyCellAnimation();
+  anim_ = emptyCellAnimation();
 }
 
 const std::unique_ptr<Piece> &Cell::piece() const { return piece_; }
@@ -25,21 +25,29 @@ void Cell::draw(const ci::Rectf &rect) {
   gl::enableAlphaBlending();
   gl::color(Color::white());
   gl::setViewport(getWindowBounds());
-  animation_.draw(rect);
+  piece_anim_.draw(rect);
+  gl::disableAlphaBlending();
+}
+
+void Cell::drawBackground(const ci::Rectf &rect) {
+  gl::enableAlphaBlending();
+  gl::color(Color::white());
+  gl::setViewport(getWindowBounds());
+  anim_.draw(rect);
   gl::disableAlphaBlending();
 }
 
 void Cell::place(std::unique_ptr<Piece> &&p) {
   assert(!piece_);
   piece_ = move(p);
-  animation_ += placePieceAnimation(value());
+  piece_anim_ += placePieceAnimation(value());
 }
 
 void Cell::moveTo(Cell &cell) {
   assert(piece_);
   cell.piece_ = std::move(piece_);
-  cell.animation_ += movePieceAnimation(*this, cell);
-  animation_ = emptyCellAnimation();
+  cell.piece_anim_ += movePieceAnimation(*this, cell);
+  piece_anim_ = emptyCellAnimation();
 }
 
 void Cell::mergeTo(Cell &cell) {
@@ -47,8 +55,8 @@ void Cell::mergeTo(Cell &cell) {
   assert(!cell.piece_->merged);
   assert(piece_);
   cell.piece_->merged = std::move(piece_);
-  cell.animation_ = mergeAnimation(*this, cell) * cell.animation_;
-  animation_ = emptyCellAnimation();
+  cell.piece_anim_ = mergeAnimation(*this, cell) * cell.piece_anim_;
+  piece_anim_ = emptyCellAnimation();
 }
 
 int Cell::value() const {

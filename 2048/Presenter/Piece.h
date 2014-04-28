@@ -1,5 +1,9 @@
 #pragma once
 
+#include "../View/Animation.h"
+
+#include <cinder/Rect.h>
+
 #include <memory>
 
 class Piece {

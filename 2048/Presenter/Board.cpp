@@ -44,8 +44,7 @@ void Board::draw(const Rectf &rect) {
   gl::drawSolidRoundedRect(rect, 5.f);
 
   for (auto &cell : d->cells) {
-    if (!cell.piece())
-      cell.draw(Scene::cellRect(cell.coord()));
+    cell.drawBackground(Scene::cellRect(cell.coord()));
   }
   for (auto &cell : d->cells) {
     if (cell.piece())
@@ -138,17 +137,19 @@ vector<Vec2i> Board::freespaces() const {
   return freeSpaces;
 }
 
-bool Board::isOccupied(const ci::Vec2i& coord) const {
+bool Board::isOccupied(const ci::Vec2i &coord) const {
   return at(coord).piece() != nullptr;
 }
 
 Cell &Board::at(const ci::Vec2i &coord) {
-  assert(coord.x < width() && coord.y < height() && coord.x >= 0 && coord.y >= 0);
+  assert(coord.x < width() && coord.y < height() && coord.x >= 0 &&
+         coord.y >= 0);
   return d->cells[coord.y * width() + coord.x];
 }
 
 const Cell &Board::at(const ci::Vec2i &coord) const {
-  assert(coord.x < width() && coord.y < height() && coord.x >= 0 && coord.y >= 0);
+  assert(coord.x < width() && coord.y < height() && coord.x >= 0 &&
+         coord.y >= 0);
   return d->cells[coord.y * width() + coord.x];
 }
 
