@@ -96,10 +96,10 @@
     <ClCompile Include="View\CellRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Model\Piece.h" />
     <ClInclude Include="Presenter\Board.h" />
     <ClInclude Include="Presenter\Cell.h" />
     <ClInclude Include="Presenter\Config.h" />
+    <ClInclude Include="Presenter\Piece.h" />
     <ClInclude Include="Presenter\Scene.h" />
     <ClInclude Include="Presenter\Game2048App.h" />
     <ClInclude Include="Random.h" />

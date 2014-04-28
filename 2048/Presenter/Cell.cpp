@@ -1,7 +1,8 @@
 #include "Cell.h"
 
+#include "Piece.h"
+
 #include "../View/CellAnimation.h"
-#include "../Model/Piece.h"
 
 #include <cinder/app/app.h>
 #include <cinder/gl/gl.h>

@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Piece.h"
+
 #include "../View/IRenderable.h"
 #include "../View/Animation.h"
-#include "../Model/Piece.h"
 
 #include <memory>
 

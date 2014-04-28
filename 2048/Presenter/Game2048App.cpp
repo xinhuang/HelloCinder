@@ -1,7 +1,5 @@
 #include "Game2048App.h"
 
-#include "../Model/Piece.h"
-
 #include "Config.h"
 #include "Scene.h"
 #include "Cell.h"

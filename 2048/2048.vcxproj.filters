@@ -14,9 +14,6 @@
     <Filter Include="Util">
       <UniqueIdentifier>{59f452f4-906f-4aec-984a-f43430d9ba26}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Model">
-      <UniqueIdentifier>{46936c7c-2b59-4fb0-a0e7-4ac96c3e727a}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Presenter\Game2048App.cpp">
@@ -51,9 +48,6 @@
     <ClInclude Include="Presenter\Game2048App.h">
       <Filter>Presenter</Filter>
     </ClInclude>
-    <ClInclude Include="Model\Piece.h">
-      <Filter>Model</Filter>
-    </ClInclude>
     <ClInclude Include="View\Animation.h">
       <Filter>View</Filter>
     </ClInclude>
@@ -73,6 +67,9 @@
       <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="Presenter\Board.h">
+      <Filter>Presenter</Filter>
+    </ClInclude>
+    <ClInclude Include="Presenter\Piece.h">
       <Filter>Presenter</Filter>
     </ClInclude>
   </ItemGroup>
