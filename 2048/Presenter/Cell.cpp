@@ -12,7 +12,7 @@ using namespace ci::app;
 
 using namespace std;
 
-Cell::Cell(const ci::Vec2i &position) : coord_(position) {
+Cell::Cell(const ci::Vec2i &coord) : coord_(coord) {
   animation_ = emptyCellAnimation();
 }
 

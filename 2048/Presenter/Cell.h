@@ -2,10 +2,10 @@
 
 #include "../View/IRenderable.h"
 #include "../View/Animation.h"
+#include "../Model/Piece.h"
 
 #include <memory>
 
-class Piece;
 
 class Cell {
   const ci::Vec2i coord_;
@@ -13,7 +13,10 @@ class Cell {
   Animation animation_;
 
 public:
-  Cell(const ci::Vec2i &position);
+  Cell(const ci::Vec2i &coord);
+  Cell(Cell &&cell)
+      : coord_(cell.coord_), piece_(std::move(cell.piece_)),
+        animation_(cell.animation_) {}
 
   const std::unique_ptr<Piece> &piece() const;
   const ci::Vec2i &coord() const;

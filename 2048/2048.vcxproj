@@ -87,6 +87,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Presenter\Board.cpp" />
     <ClCompile Include="Presenter\Cell.cpp" />
     <ClCompile Include="Presenter\Scene.cpp" />
     <ClCompile Include="Presenter\Game2048App.cpp" />
@@ -96,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Model\Piece.h" />
+    <ClInclude Include="Presenter\Board.h" />
     <ClInclude Include="Presenter\Cell.h" />
     <ClInclude Include="Presenter\Config.h" />
     <ClInclude Include="Presenter\Scene.h" />

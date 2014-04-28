@@ -9,6 +9,8 @@ class Piece;
 class Cell;
 
 class Game2048App : public ci::app::AppBasic {
+  struct Data;
+  std::unique_ptr<Data> d;
 public:
   Game2048App();
   ~Game2048App();
@@ -18,23 +20,4 @@ public:
   void draw() final;
   void update() final;
   void keyUp(ci::app::KeyEvent e) final;
-  void resize() final;
-
-private:
-  void spawn();
-  bool moveAll(const ci::Vec2i& dir);
-  void drawBoard(const ci::Rectf& rect) const;
-  std::vector<ci::Vec2i> getFreeSpaces() const;
-  bool isOccupied(const ci::Vec2i& pos) const;
-
-  std::unique_ptr<Cell>& at(const ci::Vec2i& pos);
-  const std::unique_ptr<Cell>& at(const ci::Vec2i& pos) const;
-
-  void clear(const ci::Vec2i& pos);
-  std::vector<int> buildTraversals(int max, int dir) const;
-  bool moveToFurthest(ci::Vec2i pos, const ci::Vec2i& dir);
-
-private:
-  struct Data;
-  std::unique_ptr<Data> d;
 };
