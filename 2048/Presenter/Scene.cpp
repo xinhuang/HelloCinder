@@ -11,6 +11,7 @@ using namespace std;
 
 struct Scene::Data {
   float borderSize = 2.f;
+  int headerHeight = 0;
 };
 
 Scene::Scene() : d(make_unique<Data>()) {}
@@ -35,12 +36,13 @@ ci::Vec2f Scene::distance(const ci::Vec2i &from, const ci::Vec2i &to) {
 }
 
 float Scene::boardWidth() {
-  return static_cast<float>(min(getWindowWidth(), getWindowHeight())) - 14;
+  return static_cast<float>(
+      min(getWindowWidth(), getWindowHeight() - data()->headerHeight) - 14);
 }
 
 float Scene::boardHeight() { return boardWidth(); }
 
 ci::Vec2f Scene::boardPos() {
   return {(getWindowWidth() - boardWidth()) / 2.f,
-          (getWindowHeight() - boardHeight()) / 2.f, };
+          (getWindowHeight() - boardHeight() + data()->headerHeight) / 2.f, };
 }
