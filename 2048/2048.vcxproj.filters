@@ -37,6 +37,9 @@
     <ClCompile Include="Presenter\Board.cpp">
       <Filter>Presenter</Filter>
     </ClCompile>
+    <ClCompile Include="View\Label.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Random.h">
@@ -71,6 +74,9 @@
     </ClInclude>
     <ClInclude Include="Presenter\Piece.h">
       <Filter>Presenter</Filter>
+    </ClInclude>
+    <ClInclude Include="View\Label.h">
+      <Filter>View</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

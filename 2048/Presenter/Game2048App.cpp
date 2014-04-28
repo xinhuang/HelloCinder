@@ -5,6 +5,8 @@
 #include "Cell.h"
 #include "Board.h"
 
+#include "../View/Label.h"
+
 #include "../Util/Random.h"
 
 #include <cinder/gl/gl.h>
@@ -20,6 +22,8 @@ using namespace std;
 
 struct Game2048App::Data {
   bool gameover = false;
+  Label scoreLabel;
+  Label score;
   Board board;
 };
 
@@ -28,8 +32,16 @@ Game2048App::Game2048App() : d(make_unique<Data>()) {}
 Game2048App::~Game2048App() {}
 
 void Game2048App::setup() {
-  d->board = Board(Config::SIZE, Config::SIZE);
   setFrameRate(Config::FRAME_RATE);
+
+  d->scoreLabel.setForeColor(Color::white());
+  d->scoreLabel.setBackColor(Color::hex(Config::BOARD_COLOR));
+  d->scoreLabel.setText("Score");
+  d->scoreLabel.setFontSize(30);
+  d->score.setForeColor(Color::white());
+  d->score.setBackColor(Color::hex(Config::BOARD_COLOR));
+
+  d->board = Board(Config::SIZE, Config::SIZE);
   d->board.spawn();
   d->board.spawn();
 }
@@ -69,9 +81,11 @@ void Game2048App::keyUp(ci::app::KeyEvent e) {
 }
 
 void Game2048App::update() {
-  if (d->board.moves_available())
-    return;
-  d->gameover = true;
+  d->score.setText(to_string(100));
+
+  if (!d->board.moves_available()) {
+    d->gameover = true;
+  }
 }
 
 void Game2048App::draw() {
@@ -83,6 +97,14 @@ void Game2048App::draw() {
   if (d->gameover) {
     drawGameOver(Scene::boardRect());
   }
+
+  d->scoreLabel.draw(
+      Rectf{ Scene::boardRect().x2 - 100.f, Scene::boardRect().y1 - 50.f - 50.f,
+             Scene::boardRect().x2,         Scene::boardRect().y1 - 50.f });
+
+  d->score.draw(
+      Rectf{ Scene::boardRect().x2 - 100.f, Scene::boardRect().y1 - 50.f - 20.f,
+             Scene::boardRect().x2,         Scene::boardRect().y1 - 20.f });
 }
 
 void Game2048App::drawGameOver(const Rectf &rect) const {

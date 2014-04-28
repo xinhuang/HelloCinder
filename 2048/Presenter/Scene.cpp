@@ -10,8 +10,8 @@ using namespace ci::app;
 using namespace std;
 
 struct Scene::Data {
+  int headerHeight = 150.f;
   float borderSize = 2.f;
-  int headerHeight = 0;
 };
 
 Scene::Scene() : d(make_unique<Data>()) {}
