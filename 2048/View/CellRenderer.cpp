@@ -17,8 +17,8 @@ struct CellRenderer::Data {
   gl::Fbo fbo;
   Font font;
   unordered_map<int, gl::TextureRef> texs;
-  
-  gl::TextureRef& newTexture(int value, const ci::Vec2i& size) {
+
+  gl::TextureRef &newTexture(int value, const ci::Vec2i &size) {
     if (!fbo || fbo.getWidth() != size.x || fbo.getHeight() != size.y)
       fbo = gl::Fbo(size.x, size.y, true);
 
@@ -30,7 +30,8 @@ struct CellRenderer::Data {
 
     assert(value >= 0);
     size_t color_index = value;
-    if (color_index >= sizeof(Config::CELL_COLORS) / sizeof(Config::CELL_COLORS[0]))
+    if (color_index >=
+        sizeof(Config::CELL_COLORS) / sizeof(Config::CELL_COLORS[0]))
       color_index = sizeof(Config::CELL_COLORS) / Config::CELL_COLORS[0] - 1;
     auto bk_color = Config::CELL_COLORS[color_index];
     auto fore_color = Config::FORE_COLORS[color_index];
@@ -40,9 +41,10 @@ struct CellRenderer::Data {
     gl::drawSolidRoundedRect(rect, 5.f);
 
     if (value > 0) {
+      gl::color(Color::white());
       TextBox tbox =
-        TextBox().alignment(TextBox::CENTER).size(size).font(font).text(
-        to_string(1 << value));
+          TextBox().alignment(TextBox::CENTER).size(size).font(font).text(
+              to_string(1 << value));
       tbox.setColor(Color::hex(fore_color));
       tbox.setBackgroundColor(ColorA(1, 1, 1, 0));
       gl::draw(tbox.render());
@@ -62,7 +64,7 @@ CellRenderer::CellRenderer() : d(make_unique<Data>()) {
 CellRenderer::~CellRenderer() {}
 
 void CellRenderer::draw(const int value, ci::Rectf rect) {
-  const auto& size = rect.getSize();
+  const auto &size = rect.getSize();
   gl::TextureRef tex;
 
   auto iter = d->texs.find(value);
@@ -75,7 +77,8 @@ void CellRenderer::draw(const int value, ci::Rectf rect) {
   gl::draw(tex, rect);
 }
 
-ci::gl::TextureRef CellRenderer::render(const int value, const ci::Vec2f& size) {
+ci::gl::TextureRef CellRenderer::render(const int value,
+                                        const ci::Vec2f &size) {
   gl::TextureRef tex;
   auto iter = d->texs.find(value);
   if (iter == d->texs.end())
