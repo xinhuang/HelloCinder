@@ -22,19 +22,11 @@ const std::unique_ptr<Piece> &Cell::piece() const { return piece_; }
 const ci::Vec2i &Cell::coord() const { return coord_; }
 
 void Cell::draw(const ci::Rectf &rect) {
-  gl::enableAlphaBlending();
-  gl::color(Color::white());
-  gl::setViewport(getWindowBounds());
   piece_anim_.draw(rect);
-  gl::disableAlphaBlending();
 }
 
 void Cell::drawBackground(const ci::Rectf &rect) {
-  gl::enableAlphaBlending();
-  gl::color(Color::white());
-  gl::setViewport(getWindowBounds());
   anim_.draw(rect);
-  gl::disableAlphaBlending();
 }
 
 void Cell::place(std::unique_ptr<Piece> &&p) {

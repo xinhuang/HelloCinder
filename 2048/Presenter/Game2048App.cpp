@@ -67,7 +67,6 @@ void Game2048App::update() {}
 
 void Game2048App::draw() {
   gl::clear(Color::hex(Config::BK_COLOR));
-
   gl::setViewport(getWindowBounds());
   gl::setMatricesWindow(getWindowSize());
   d->board.draw(Scene::boardRect());
