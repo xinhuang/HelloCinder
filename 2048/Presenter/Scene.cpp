@@ -10,7 +10,7 @@ using namespace ci::app;
 using namespace std;
 
 struct Scene::Data {
-  int headerHeight = 150.f;
+  int headerHeight = 150;
   float borderSize = 2.f;
 };
 

@@ -17,6 +17,7 @@ struct Board::Data {
   int width;
   int height;
   vector<Cell> cells;
+  vector<IBoardEventListener*> listeners;
 };
 
 Board::Board() : d(make_unique<Data>()) {}
@@ -97,6 +98,7 @@ bool Board::slide(const ci::Vec2i &dir) {
     if (!p)
       continue;
     if (p->merged) {
+      onPieceMerged(*(p->merged), *p);
       p->value++;
       p->merged = nullptr;
     }
@@ -181,4 +183,14 @@ const Cell &Board::at(const ci::Vec2i &coord) const {
 
 void Board::place(const ci::Vec2i &coord, std::unique_ptr<Piece> &&p) {
   at(coord).place(move(p));
+}
+
+void Board::addListener(IBoardEventListener &listener) {
+  d->listeners.push_back(&listener);
+}
+
+void Board::onPieceMerged(const Piece &from, const Piece &to) {
+  for (auto& listener : d->listeners) {
+    listener->onPieceMerged(from, to);
+  }
 }

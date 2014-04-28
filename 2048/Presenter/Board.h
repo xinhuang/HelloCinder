@@ -8,6 +8,11 @@
 class Cell;
 class Piece;
 
+class IBoardEventListener {
+public:
+  virtual void onPieceMerged(const Piece& from, const Piece& to) = 0;
+};
+
 class Board {
   struct Data;
   std::unique_ptr<Data> d;
@@ -19,6 +24,8 @@ class Board {
   std::vector<int> traversal(int max, int dir) const;
   std::vector<ci::Vec2i> freespaces() const;
   bool isOccupied(const ci::Vec2i& coord) const;
+
+  void onPieceMerged(const Piece &from, const Piece &to);
 
 public:
   Board();
@@ -35,4 +42,6 @@ public:
   void spawn();
 
   void draw(const ci::Rectf& rect);
+
+  void addListener(IBoardEventListener& listener);
 };

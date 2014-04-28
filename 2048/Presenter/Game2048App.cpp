@@ -3,7 +3,6 @@
 #include "Config.h"
 #include "Scene.h"
 #include "Cell.h"
-#include "Board.h"
 
 #include "../View/Label.h"
 
@@ -22,6 +21,7 @@ using namespace std;
 
 struct Game2048App::Data {
   bool gameover = false;
+  int score_value = 0;
   Label scoreLabel;
   Label score;
   Board board;
@@ -44,6 +44,7 @@ void Game2048App::setup() {
   d->board = Board(Config::SIZE, Config::SIZE);
   d->board.spawn();
   d->board.spawn();
+  d->board.addListener(*this);
 }
 
 void Game2048App::keyUp(ci::app::KeyEvent e) {
@@ -81,7 +82,7 @@ void Game2048App::keyUp(ci::app::KeyEvent e) {
 }
 
 void Game2048App::update() {
-  d->score.setText(to_string(100));
+  d->score.setText(to_string(d->score_value));
 
   if (!d->board.moves_available()) {
     d->gameover = true;
@@ -121,6 +122,10 @@ void Game2048App::drawGameOver(const Rectf &rect) const {
   gl::draw(tb.render(), rect);
 
   gl::disableAlphaBlending();
+}
+
+void Game2048App::onPieceMerged(const Piece &from, const Piece &to) {
+  d->score_value += (1 << from.value) + (1 << to.value);
 }
 
 CINDER_APP_BASIC(Game2048App, RendererGl);

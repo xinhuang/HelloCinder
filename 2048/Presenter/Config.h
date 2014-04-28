@@ -21,5 +21,5 @@ const float FRAME_RATE = 60.f;
 const int ANIM_FRAMES = 6;
 
 const char FONT[] = "Arial";
-const float FONT_WEIGHT = 80;
+const float FONT_WEIGHT = 50;
 }
