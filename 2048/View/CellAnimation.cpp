@@ -1,7 +1,9 @@
 #include "CellAnimation.h"
-#include "../Presenter/Scene.h"
 
 #include "CellRenderer.h"
+
+#include "../Presenter/Scene.h"
+#include "../Presenter/Config.h"
 
 using namespace std;
 
@@ -16,7 +18,7 @@ Animation emptyCellAnimation() {
 
 Animation placePieceAnimation(int value) {
   auto tex = getTex(value);
-  return scaleBy(tex, 0.5f, 1.03f, 3) + scaleBy(tex, 1.03f, 1.f, 3);
+  return emptyCellAnimation() + scaleBy(tex, 0.5f, 1.03f, Config::ANIM_FRAMES) + scaleBy(tex, 1.03f, 1.f, Config::ANIM_FRAMES);
 }
 
 Animation movePieceAnimation(const Cell &src, const Cell &dst) {
@@ -27,7 +29,7 @@ Animation movePieceAnimation(const Cell &src, const Cell &dst) {
 
 Animation promotionPieceAnimation(int level) {
   auto tex = getTex(level + 1);
-  return scaleBy(tex, 1.f, 1.03f, 3) + scaleBy(tex, 1.03f, 1.f, 3);
+  return scaleBy(tex, 1.f, 1.03f, Config::ANIM_FRAMES) + scaleBy(tex, 1.03f, 1.f, Config::ANIM_FRAMES);
 }
 
 Animation mergeAnimation(const Cell &src, const Cell &dst) {

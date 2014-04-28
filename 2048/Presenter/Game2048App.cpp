@@ -31,7 +31,7 @@ void Game2048App::setup() {
   for (int c = 0; c < Config::SIZE; ++c)
     for (int r = 0; r < Config::SIZE; ++r)
       d->cells.push_back(make_unique<Cell>(Vec2i{ r, c }));
-  setFrameRate(30);
+  setFrameRate(Config::FRAME_RATE);
   d->font = Font("Arial", 60);
   spawn();
   spawn();
@@ -75,7 +75,12 @@ void Game2048App::draw() {
   drawBoard(Scene::boardRect());
 
   for (const auto &cell : d->cells) {
-    cell->draw(Scene::cellRect(cell->coord()));
+    if (!cell->piece())
+      cell->draw(Scene::cellRect(cell->coord()));
+  }
+  for (const auto &cell : d->cells) {
+    if (cell->piece())
+      cell->draw(Scene::cellRect(cell->coord()));
   }
 }
 
