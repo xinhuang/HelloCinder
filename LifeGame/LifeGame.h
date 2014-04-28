@@ -15,6 +15,7 @@
 class LifeGame : public ci::app::AppBasic {
 public:
   LifeGame();
+  ~LifeGame() override;
   void setup() override;
 
   void draw() override;

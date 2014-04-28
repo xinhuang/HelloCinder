@@ -36,6 +36,15 @@
     <ClInclude Include="..\LifeGame\vax.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\LifeGame\GpuGlslUniverse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LifeGame\LifeGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LifeGame\Resources.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\LifeGame\stdafx.cpp">
@@ -50,5 +59,27 @@
     <ClCompile Include="..\LifeGame\vax.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\LifeGame\GpuGlslUniverse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LifeGame\LifeGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Program.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\LifeGame\resources\LifeGame_frag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\LifeGame\resources\PassThru_vert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\LifeGame\ShaderLifeGame.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

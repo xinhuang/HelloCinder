@@ -49,6 +49,8 @@ LifeGame::LifeGame() : d(make_unique<Data>()) {
 #endif // USE_TBB
 }
 
+LifeGame::~LifeGame() {}
+
 void LifeGame::setup() {
   d->font_ = Font("Helvetica", 16);
   gl::disableVerticalSync();
@@ -195,5 +197,3 @@ void LifeGame::zoom(float scale) {
   if (d->cellSize_ > GameConfig::MAX_CELL_SIZE)
     d->cellSize_ = GameConfig::MAX_CELL_SIZE;
 }
-
-CINDER_APP_BASIC(LifeGame, RendererGl)
