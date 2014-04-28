@@ -39,6 +39,32 @@ Board::~Board() {}
 int Board::width() const { return d->width; }
 int Board::height() const { return d->height; }
 
+bool Board::moves_available() const {
+  if (freespaces().size() > 0)
+    return true;
+
+  const int dx[] = { 0, 1 };
+  const int dy[] = { 1, 0 };
+  for (int x = 0; x < width(); ++x) {
+    for (int y = 0; y < height(); ++y) {
+      assert(at({ x, y }).piece());
+      assert(at({ x, y }).piece()->merged == nullptr);
+
+      for (int i = 0; i < 2; ++i) {
+        if (x + dx[i] >= width() || y + dy[i] >= height())
+          continue;
+        assert(at({ x + dx[i], y + dy[i] }).piece());
+        assert(at({ x + dx[i], y + dy[i] }).piece()->merged == nullptr);
+        if (at({ x, y }).piece()->value ==
+            at({ x + dx[i], y + dy[i] }).piece()->value)
+          return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 void Board::draw(const Rectf &rect) {
   gl::color(Color::hex(Config::BOARD_COLOR));
   gl::drawSolidRoundedRect(rect, 5.f);

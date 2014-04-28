@@ -29,6 +29,7 @@ public:
 
   int width() const;
   int height() const;
+  bool moves_available() const;
 
   bool slide(const ci::Vec2i &dir);
   void spawn();

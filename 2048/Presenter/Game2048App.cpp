@@ -18,7 +18,7 @@ using namespace ci::app;
 using namespace std;
 
 struct Game2048App::Data {
-  vector<unique_ptr<Cell> > cells;
+  bool gameover = false;
   Board board;
 };
 
@@ -59,11 +59,19 @@ void Game2048App::keyUp(ci::app::KeyEvent e) {
   default:
     return;
   }
+  
+  if (d->gameover)
+    return;
+
   if (offset != Vec2i{} && d->board.slide(offset))
     d->board.spawn();
 }
 
-void Game2048App::update() {}
+void Game2048App::update() {
+  if (d->board.moves_available())
+    return;
+  d->gameover = true;
+}
 
 void Game2048App::draw() {
   gl::clear(Color::hex(Config::BK_COLOR));
