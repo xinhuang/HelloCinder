@@ -56,7 +56,7 @@ struct CellRenderer::Data {
 };
 
 CellRenderer::CellRenderer() : d(make_unique<Data>()) {
-  d->font = Font("Arial", 60);
+  d->font = Font(Config::FONT, Config::FONT_WEIGHT);
 }
 
 CellRenderer::~CellRenderer() {}
