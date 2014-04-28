@@ -9,6 +9,7 @@
 
 #include <cinder/gl/gl.h>
 #include <cinder/gl/Texture.h>
+#include <cinder/Text.h>
 
 using namespace ci;
 using namespace ci::app;
@@ -59,7 +60,7 @@ void Game2048App::keyUp(ci::app::KeyEvent e) {
   default:
     return;
   }
-  
+
   if (d->gameover)
     return;
 
@@ -78,6 +79,26 @@ void Game2048App::draw() {
   gl::setViewport(getWindowBounds());
   gl::setMatricesWindow(getWindowSize());
   d->board.draw(Scene::boardRect());
+
+  if (d->gameover) {
+    drawGameOver(Scene::boardRect());
+  }
+}
+
+void Game2048App::drawGameOver(const Rectf &rect) const {
+  gl::enableAlphaBlending();
+
+  gl::color(ColorA(1.f, 1.f, 1.f, 0.6f));
+  gl::drawSolidRect(rect);
+
+  gl::color(Color::white());
+  auto font = Font("Arial", 100.f);
+  auto tb = TextBox().alignment(TextBox::CENTER).font(font).text("Game over!");
+  tb.setSize(rect.getSize());
+  tb.setColor(Color::hex(0x776E65));
+  gl::draw(tb.render(), rect);
+
+  gl::disableAlphaBlending();
 }
 
 CINDER_APP_BASIC(Game2048App, RendererGl);
