@@ -1,5 +1,9 @@
 #include "Label.h"
 
+#include "IRenderable.h"
+
+#include <cassert>
+
 using namespace std;
 
 #include <cinder/Text.h>
@@ -9,27 +13,38 @@ using namespace std;
 using namespace ci;
 
 struct Label::Data {
-  string text;
   float fontSize = 60.f;
   Vec2f size;
   Vec2f location;
   Color foreColor = Color::white();
   Color backColor = Color::black();
+  string text;
+  mutable unique_ptr<IRenderable> render;
 };
 
 Label::Label() : d(make_unique<Data>()) {}
 
 Label::~Label() {}
 
-void Label::setText(const std::string &text) { d->text = text; }
+void Label::setForeColor(const Color &color) {
+  d->foreColor = color;
+  d->render.reset();
+}
 
-void Label::setForeColor(const Color &color) { d->foreColor = color; }
+void Label::setBackColor(const Color &color) {
+  d->backColor = color;
+  d->render.reset();
+}
 
-void Label::setBackColor(const Color &color) { d->backColor = color; }
+void Label::setFontSize(float size) {
+  d->fontSize = size;
+  d->render.reset();
+}
 
-void Label::setFontSize(float size) { d->fontSize = size; }
-
-void Label::setSize(const ci::Vec2f &size) { d->size = size; }
+void Label::setSize(const ci::Vec2f &size) {
+  d->size = size;
+  d->render.reset();
+}
 
 void Label::setLocation(const ci::Vec2f &loc) { d->location = loc; }
 
@@ -37,16 +52,29 @@ const ci::Vec2f &Label::size() const { return d->size; }
 
 const ci::Vec2f &Label::location() const { return d->location; }
 
-void Label::draw() const {
-  gl::enableAlphaBlending();
+void Label::setText(const std::string &text) {
+  d->text = text;
+  d->render.reset();
+}
 
-  gl::color(Color::white());
+void Label::updateCache() const {
   auto font = Font("Arial", d->fontSize);
   auto tb = TextBox().alignment(TextBox::CENTER).font(font).text(d->text);
   tb.setSize(d->size);
   tb.setColor(d->foreColor);
   tb.setBackgroundColor(d->backColor);
-  gl::draw(tb.render(), rect());
+
+  d->render.reset(new TextureRenderer(gl::Texture::create(tb.render())));
+}
+
+void Label::draw() const {
+  if (!d->render)
+    updateCache();
+
+  gl::enableAlphaBlending();
+
+  gl::color(Color::white());
+  d->render->draw(rect());
 
   gl::disableAlphaBlending();
 }

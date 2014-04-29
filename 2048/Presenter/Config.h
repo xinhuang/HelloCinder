@@ -18,7 +18,7 @@ const uint32_t BOARD_COLOR = 0xBBADA0;
 const uint32_t BK_COLOR = 0xFAF8EF;
 
 const float FRAME_RATE = 60.f;
-const int ANIM_FRAMES = 6;
+const int ANIM_FRAMES = 4;
 
 const char FONT[] = "Arial";
 const float FONT_WEIGHT = 50;

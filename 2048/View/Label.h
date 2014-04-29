@@ -11,6 +11,8 @@ class Label {
   struct Data;
   std::unique_ptr<Data> d;
 
+  void updateCache() const;
+
 public:
   Label();
   ~Label();

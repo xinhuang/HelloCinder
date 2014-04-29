@@ -24,7 +24,7 @@ Animation placePieceAnimation(int value) {
 Animation movePieceAnimation(const Cell &src, const Cell &dst) {
   auto tex = getTex(dst.value());
   auto delta = BoardLayout::distance(src.coord(), dst.coord());
-  return moveBy(tex, delta, 3).reverse();
+  return moveBy(tex, delta, Config::ANIM_FRAMES).reverse();
 }
 
 Animation promotionPieceAnimation(int level) {
