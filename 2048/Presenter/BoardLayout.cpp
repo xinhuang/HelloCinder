@@ -1,4 +1,4 @@
-#include "Scene.h"
+#include "BoardLayout.h"
 
 #include "Config.h"
 
@@ -9,40 +9,40 @@ using namespace ci::app;
 
 using namespace std;
 
-struct Scene::Data {
+struct BoardLayout::Data {
   int headerHeight = 150;
   float borderSize = 2.f;
 };
 
-Scene::Scene() : d(make_unique<Data>()) {}
-Scene::~Scene() {}
+BoardLayout::BoardLayout() : d(make_unique<Data>()) {}
+BoardLayout::~BoardLayout() {}
 
-ci::Vec2f Scene::cellSize() {
+ci::Vec2f BoardLayout::cellSize() {
   auto borderWidthTotal = (Config::SIZE + 1) * data()->borderSize;
   auto boardHeightTotal = (Config::SIZE + 1) * data()->borderSize;
   return {(boardWidth() - borderWidthTotal) / Config::SIZE,
           (boardHeight() - boardHeightTotal) / Config::SIZE };
 }
 
-ci::Vec2f Scene::cellPos(const ci::Vec2i &coord) {
+ci::Vec2f BoardLayout::cellPos(const ci::Vec2i &coord) {
   return boardPos() + Vec2f(data()->borderSize, data()->borderSize) +
          static_cast<Vec2f>(coord) *
              (cellSize() + Vec2f(data()->borderSize, data()->borderSize));
 }
 
-ci::Vec2f Scene::distance(const ci::Vec2i &from, const ci::Vec2i &to) {
+ci::Vec2f BoardLayout::distance(const ci::Vec2i &from, const ci::Vec2i &to) {
   return Vec2f(from - to) *
          (cellSize() + Vec2f(data()->borderSize, data()->borderSize));
 }
 
-float Scene::boardWidth() {
+float BoardLayout::boardWidth() {
   return static_cast<float>(
       min(getWindowWidth(), getWindowHeight() - data()->headerHeight) - 14);
 }
 
-float Scene::boardHeight() { return boardWidth(); }
+float BoardLayout::boardHeight() { return boardWidth(); }
 
-ci::Vec2f Scene::boardPos() {
+ci::Vec2f BoardLayout::boardPos() {
   return {(getWindowWidth() - boardWidth()) / 2.f,
           (getWindowHeight() - boardHeight() + data()->headerHeight) / 2.f, };
 }

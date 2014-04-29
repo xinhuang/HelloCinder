@@ -2,13 +2,13 @@
 
 #include "CellRenderer.h"
 
-#include "../Presenter/Scene.h"
+#include "../Presenter/BoardLayout.h"
 #include "../Presenter/Config.h"
 
 using namespace std;
 
 ci::gl::TextureRef getTex(int value) {
-  return CellRenderer::instance().render(value, Scene::cellSize());
+  return CellRenderer::instance().render(value, BoardLayout::cellSize());
 }
 
 Animation emptyCellAnimation() {
@@ -23,7 +23,7 @@ Animation placePieceAnimation(int value) {
 
 Animation movePieceAnimation(const Cell &src, const Cell &dst) {
   auto tex = getTex(dst.value());
-  auto delta = Scene::distance(src.coord(), dst.coord());
+  auto delta = BoardLayout::distance(src.coord(), dst.coord());
   return moveBy(tex, delta, 3).reverse();
 }
 

@@ -28,9 +28,6 @@
     <ClCompile Include="View\CellAnimation.cpp">
       <Filter>View</Filter>
     </ClCompile>
-    <ClCompile Include="Presenter\Scene.cpp">
-      <Filter>Presenter</Filter>
-    </ClCompile>
     <ClCompile Include="View\CellRenderer.cpp">
       <Filter>View</Filter>
     </ClCompile>
@@ -39,6 +36,9 @@
     </ClCompile>
     <ClCompile Include="View\Label.cpp">
       <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="Presenter\BoardLayout.cpp">
+      <Filter>Presenter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -63,9 +63,6 @@
     <ClInclude Include="View\CellAnimation.h">
       <Filter>View</Filter>
     </ClInclude>
-    <ClInclude Include="Presenter\Scene.h">
-      <Filter>Presenter</Filter>
-    </ClInclude>
     <ClInclude Include="View\CellRenderer.h">
       <Filter>View</Filter>
     </ClInclude>
@@ -77,6 +74,9 @@
     </ClInclude>
     <ClInclude Include="View\Label.h">
       <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="Presenter\BoardLayout.h">
+      <Filter>Presenter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

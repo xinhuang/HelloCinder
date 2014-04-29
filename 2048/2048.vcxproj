@@ -89,7 +89,7 @@
   <ItemGroup>
     <ClCompile Include="Presenter\Board.cpp" />
     <ClCompile Include="Presenter\Cell.cpp" />
-    <ClCompile Include="Presenter\Scene.cpp" />
+    <ClCompile Include="Presenter\BoardLayout.cpp" />
     <ClCompile Include="Presenter\Game2048App.cpp" />
     <ClCompile Include="View\Animation.cpp" />
     <ClCompile Include="View\CellAnimation.cpp" />
@@ -101,7 +101,7 @@
     <ClInclude Include="Presenter\Cell.h" />
     <ClInclude Include="Presenter\Config.h" />
     <ClInclude Include="Presenter\Piece.h" />
-    <ClInclude Include="Presenter\Scene.h" />
+    <ClInclude Include="Presenter\BoardLayout.h" />
     <ClInclude Include="Presenter\Game2048App.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="View\Animation.h" />

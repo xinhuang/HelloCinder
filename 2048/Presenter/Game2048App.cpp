@@ -1,7 +1,7 @@
 #include "Game2048App.h"
 
 #include "Config.h"
-#include "Scene.h"
+#include "BoardLayout.h"
 #include "Cell.h"
 
 #include "../View/Label.h"
@@ -93,19 +93,19 @@ void Game2048App::draw() {
   gl::clear(Color::hex(Config::BK_COLOR));
   gl::setViewport(getWindowBounds());
   gl::setMatricesWindow(getWindowSize());
-  d->board.draw(Scene::boardRect());
+  d->board.draw(BoardLayout::boardRect());
 
   if (d->gameover) {
-    drawGameOver(Scene::boardRect());
+    drawGameOver(BoardLayout::boardRect());
   }
 
   d->scoreLabel.draw(
-      Rectf{ Scene::boardRect().x2 - 100.f, Scene::boardRect().y1 - 50.f - 50.f,
-             Scene::boardRect().x2,         Scene::boardRect().y1 - 50.f });
+      Rectf{ BoardLayout::boardRect().x2 - 100.f, BoardLayout::boardRect().y1 - 50.f - 50.f,
+             BoardLayout::boardRect().x2,         BoardLayout::boardRect().y1 - 50.f });
 
   d->score.draw(
-      Rectf{ Scene::boardRect().x2 - 100.f, Scene::boardRect().y1 - 50.f - 20.f,
-             Scene::boardRect().x2,         Scene::boardRect().y1 - 20.f });
+      Rectf{ BoardLayout::boardRect().x2 - 100.f, BoardLayout::boardRect().y1 - 50.f - 20.f,
+             BoardLayout::boardRect().x2,         BoardLayout::boardRect().y1 - 20.f });
 }
 
 void Game2048App::drawGameOver(const Rectf &rect) const {

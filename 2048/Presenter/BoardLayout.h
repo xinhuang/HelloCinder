@@ -5,20 +5,20 @@
 #include <cinder/Vector.h>
 #include <cinder/Rect.h>
 
-class Scene {
+class BoardLayout {
   struct Data;
   std::unique_ptr<Data> d;
 
-  Scene();
+  BoardLayout();
 
-  static Scene &instance() {
-    static Scene env;
+  static BoardLayout &instance() {
+    static BoardLayout env;
     return env;
   }
   static std::unique_ptr<Data> &data() { return instance().d; }
 
 public:
-  ~Scene();
+  ~BoardLayout();
 
   static ci::Vec2f cellSize();
   static ci::Vec2f cellPos(const ci::Vec2i &coord);

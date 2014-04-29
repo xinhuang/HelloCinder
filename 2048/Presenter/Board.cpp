@@ -1,7 +1,7 @@
 #include "Board.h"
 
 #include "Cell.h"
-#include "Scene.h"
+#include "BoardLayout.h"
 #include "Config.h"
 
 #include "..\Util\Random.h"
@@ -71,11 +71,11 @@ void Board::draw(const Rectf &rect) {
   gl::drawSolidRoundedRect(rect, 5.f);
 
   for (auto &cell : d->cells) {
-    cell.drawBackground(Scene::cellRect(cell.coord()));
+    cell.drawBackground(BoardLayout::cellRect(cell.coord()));
   }
   for (auto &cell : d->cells) {
     if (cell.piece())
-      cell.draw(Scene::cellRect(cell.coord()));
+      cell.draw(BoardLayout::cellRect(cell.coord()));
   }
 }
 
