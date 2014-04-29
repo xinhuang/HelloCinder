@@ -95,6 +95,7 @@
     <ClCompile Include="View\CellAnimation.cpp" />
     <ClCompile Include="View\CellRenderer.cpp" />
     <ClCompile Include="View\Label.cpp" />
+    <ClCompile Include="View\VerticalLabel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Presenter\Board.h" />
@@ -109,6 +110,7 @@
     <ClInclude Include="View\CellAnimation.h" />
     <ClInclude Include="View\CellRenderer.h" />
     <ClInclude Include="View\Label.h" />
+    <ClInclude Include="View\VerticalLabel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

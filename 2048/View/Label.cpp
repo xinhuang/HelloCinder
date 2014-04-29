@@ -13,7 +13,7 @@ using namespace std;
 using namespace ci;
 
 struct Label::Data {
-  float fontSize = 60.f;
+  Font font;
   Vec2f size;
   Vec2f location;
   Color foreColor = Color::white();
@@ -36,8 +36,8 @@ void Label::setBackColor(const Color &color) {
   d->render.reset();
 }
 
-void Label::setFontSize(float size) {
-  d->fontSize = size;
+void Label::setFont(const Font& font) {
+  d->font = font;
   d->render.reset();
 }
 
@@ -52,14 +52,15 @@ const ci::Vec2f &Label::size() const { return d->size; }
 
 const ci::Vec2f &Label::location() const { return d->location; }
 
+const Font &Label::font() const { return d->font; }
+
 void Label::setText(const std::string &text) {
   d->text = text;
   d->render.reset();
 }
 
 void Label::updateCache() const {
-  auto font = Font("Arial", d->fontSize);
-  auto tb = TextBox().alignment(TextBox::CENTER).font(font).text(d->text);
+  auto tb = TextBox().alignment(TextBox::CENTER).font(d->font).text(d->text);
   tb.setSize(d->size);
   tb.setColor(d->foreColor);
   tb.setBackgroundColor(d->backColor);

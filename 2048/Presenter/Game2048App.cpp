@@ -4,7 +4,7 @@
 #include "BoardLayout.h"
 #include "Cell.h"
 
-#include "../View/Label.h"
+#include "../View/VerticalLabel.h"
 
 #include "../Util/Random.h"
 
@@ -22,8 +22,7 @@ using namespace std;
 struct Game2048App::Data {
   bool gameover = false;
   int score_value = 0;
-  Label scoreLabel;
-  Label score;
+  VerticalLabel score;
   Board board;
 };
 
@@ -34,19 +33,15 @@ Game2048App::~Game2048App() {}
 void Game2048App::setup() {
   setFrameRate(Config::FRAME_RATE);
 
-  d->scoreLabel.setForeColor(Color::hex(Config::LABEL_FORE_COLOR));
-  d->scoreLabel.setBackColor(Color::hex(Config::BOARD_COLOR));
-  d->scoreLabel.setText("Score");
-  d->scoreLabel.setFontSize(30);
-  d->scoreLabel.setSize({ 100.f, 50.f });
-  d->scoreLabel.setLocation(
-      { BoardLayout::boardRect().x2 - 100.f, BoardLayout::boardRect().y1 - 110.f });
-
-  d->score.setForeColor(Color::hex(Config::SCORE_COLOR));
   d->score.setBackColor(Color::hex(Config::BOARD_COLOR));
-  d->score.setSize({ 100.f, 50.f });
+  d->score.setSize({ 100.f, 100.f });
   d->score.setLocation({ BoardLayout::boardRect().x2 - 100.f,
-                         BoardLayout::boardRect().y1 - 50.f - 20.f });
+                       BoardLayout::boardRect().y1 - 110.f });
+  d->score.setLabelColor(Color::hex(Config::LABEL_FORE_COLOR));
+  d->score.setLabel("SCORE");
+  d->score.setLabelFont(Font("Arial", 30));
+  d->score.setTextColor(Color::hex(Config::SCORE_COLOR));
+  d->score.setTextFont(Font("Arial", Config::FONT_WEIGHT));
 
   d->board = Board(Config::SIZE, Config::SIZE);
   d->board.spawn();
@@ -105,8 +100,6 @@ void Game2048App::draw() {
   if (d->gameover) {
     drawGameOver(BoardLayout::boardRect());
   }
-
-  d->scoreLabel.draw();
 
   d->score.draw();
 }

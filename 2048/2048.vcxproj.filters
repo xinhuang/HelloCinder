@@ -40,6 +40,9 @@
     <ClCompile Include="Presenter\BoardLayout.cpp">
       <Filter>Presenter</Filter>
     </ClCompile>
+    <ClCompile Include="View\VerticalLabel.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Random.h">
@@ -77,6 +80,9 @@
     </ClInclude>
     <ClInclude Include="Presenter\BoardLayout.h">
       <Filter>Presenter</Filter>
+    </ClInclude>
+    <ClInclude Include="View\VerticalLabel.h">
+      <Filter>View</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
