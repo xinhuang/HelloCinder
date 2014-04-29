@@ -34,12 +34,19 @@ Game2048App::~Game2048App() {}
 void Game2048App::setup() {
   setFrameRate(Config::FRAME_RATE);
 
-  d->scoreLabel.setForeColor(Color::white());
+  d->scoreLabel.setForeColor(Color::hex(Config::LABEL_FORE_COLOR));
   d->scoreLabel.setBackColor(Color::hex(Config::BOARD_COLOR));
   d->scoreLabel.setText("Score");
   d->scoreLabel.setFontSize(30);
-  d->score.setForeColor(Color::white());
+  d->scoreLabel.setSize({ 100.f, 50.f });
+  d->scoreLabel.setLocation(
+      { BoardLayout::boardRect().x2 - 100.f, BoardLayout::boardRect().y1 - 110.f });
+
+  d->score.setForeColor(Color::hex(Config::SCORE_COLOR));
   d->score.setBackColor(Color::hex(Config::BOARD_COLOR));
+  d->score.setSize({ 100.f, 50.f });
+  d->score.setLocation({ BoardLayout::boardRect().x2 - 100.f,
+                         BoardLayout::boardRect().y1 - 50.f - 20.f });
 
   d->board = Board(Config::SIZE, Config::SIZE);
   d->board.spawn();
@@ -99,13 +106,9 @@ void Game2048App::draw() {
     drawGameOver(BoardLayout::boardRect());
   }
 
-  d->scoreLabel.draw(
-      Rectf{ BoardLayout::boardRect().x2 - 100.f, BoardLayout::boardRect().y1 - 50.f - 50.f,
-             BoardLayout::boardRect().x2,         BoardLayout::boardRect().y1 - 50.f });
+  d->scoreLabel.draw();
 
-  d->score.draw(
-      Rectf{ BoardLayout::boardRect().x2 - 100.f, BoardLayout::boardRect().y1 - 50.f - 20.f,
-             BoardLayout::boardRect().x2,         BoardLayout::boardRect().y1 - 20.f });
+  d->score.draw();
 }
 
 void Game2048App::drawGameOver(const Rectf &rect) const {

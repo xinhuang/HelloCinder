@@ -22,4 +22,7 @@ const int ANIM_FRAMES = 6;
 
 const char FONT[] = "Arial";
 const float FONT_WEIGHT = 50;
+
+const uint32_t LABEL_FORE_COLOR = 0xEEE4DA;
+const uint32_t SCORE_COLOR = 0xFFFFFF;
 }
