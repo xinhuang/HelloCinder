@@ -37,3 +37,4 @@ public:
 
 Animation scaleBy(ci::gl::TextureRef &tex, float from, float to, int nframe);
 Animation moveBy(ci::gl::TextureRef &tex, const ci::Vec2f &offset, int nframe);
+Animation fade(ci::gl::TextureRef &tex, float begin, float end, int nframe);

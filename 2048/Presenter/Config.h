@@ -19,6 +19,7 @@ const uint32_t BK_COLOR = 0xFAF8EF;
 
 const float FRAME_RATE = 60.f;
 const int ANIM_FRAMES = 4;
+const float ENLARGE_RATIO = 1.2f;
 
 const char FONT[] = "Arial";
 const float FONT_WEIGHT = 50;

@@ -18,7 +18,10 @@ Animation emptyCellAnimation() {
 
 Animation placePieceAnimation(int value) {
   auto tex = getTex(value);
-  return emptyCellAnimation() + scaleBy(tex, 0.5f, 1.03f, Config::ANIM_FRAMES) + scaleBy(tex, 1.03f, 1.f, Config::ANIM_FRAMES);
+  return emptyCellAnimation() +
+    fade(tex, 0.f, 1.f, Config::ANIM_FRAMES);
+         //scaleBy(tex, 0.5f, Config::ENLARGE_RATIO, Config::ANIM_FRAMES) +
+         //scaleBy(tex, Config::ENLARGE_RATIO, 1.f, Config::ANIM_FRAMES);
 }
 
 Animation movePieceAnimation(const Cell &src, const Cell &dst) {
@@ -29,7 +32,8 @@ Animation movePieceAnimation(const Cell &src, const Cell &dst) {
 
 Animation promotionPieceAnimation(int level) {
   auto tex = getTex(level + 1);
-  return scaleBy(tex, 1.f, 1.03f, Config::ANIM_FRAMES) + scaleBy(tex, 1.03f, 1.f, Config::ANIM_FRAMES);
+  return scaleBy(tex, 1.f, Config::ENLARGE_RATIO, Config::ANIM_FRAMES) +
+         scaleBy(tex, Config::ENLARGE_RATIO, 1.f, Config::ANIM_FRAMES);
 }
 
 Animation mergeAnimation(const Cell &src, const Cell &dst) {

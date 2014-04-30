@@ -96,5 +96,16 @@ Animation moveBy(ci::gl::TextureRef &tex, const ci::Vec2f &offset,
   }
   anim += make_unique<TextureRenderer>(tex, offset);
 
-  return move(anim);
+  return anim;
+}
+
+Animation fade(ci::gl::TextureRef &tex, float begin, float end, int nframe) {
+  Animation anim;
+  auto step = (end - begin) / static_cast<float>(nframe);
+  for (int i = 0; i < nframe - 1; ++i) {
+    anim += TextureRenderer::fade(tex, begin + step * i);
+  }
+  anim += TextureRenderer::fade(tex, end);
+
+  return anim;
 }
