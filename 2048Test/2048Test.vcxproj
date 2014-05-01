@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{C563FF5D-CFC1-4DF5-A4B3-FBAFE57242F3}</ProjectGuid>
+    <ProjectGuid>{FFE3A4C2-E2E9-43B0-92CD-58EA66562CA8}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>My2048</RootNamespace>
+    <RootNamespace>My2048Test</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -41,13 +41,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\dependencies\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>..\dependencies\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
+    <IncludePath>../2048;../dependencies/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(OutDir);../dependencies/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\dependencies\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>..\dependencies\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
+    <IncludePath>../2048;../dependencies/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(OutDir);../dependencies/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -55,14 +55,16 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <StringPooling>
+      </StringPooling>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>cinder_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gtest_d.lib;cinder_d.lib;gmock_d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -74,50 +76,31 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <StringPooling>
+      </StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>cinder.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gtest.lib;cinder.lib;gmock.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Presenter\Board.cpp" />
-    <ClCompile Include="Presenter\Cell.cpp" />
-    <ClCompile Include="Presenter\BoardLayout.cpp" />
-    <ClCompile Include="Presenter\Game2048App.cpp" />
-    <ClCompile Include="View\Animation.cpp" />
-    <ClCompile Include="View\CellAnimation.cpp" />
-    <ClCompile Include="View\CellRenderer.cpp" />
-    <ClCompile Include="View\Label.cpp" />
-    <ClCompile Include="View\Timer.cpp" />
-    <ClCompile Include="View\VerticalLabel.cpp" />
+    <ClCompile Include="..\2048\View\Animation.cpp" />
+    <ClCompile Include="..\2048\View\Timer.cpp" />
+    <ClCompile Include="AnimationTest.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Presenter\Board.h" />
-    <ClInclude Include="Presenter\Cell.h" />
-    <ClInclude Include="Presenter\Config.h" />
-    <ClInclude Include="Presenter\Piece.h" />
-    <ClInclude Include="Presenter\BoardLayout.h" />
-    <ClInclude Include="Presenter\Game2048App.h" />
-    <ClInclude Include="Random.h" />
-    <ClInclude Include="View\Animation.h" />
-    <ClInclude Include="View\IRenderable.h" />
-    <ClInclude Include="View\CellAnimation.h" />
-    <ClInclude Include="View\CellRenderer.h" />
-    <ClInclude Include="View\Label.h" />
-    <ClInclude Include="View\NullRenderer.h" />
-    <ClInclude Include="View\TextureRenderer.h" />
-    <ClInclude Include="View\Timer.h" />
-    <ClInclude Include="View\VerticalLabel.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="README.md" />
+    <ClInclude Include="..\2048\View\Animation.h" />
+    <ClInclude Include="..\2048\View\Timer.h" />
+    <ClInclude Include="RenderableMock.h" />
+    <ClInclude Include="TimerMock.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

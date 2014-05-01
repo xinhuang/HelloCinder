@@ -1,6 +1,8 @@
 #include "CellAnimation.h"
 
 #include "CellRenderer.h"
+#include "TextureRenderer.h"
+#include "NullRenderer.h"
 
 #include "../Presenter/BoardLayout.h"
 #include "../Presenter/Config.h"
@@ -20,8 +22,6 @@ Animation placePieceAnimation(int value) {
   auto tex = getTex(value);
   return emptyCellAnimation() +
     fade(tex, 0.f, 1.f, Config::ANIM_FRAMES);
-         //scaleBy(tex, 0.5f, Config::ENLARGE_RATIO, Config::ANIM_FRAMES) +
-         //scaleBy(tex, Config::ENLARGE_RATIO, 1.f, Config::ANIM_FRAMES);
 }
 
 Animation movePieceAnimation(const Cell &src, const Cell &dst) {

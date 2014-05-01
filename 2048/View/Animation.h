@@ -19,6 +19,7 @@ public:
   ~Animation() override;
 
   void draw(const ci::Rectf &rect) override;
+  void draw(const ci::Rectf &rect, float alpha) final { draw(rect); }
 
   Animation &reverse();
 
@@ -38,3 +39,32 @@ public:
 Animation scaleBy(ci::gl::TextureRef &tex, float from, float to, int nframe);
 Animation moveBy(ci::gl::TextureRef &tex, const ci::Vec2f &offset, int nframe);
 Animation fade(ci::gl::TextureRef &tex, float begin, float end, int nframe);
+
+// ---------------------------------------------------------------- //
+
+#include "Timer.h"
+
+class Animation2 {
+  struct Data;
+  std::unique_ptr<Data> d;
+
+public:
+  Animation2();
+  Animation2(const std::shared_ptr<IRenderable>& renderable);
+  Animation2(const Animation2& anim);
+  ~Animation2();
+
+  Animation2& operator=(const Animation2& anim);
+
+  Animation2& moveby(const ci::Vec2f& offset);
+  Animation2& fadeby(float delta);
+  Animation2& duration(float seconds);
+
+  ci::Vec2f offset() const;
+  float alpha() const;
+
+  void draw(const ci::Rectf& rect);
+
+  static void setTimer(Timer* timer);
+  static Timer* timer();
+};

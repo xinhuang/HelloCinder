@@ -43,6 +43,9 @@
     <ClCompile Include="View\VerticalLabel.cpp">
       <Filter>View</Filter>
     </ClCompile>
+    <ClCompile Include="View\Timer.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Random.h">
@@ -82,6 +85,15 @@
       <Filter>Presenter</Filter>
     </ClInclude>
     <ClInclude Include="View\VerticalLabel.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="View\Timer.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="View\NullRenderer.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="View\TextureRenderer.h">
       <Filter>View</Filter>
     </ClInclude>
   </ItemGroup>

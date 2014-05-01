@@ -1,6 +1,6 @@
 #include "Label.h"
 
-#include "IRenderable.h"
+#include "TextureRenderer.h"
 
 #include <cassert>
 
