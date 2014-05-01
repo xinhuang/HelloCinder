@@ -126,14 +126,11 @@ std::unique_ptr<Timer> Clip::Data::timer = make_unique<Timer>();
 
 Clip::Clip() : d(make_unique<Data>()) {}
 
-Clip::Clip(const std::shared_ptr<IRenderable> &renderable)
-    : Clip() {
+Clip::Clip(const std::shared_ptr<IRenderable> &renderable) : Clip() {
   d->renderable = renderable;
 }
 
-Clip::Clip(const Clip &anim) : Clip() {
-  *d = *(anim.d);
-}
+Clip::Clip(const Clip &anim) : Clip() { *d = *(anim.d); }
 
 Clip::~Clip() {}
 
@@ -158,6 +155,10 @@ float Clip::scale() const {
   auto elapsed = (float)Data::timer->elapsed();
   assert(elapsed <= d->duration);
   return 1.f + d->scale * elapsed / d->duration;
+}
+
+bool Clip::finished() const {
+  return d->passed >= d->duration;
 }
 
 Clip &Clip::moveby(const ci::Vec2f &offset) {
@@ -212,10 +213,16 @@ Animation2::Animation2() : d(make_unique<Data>()) {}
 
 Animation2::~Animation2() {}
 
-Animation2::Animation2(const std::initializer_list<Clip>& clips): Animation2() {
+Animation2::Animation2(const std::initializer_list<Clip> &clips)
+    : Animation2() {
   d->clips = clips;
 }
 
-void Animation2::draw(const ci::Rectf& rect) {
-  d->clips[0].draw(rect);
+void Animation2::draw(const ci::Rectf &rect) {
+  for (auto &clip : d->clips) {
+    if (clip.finished())
+      continue;
+    clip.draw(rect);
+    break;
+  }
 }

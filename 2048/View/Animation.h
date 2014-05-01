@@ -61,6 +61,8 @@ public:
   Clip& scaleby(float scale);
   Clip& duration(float seconds);
 
+  bool finished() const;
+
   ci::Vec2f offset() const;
   float alpha() const;
   float scale() const;
