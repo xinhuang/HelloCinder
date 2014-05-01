@@ -112,17 +112,13 @@ Animation fade(ci::gl::TextureRef &tex, float begin, float end, int nframe) {
 // ------------------------------------------------------------------ //
 
 struct Clip::Data {
-  static unique_ptr<Timer> timer;
-
   float passed = 0;
-  float duration;
+  float duration = 0;
   float alpha = 0.f;
   float scale = 0.f;
   ci::Vec2f offset;
   shared_ptr<IRenderable> renderable;
 };
-
-std::unique_ptr<Timer> Clip::Data::timer = make_unique<Timer>();
 
 Clip::Clip() : d(make_unique<Data>()) {}
 
@@ -140,26 +136,23 @@ Clip &Clip::operator=(const Clip &anim) {
 }
 
 ci::Vec2f Clip::offset() const {
-  auto elapsed = (float)Data::timer->elapsed() + d->passed;
-  assert(elapsed <= d->duration);
-  return d->offset * elapsed / d->duration;
+  assert(d->passed <= d->duration);
+  return d->offset * d->passed / d->duration;
 }
 
 float Clip::alpha() const {
-  auto elapsed = (float)Data::timer->elapsed();
-  assert(elapsed <= d->duration);
-  return 1.f + d->alpha * elapsed / d->duration;
+  assert(d->passed <= d->duration);
+  return 1.f + d->alpha * d->passed / d->duration;
 }
 
 float Clip::scale() const {
-  auto elapsed = (float)Data::timer->elapsed();
-  assert(elapsed <= d->duration);
-  return 1.f + d->scale * elapsed / d->duration;
+  assert(d->passed <= d->duration);
+  return 1.f + d->scale * d->passed / d->duration;
 }
 
-bool Clip::finished() const {
-  return d->passed >= d->duration;
-}
+float Clip::duration() const { return d->duration; }
+
+bool Clip::finished() const { return d->passed > d->duration; }
 
 Clip &Clip::moveby(const ci::Vec2f &offset) {
   d->offset = offset;
@@ -181,11 +174,14 @@ Clip &Clip::duration(float seconds) {
   return *this;
 }
 
+void Clip::update(float elapsed_seconds) {
+  d->passed += elapsed_seconds;
+}
+
 void Clip::draw(ci::Rectf rect) {
-  auto elapsed = (float)Data::timer->elapsed();
-  if (elapsed > d->duration) {
+  if (finished())
     return;
-  }
+  
   auto scale_factor = scale();
   if (scale_factor != 1.f) {
     auto size = rect.getSize() * scale_factor;
@@ -193,21 +189,18 @@ void Clip::draw(ci::Rectf rect) {
   }
   rect += offset();
   d->renderable->draw(rect, alpha());
-  d->passed += elapsed;
 }
-
-void Clip::setTimer(Timer *timer) {
-  Data::timer.release();
-  Data::timer.reset(timer);
-}
-
-Timer *Clip::timer() { return Data::timer.release(); }
 
 // ---------------------------------------------- //
 
 struct Animation2::Data {
+  static unique_ptr<Timer> timer;
+
+  float passed = 0;
   vector<Clip> clips;
 };
+
+unique_ptr<Timer> Animation2::Data::timer = make_unique<Timer>();
 
 Animation2::Animation2() : d(make_unique<Data>()) {}
 
@@ -219,10 +212,23 @@ Animation2::Animation2(const std::initializer_list<Clip> &clips)
 }
 
 void Animation2::draw(const ci::Rectf &rect) {
+  d->passed += (float)Data::timer->elapsed();
+
+  float passed = d->passed;
   for (auto &clip : d->clips) {
-    if (clip.finished())
-      continue;
-    clip.draw(rect);
-    break;
+    if (passed <= clip.duration()) {
+      clip.update(passed);
+      clip.draw(rect);
+      break;
+    } else {
+      passed -= clip.duration();
+    }
   }
 }
+
+void Animation2::setTimer(Timer *timer) {
+  Data::timer.release();
+  Data::timer.reset(timer);
+}
+
+Timer *Animation2::timer() { return Data::timer.release(); }

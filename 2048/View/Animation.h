@@ -61,16 +61,15 @@ public:
   Clip& scaleby(float scale);
   Clip& duration(float seconds);
 
+  void update(float elapsed_seconds);
   bool finished() const;
 
   ci::Vec2f offset() const;
   float alpha() const;
   float scale() const;
+  float duration() const;
 
   void draw(ci::Rectf rect);
-
-  static void setTimer(Timer* timer);
-  static Timer* timer();
 };
 
 // --------------------------------------------------------------- //
@@ -85,4 +84,7 @@ public:
   ~Animation2();
   Animation2(const std::initializer_list<Clip>& clips);
   void draw(const ci::Rectf& rect);
+
+  static void setTimer(Timer* timer);
+  static Timer* timer();
 };
