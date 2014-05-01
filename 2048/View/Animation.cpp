@@ -201,3 +201,21 @@ void Clip::setTimer(Timer *timer) {
 }
 
 Timer *Clip::timer() { return Data::timer.release(); }
+
+// ---------------------------------------------- //
+
+struct Animation2::Data {
+  vector<Clip> clips;
+};
+
+Animation2::Animation2() : d(make_unique<Data>()) {}
+
+Animation2::~Animation2() {}
+
+Animation2::Animation2(const std::initializer_list<Clip>& clips): Animation2() {
+  d->clips = clips;
+}
+
+void Animation2::draw(const ci::Rectf& rect) {
+  d->clips[0].draw(rect);
+}

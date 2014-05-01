@@ -70,3 +70,17 @@ public:
   static void setTimer(Timer* timer);
   static Timer* timer();
 };
+
+// --------------------------------------------------------------- //
+
+#include <initializer_list>
+
+class Animation2 {
+  struct Data;
+  std::unique_ptr<Data> d;
+public:
+  Animation2();
+  ~Animation2();
+  Animation2(const std::initializer_list<Clip>& clips);
+  void draw(const ci::Rectf& rect);
+};
