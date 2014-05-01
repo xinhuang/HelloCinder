@@ -111,7 +111,7 @@ Animation fade(ci::gl::TextureRef &tex, float begin, float end, int nframe) {
 
 // ------------------------------------------------------------------ //
 
-struct Animation2::Data {
+struct Clip::Data {
   static unique_ptr<Timer> timer;
 
   float passed = 0;
@@ -122,65 +122,65 @@ struct Animation2::Data {
   shared_ptr<IRenderable> renderable;
 };
 
-std::unique_ptr<Timer> Animation2::Data::timer = make_unique<Timer>();
+std::unique_ptr<Timer> Clip::Data::timer = make_unique<Timer>();
 
-Animation2::Animation2() : d(make_unique<Data>()) {}
+Clip::Clip() : d(make_unique<Data>()) {}
 
-Animation2::Animation2(const std::shared_ptr<IRenderable> &renderable)
-    : Animation2() {
+Clip::Clip(const std::shared_ptr<IRenderable> &renderable)
+    : Clip() {
   d->renderable = renderable;
 }
 
-Animation2::Animation2(const Animation2 &anim) : Animation2() {
+Clip::Clip(const Clip &anim) : Clip() {
   *d = *(anim.d);
 }
 
-Animation2::~Animation2() {}
+Clip::~Clip() {}
 
-Animation2 &Animation2::operator=(const Animation2 &anim) {
+Clip &Clip::operator=(const Clip &anim) {
   *d = *(anim.d);
   return *this;
 }
 
-ci::Vec2f Animation2::offset() const {
+ci::Vec2f Clip::offset() const {
   auto elapsed = (float)Data::timer->elapsed() + d->passed;
   assert(elapsed <= d->duration);
   return d->offset * elapsed / d->duration;
 }
 
-float Animation2::alpha() const {
+float Clip::alpha() const {
   auto elapsed = (float)Data::timer->elapsed();
   assert(elapsed <= d->duration);
   return 1.f + d->alpha * elapsed / d->duration;
 }
 
-float Animation2::scale() const {
+float Clip::scale() const {
   auto elapsed = (float)Data::timer->elapsed();
   assert(elapsed <= d->duration);
   return 1.f + d->scale * elapsed / d->duration;
 }
 
-Animation2 &Animation2::moveby(const ci::Vec2f &offset) {
+Clip &Clip::moveby(const ci::Vec2f &offset) {
   d->offset = offset;
   return *this;
 }
 
-Animation2 &Animation2::fadeby(float delta) {
+Clip &Clip::fadeby(float delta) {
   d->alpha = delta;
   return *this;
 }
 
-Animation2 &Animation2::scaleby(float scale) {
+Clip &Clip::scaleby(float scale) {
   d->scale = scale;
   return *this;
 }
 
-Animation2 &Animation2::duration(float seconds) {
+Clip &Clip::duration(float seconds) {
   d->duration = seconds;
   return *this;
 }
 
-void Animation2::draw(ci::Rectf rect) {
+void Clip::draw(ci::Rectf rect) {
   auto elapsed = (float)Data::timer->elapsed();
   if (elapsed > d->duration) {
     return;
@@ -195,9 +195,9 @@ void Animation2::draw(ci::Rectf rect) {
   d->passed += elapsed;
 }
 
-void Animation2::setTimer(Timer *timer) {
+void Clip::setTimer(Timer *timer) {
   Data::timer.release();
   Data::timer.reset(timer);
 }
 
-Timer *Animation2::timer() { return Data::timer.release(); }
+Timer *Clip::timer() { return Data::timer.release(); }

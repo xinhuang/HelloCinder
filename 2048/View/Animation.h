@@ -44,22 +44,22 @@ Animation fade(ci::gl::TextureRef &tex, float begin, float end, int nframe);
 
 #include "Timer.h"
 
-class Animation2 {
+class Clip {
   struct Data;
   std::unique_ptr<Data> d;
 
 public:
-  Animation2();
-  Animation2(const std::shared_ptr<IRenderable>& renderable);
-  Animation2(const Animation2& anim);
-  ~Animation2();
+  Clip();
+  Clip(const std::shared_ptr<IRenderable>& renderable);
+  Clip(const Clip& anim);
+  ~Clip();
 
-  Animation2& operator=(const Animation2& anim);
+  Clip& operator=(const Clip& anim);
 
-  Animation2& moveby(const ci::Vec2f& offset);
-  Animation2& fadeby(float delta);
-  Animation2& scaleby(float scale);
-  Animation2& duration(float seconds);
+  Clip& moveby(const ci::Vec2f& offset);
+  Clip& fadeby(float delta);
+  Clip& scaleby(float scale);
+  Clip& duration(float seconds);
 
   ci::Vec2f offset() const;
   float alpha() const;

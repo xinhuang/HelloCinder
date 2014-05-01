@@ -16,14 +16,17 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AnimationTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\2048\View\Animation.cpp">
       <Filter>2048</Filter>
     </ClCompile>
     <ClCompile Include="..\2048\View\Timer.cpp">
       <Filter>2048</Filter>
+    </ClCompile>
+    <ClCompile Include="ClipTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationTest.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

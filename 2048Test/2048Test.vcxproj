@@ -94,6 +94,7 @@
     <ClCompile Include="..\2048\View\Animation.cpp" />
     <ClCompile Include="..\2048\View\Timer.cpp" />
     <ClCompile Include="AnimationTest.cpp" />
+    <ClCompile Include="ClipTest.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
