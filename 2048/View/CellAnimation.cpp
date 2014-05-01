@@ -39,3 +39,16 @@ Animation promotionPieceAnimation(int level) {
 Animation mergeAnimation(const Cell &src, const Cell &dst) {
   return movePieceAnimation(src, dst) + promotionPieceAnimation(dst.value());
 }
+
+Animation2 placePieceAnimation2(int value) {
+  auto tex = getTex(value);
+  return { Clip().duration(0.3f), Clip(tex).fadeby(1.f, 0.f).duration(0.3f) };
+}
+
+Animation2 movePieceAnimation2(const Cell &src, const Cell &dst);
+Animation2 promotionPieceAnimation2(int level);
+Animation2 mergeAnimation2(const Cell &src, const Cell &dst);
+
+Animation2 emptyCellAnimation2() {
+  return { Clip().duration(0.3f) };
+}

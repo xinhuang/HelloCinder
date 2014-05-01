@@ -114,7 +114,8 @@ Animation fade(ci::gl::TextureRef &tex, float begin, float end, int nframe) {
 struct Clip::Data {
   float elapsed = 0;
   float duration = 0;
-  float alpha = 0.f;
+  float delta_alpha = 0.f;
+  float alpha = 1.f;
   float scale = 0.f;
   ci::Vec2f offset;
   shared_ptr<IRenderable> renderable;
@@ -142,12 +143,12 @@ ci::Vec2f Clip::offset() const {
 
 float Clip::alpha() const {
   assert(d->elapsed <= d->duration);
-  return 1.f + d->alpha * d->elapsed / d->duration;
+  return 1.f + d->delta_alpha * d->elapsed / d->duration;
 }
 
 float Clip::scale() const {
   assert(d->elapsed <= d->duration);
-  return 1.f + d->scale * d->elapsed / d->duration;
+  return d->alpha + d->scale * d->elapsed / d->duration;
 }
 
 float Clip::duration() const { return d->duration; }
@@ -159,8 +160,9 @@ Clip &Clip::moveby(const ci::Vec2f &offset) {
   return *this;
 }
 
-Clip &Clip::fadeby(float delta) {
-  d->alpha = delta;
+Clip &Clip::fadeby(float delta, float from) {
+  d->delta_alpha = delta;
+  d->alpha = from;
   return *this;
 }
 

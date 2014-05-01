@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IRenderable.h"
+#include "TextureRenderer.h"
 
 #include <memory>
 
@@ -51,13 +52,15 @@ class Clip {
 public:
   Clip();
   Clip(const std::shared_ptr<IRenderable>& renderable);
+  Clip(ci::gl::TextureRef &tex)
+      : Clip(std::shared_ptr<IRenderable>(new TextureRenderer(tex))) {}
   Clip(const Clip& anim);
   ~Clip();
 
   Clip& operator=(const Clip& anim);
 
   Clip& moveby(const ci::Vec2f& offset);
-  Clip& fadeby(float delta);
+  Clip& fadeby(float delta, float from = 1.f);
   Clip& scaleby(float scale);
   Clip& duration(float seconds);
 
