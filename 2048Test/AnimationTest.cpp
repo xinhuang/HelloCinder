@@ -21,9 +21,7 @@ struct AnimationTest : public ::testing::Test {
     clips.emplace_back(dynamic_pointer_cast<IRenderable>(renderables[1]));
   }
 
-  void TearDown() final { 
-    Animation2::setTimer(old_timer);
-  }
+  void TearDown() final { Animation2::setTimer(old_timer); }
 
   Timer *old_timer;
   TimerMock timer;
@@ -77,6 +75,18 @@ TEST_F(AnimationTest, given_render_2_clips_anim_when_there_is_interleaving) {
   timer.reset();
 
   timer.tick(2);
+  sut.draw({});
+  timer.reset();
+}
+
+TEST_F(AnimationTest,
+       given_render_2_clips_anim_when_1st_clip_should_be_skipped) {
+  EXPECT_CALL(*renderables[1], draw(_, FloatNear(0.3f, 0.001f))).Times(1);
+
+  Animation2 sut = { clips[0].fadeby(-0.6f).duration(3),
+                     clips[1].fadeby(-0.7f).duration(1) };
+
+  timer.tick(4);
   sut.draw({});
   timer.reset();
 }

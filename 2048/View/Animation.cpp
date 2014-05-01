@@ -112,7 +112,7 @@ Animation fade(ci::gl::TextureRef &tex, float begin, float end, int nframe) {
 // ------------------------------------------------------------------ //
 
 struct Clip::Data {
-  float passed = 0;
+  float elapsed = 0;
   float duration = 0;
   float alpha = 0.f;
   float scale = 0.f;
@@ -136,23 +136,23 @@ Clip &Clip::operator=(const Clip &anim) {
 }
 
 ci::Vec2f Clip::offset() const {
-  assert(d->passed <= d->duration);
-  return d->offset * d->passed / d->duration;
+  assert(d->elapsed <= d->duration);
+  return d->offset * d->elapsed / d->duration;
 }
 
 float Clip::alpha() const {
-  assert(d->passed <= d->duration);
-  return 1.f + d->alpha * d->passed / d->duration;
+  assert(d->elapsed <= d->duration);
+  return 1.f + d->alpha * d->elapsed / d->duration;
 }
 
 float Clip::scale() const {
-  assert(d->passed <= d->duration);
-  return 1.f + d->scale * d->passed / d->duration;
+  assert(d->elapsed <= d->duration);
+  return 1.f + d->scale * d->elapsed / d->duration;
 }
 
 float Clip::duration() const { return d->duration; }
 
-bool Clip::finished() const { return d->passed > d->duration; }
+bool Clip::finished() const { return d->elapsed > d->duration; }
 
 Clip &Clip::moveby(const ci::Vec2f &offset) {
   d->offset = offset;
@@ -175,7 +175,7 @@ Clip &Clip::duration(float seconds) {
 }
 
 void Clip::update(float elapsed_seconds) {
-  d->passed += elapsed_seconds;
+  d->elapsed += elapsed_seconds;
 }
 
 void Clip::draw(ci::Rectf rect) {
@@ -196,7 +196,7 @@ void Clip::draw(ci::Rectf rect) {
 struct Animation2::Data {
   static unique_ptr<Timer> timer;
 
-  float passed = 0;
+  float elapsed = 0;
   vector<Clip> clips;
 };
 
@@ -212,16 +212,16 @@ Animation2::Animation2(const std::initializer_list<Clip> &clips)
 }
 
 void Animation2::draw(const ci::Rectf &rect) {
-  d->passed += (float)Data::timer->elapsed();
+  d->elapsed += (float)Data::timer->elapsed();
 
-  float passed = d->passed;
+  float elapsed = d->elapsed;
   for (auto &clip : d->clips) {
-    if (passed <= clip.duration()) {
-      clip.update(passed);
+    if (elapsed <= clip.duration()) {
+      clip.update(elapsed);
       clip.draw(rect);
       break;
     } else {
-      passed -= clip.duration();
+      elapsed -= clip.duration();
     }
   }
 }
