@@ -85,11 +85,20 @@ TEST_F(AnimationTest, given_move_when_render_at_every_0_1_seconds) {
   timer.reset();
 }
 
-TEST_F(AnimationTest, given_animation_when_fade_should_return_correct_alpha) {
+TEST_F(AnimationTest, given_animation_when_fade_should_return_draw_with_correct_alpha) {
   EXPECT_CALL(*renderable, draw(_, 0.8f)).Times(1);
 
   sut.fadeby(-0.6f).duration(0.3f);
 
   timer.tick(0.1);
   sut.draw({});
+}
+
+TEST_F(AnimationTest, given_animation_when_zoom_should_return_draw_with_correct_size) {
+  EXPECT_CALL(*renderable, draw(Rectf(2, 2, 5, 5), 1.f)).Times(1);
+
+  sut.scaleby(6.f).duration(0.3f);
+
+  timer.tick(0.1);
+  sut.draw(Rectf(2, 2, 3, 3));
 }

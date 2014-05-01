@@ -117,6 +117,7 @@ struct Animation2::Data {
   float passed = 0;
   float duration;
   float alpha = 0.f;
+  float scale = 0.f;
   ci::Vec2f offset;
   shared_ptr<IRenderable> renderable;
 };
@@ -144,8 +145,6 @@ Animation2 &Animation2::operator=(const Animation2 &anim) {
 ci::Vec2f Animation2::offset() const {
   auto elapsed = (float)Data::timer->elapsed() + d->passed;
   assert(elapsed <= d->duration);
-  if (elapsed > d->duration)
-    elapsed = d->duration;
   return d->offset * elapsed / d->duration;
 }
 
@@ -153,6 +152,12 @@ float Animation2::alpha() const {
   auto elapsed = (float)Data::timer->elapsed();
   assert(elapsed <= d->duration);
   return 1.f + d->alpha * elapsed / d->duration;
+}
+
+float Animation2::scale() const {
+  auto elapsed = (float)Data::timer->elapsed();
+  assert(elapsed <= d->duration);
+  return 1.f + d->scale * elapsed / d->duration;
 }
 
 Animation2 &Animation2::moveby(const ci::Vec2f &offset) {
@@ -165,17 +170,28 @@ Animation2 &Animation2::fadeby(float delta) {
   return *this;
 }
 
+Animation2 &Animation2::scaleby(float scale) {
+  d->scale = scale;
+  return *this;
+}
+
 Animation2 &Animation2::duration(float seconds) {
   d->duration = seconds;
   return *this;
 }
 
-void Animation2::draw(const ci::Rectf &rect) {
+void Animation2::draw(ci::Rectf rect) {
   auto elapsed = (float)Data::timer->elapsed();
   if (elapsed > d->duration) {
     return;
   }
-  d->renderable->draw(rect + offset(), alpha());
+  auto scale_factor = scale();
+  if (scale_factor != 1.f) {
+    auto size = rect.getSize() * scale_factor;
+    rect = { rect.getUpperLeft(), rect.getUpperLeft() + size };
+  }
+  rect += offset();
+  d->renderable->draw(rect, alpha());
   d->passed += elapsed;
 }
 

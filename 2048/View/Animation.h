@@ -58,12 +58,14 @@ public:
 
   Animation2& moveby(const ci::Vec2f& offset);
   Animation2& fadeby(float delta);
+  Animation2& scaleby(float scale);
   Animation2& duration(float seconds);
 
   ci::Vec2f offset() const;
   float alpha() const;
+  float scale() const;
 
-  void draw(const ci::Rectf& rect);
+  void draw(ci::Rectf rect);
 
   static void setTimer(Timer* timer);
   static Timer* timer();
