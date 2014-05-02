@@ -22,7 +22,7 @@ const std::unique_ptr<Piece> &Cell::piece() const { return piece_; }
 const ci::Vec2i &Cell::coord() const { return coord_; }
 
 void Cell::draw(const ci::Rectf &rect) {
-  //piece_anim_.draw(rect);
+  piece_anim_.draw(rect);
 }
 
 void Cell::drawBackground(const ci::Rectf &rect) {

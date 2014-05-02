@@ -11,6 +11,7 @@ class Cell {
   const ci::Vec2i coord_;
   std::unique_ptr<Piece> piece_;
   Sprite anim_;
+  // TODO: lift piece_anim_ to Piece class
   Sprite piece_anim_;
 
 public:

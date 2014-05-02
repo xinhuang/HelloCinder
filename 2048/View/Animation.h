@@ -9,9 +9,17 @@
 
 class Timer;
 
+enum class WrapMode {
+  ONCE,
+  CLAMP_FOREVER,
+  LOOP,
+};
+
 class Animation {
   struct Data;
   std::unique_ptr<Data> d;
+
+  void wrap();
 
 public:
   Animation();
@@ -21,9 +29,10 @@ public:
 
   Animation& operator=(const Animation& anim);
 
-  Animation& cyclic(bool value = true);
+  Animation& wrap(WrapMode mode);
   void draw(const ci::Rectf &rect);
 
+  bool isPlaying() const;
   float duration() const;
 
   static void setTimer(Timer *timer);

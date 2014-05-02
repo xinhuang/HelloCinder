@@ -91,7 +91,7 @@ TEST_F(AnimationTest,
   timer.reset();
 }
 
-TEST_F(AnimationTest, given_render_1_clip_anim_when_cyclic) {
+TEST_F(AnimationTest, given_render_1_clip_anim_when_wrap_as_loop) {
   {
     InSequence s;
     EXPECT_CALL(*renderables[0], draw(_, _)).Times(2);
@@ -99,7 +99,7 @@ TEST_F(AnimationTest, given_render_1_clip_anim_when_cyclic) {
 
   Animation sut = { clips[0].duration(3) };
 
-  sut.cyclic();
+  sut.wrap(WrapMode::LOOP);
 
   timer.tick(1);
   sut.draw({});
@@ -110,7 +110,7 @@ TEST_F(AnimationTest, given_render_1_clip_anim_when_cyclic) {
   timer.reset();
 }
 
-TEST_F(AnimationTest, given_render_2_clips_anim_when_cyclic) {
+TEST_F(AnimationTest, given_render_2_clips_anim_when_wrap_as_loop) {
   {
     InSequence s;
     EXPECT_CALL(*renderables[0], draw(_, FloatNear(0.8f, 0.001f))).Times(1);
@@ -121,7 +121,7 @@ TEST_F(AnimationTest, given_render_2_clips_anim_when_cyclic) {
   Animation sut = { clips[0].fadeby(-0.6f).duration(3),
     clips[1].fadeby(-0.7f).duration(1) };
 
-  sut.cyclic();
+  sut.wrap(WrapMode::LOOP);
 
   timer.tick(1);
   sut.draw({});
@@ -132,6 +132,30 @@ TEST_F(AnimationTest, given_render_2_clips_anim_when_cyclic) {
   timer.reset();
 
   timer.tick(2);
+  sut.draw({});
+  timer.reset();
+}
+
+TEST_F(AnimationTest, given_render_1_clip_anim_when_wrap_as_clamp_forever) {
+  {
+    InSequence s;
+    EXPECT_CALL(*renderables[0], draw(_, FloatNear(0.9f, 0.001f))).Times(1);
+    EXPECT_CALL(*renderables[0], draw(_, FloatNear(0.8f, 0.001f))).Times(2);
+  }
+
+  Animation sut = { clips[0].fadeby(-0.2f).duration(2) };
+
+  sut.wrap(WrapMode::CLAMP_FOREVER);
+
+  timer.tick(1);
+  sut.draw({});
+  timer.reset();
+
+  timer.tick(1);
+  sut.draw({});
+  timer.reset();
+
+  timer.tick(1);
   sut.draw({});
   timer.reset();
 }

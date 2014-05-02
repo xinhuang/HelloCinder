@@ -73,5 +73,5 @@ Sprite mergeAnimation2(const Cell &src, const Cell &dst) {
 Sprite emptyCellAnimation2() {
   auto tex = getTex(0);
   Animation anim = { Clip(tex).duration(0.3f) };
-  return { { 0, anim.cyclic() } };
+  return { { 0, anim.wrap(WrapMode::LOOP) } };
 }

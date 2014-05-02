@@ -14,7 +14,7 @@ using namespace std;
 struct Animation::Data {
   static unique_ptr<Timer> timer;
 
-  bool cyclic = false;
+  WrapMode wrap_mode = WrapMode::ONCE;
   float elapsed = 0;
   vector<Clip> clips;
 };
@@ -39,22 +39,42 @@ Animation& Animation::operator=(const Animation& anim) {
   return *this;
 }
 
-Animation& Animation::cyclic(bool value) {
-  d->cyclic = value;
+void Animation::wrap() {
+  switch (d->wrap_mode) {
+  case WrapMode::ONCE:
+    return;
+
+  case WrapMode::LOOP:
+    d->elapsed = fmod(d->elapsed, duration());
+    return;
+
+  case WrapMode::CLAMP_FOREVER:
+    d->elapsed = duration();
+    return;
+
+  default:
+    throw invalid_argument("Un-recognized wrap mode");
+  }
+}
+
+Animation& Animation::wrap(WrapMode mode) {
+  d->wrap_mode = mode;
   return *this;
+}
+
+bool Animation::isPlaying() const {
+  return d->elapsed <= duration();
 }
 
 void Animation::draw(const ci::Rectf &rect) {
   float frame_interval = (float)Data::timer->elapsed();
   d->elapsed += frame_interval;
 
-  float anim_duration = duration();
-  if (d->cyclic && d->elapsed > anim_duration)
-    d->elapsed = fmod(d->elapsed, anim_duration);
-  if (anim_duration < d->elapsed) {
-    assert(!d->cyclic);
+  if (d->elapsed > duration())
+    wrap();
+
+  if (!isPlaying())
     return;
-  }
 
   float elapsed = d->elapsed;
   for (auto &clip : d->clips) {
