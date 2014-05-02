@@ -74,7 +74,7 @@ void Board::draw(const Rectf &rect) {
     cell.drawBackground(BoardLayout::cellRect(cell.coord()));
   }
   for (auto &cell : d->cells) {
-    if (cell.piece())
+    //if (cell.piece())
       cell.draw(BoardLayout::cellRect(cell.coord()));
   }
 }

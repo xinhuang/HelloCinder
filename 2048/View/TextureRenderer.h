@@ -32,7 +32,7 @@ public:
   }
 
   void draw(const ci::Rectf &rect, float alpha) final {
-    ci::gl::color(ci::ColorA(1.f, 1.f, 1.f, alpha_));
+    ci::gl::color(ci::ColorA(1.f, 1.f, 1.f, alpha));
     auto size = rect.getSize() * scale_;
     auto offset = offset_ - (size - rect.getSize()) / 2;
     ci::Vec2f upperLeft = rect.getUpperLeft() + offset;

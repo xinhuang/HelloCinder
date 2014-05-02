@@ -38,8 +38,8 @@ void Cell::place(std::unique_ptr<Piece> &&p) {
 void Cell::moveTo(Cell &cell) {
   assert(piece_);
   cell.piece_ = std::move(piece_);
-  cell.piece_anim_ = movePieceAnimation2(*this, cell);
-  piece_anim_ = emptyCellAnimation2();
+  cell.piece_anim_ = placePieceAnimation2(cell.value());
+  piece_anim_ = movePieceAnimation2(*this, cell);
 }
 
 void Cell::mergeTo(Cell &cell) {
