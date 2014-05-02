@@ -25,16 +25,16 @@ public:
   Animation &reverse();
 
   friend Animation &operator+=(Animation &anim,
-                                std::shared_ptr<IRenderable> &&value);
+                               std::shared_ptr<IRenderable> &&value);
   template <typename T>
   friend Animation &operator+=(Animation &anim, std::unique_ptr<T> &&value) {
     auto p = std::shared_ptr<IRenderable>(value.release());
     return anim += move(p);
   }
   friend Animation operator+(Animation lhs, const Animation &rhs);
-  friend Animation& operator+=(Animation& anim, const Animation &value);
+  friend Animation &operator+=(Animation &anim, const Animation &value);
   friend Animation operator*(Animation lhs, const Animation &rhs);
-  friend Animation& operator*=(Animation& anim, const Animation &value);
+  friend Animation &operator*=(Animation &anim, const Animation &value);
 };
 
 Animation scaleBy(ci::gl::TextureRef &tex, float from, float to, int nframe);
@@ -51,18 +51,18 @@ class Clip {
 
 public:
   Clip();
-  Clip(const std::shared_ptr<IRenderable>& renderable);
+  Clip(const std::shared_ptr<IRenderable> &renderable);
   Clip(ci::gl::TextureRef &tex)
       : Clip(std::shared_ptr<IRenderable>(new TextureRenderer(tex))) {}
-  Clip(const Clip& anim);
+  Clip(const Clip &anim);
   ~Clip();
 
-  Clip& operator=(const Clip& anim);
+  Clip &operator=(const Clip &anim);
 
-  Clip& moveby(const ci::Vec2f& offset);
-  Clip& fadeby(float delta, float from = 1.f);
-  Clip& scaleby(float scale);
-  Clip& duration(float seconds);
+  Clip &moveby(const ci::Vec2f &offset);
+  Clip &fadeby(float delta, float from = 1.f);
+  Clip &scaleby(float scale);
+  Clip &duration(float seconds);
 
   void update(float elapsed_seconds);
   bool finished() const;
@@ -82,12 +82,38 @@ public:
 class Animation2 {
   struct Data;
   std::unique_ptr<Data> d;
+
 public:
   Animation2();
   ~Animation2();
-  Animation2(const std::initializer_list<Clip>& clips);
-  void draw(const ci::Rectf& rect);
+  Animation2(const Animation2& anim);
+  Animation2(const std::initializer_list<Clip> &clips);
 
-  static void setTimer(Timer* timer);
-  static Timer* timer();
+  Animation2& operator=(const Animation2& anim);
+
+  void draw(const ci::Rectf &rect);
+
+  static void setTimer(Timer *timer);
+  static Timer *timer();
+};
+
+// --------------------------------------------------------------- //
+
+#include <tuple>
+
+using Layer = std::pair<const int, Animation2>;
+
+class Sprite {
+  struct Data;
+  std::unique_ptr<Data> d;
+
+public:
+  Sprite();
+  ~Sprite();
+  Sprite(Animation anim);
+  Sprite(std::initializer_list<Layer> layers);
+
+  Sprite& operator=(const Sprite& sprite);
+
+  void draw(const ci::Rectf &rect);
 };

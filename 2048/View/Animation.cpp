@@ -208,9 +208,18 @@ Animation2::Animation2() : d(make_unique<Data>()) {}
 
 Animation2::~Animation2() {}
 
+Animation2::Animation2(const Animation2& anim) : Animation2() {
+  *this = anim;
+}
+
 Animation2::Animation2(const std::initializer_list<Clip> &clips)
     : Animation2() {
   d->clips = clips;
+}
+
+Animation2& Animation2::operator=(const Animation2& anim) {
+  *d = *(anim.d);
+  return *this;
 }
 
 void Animation2::draw(const ci::Rectf &rect) {
@@ -234,3 +243,31 @@ void Animation2::setTimer(Timer *timer) {
 }
 
 Timer *Animation2::timer() { return Data::timer.release(); }
+
+// ----------------------------------------------------------------- //
+
+#include <map>
+
+struct Sprite::Data {
+  map<int, Animation2> layers;
+};
+
+Sprite::Sprite() : d(make_unique<Data>()) {}
+
+Sprite::~Sprite() {}
+
+Sprite::Sprite(initializer_list<Layer> layers) : Sprite() {
+  d->layers = move(layers);
+}
+
+Sprite& Sprite::operator=(const Sprite& sprite) {
+  *d = *(sprite.d);
+  return *this;
+}
+
+
+void Sprite::draw(const Rectf& rect) {
+  for (auto& layer : d->layers) {
+    get<1>(layer).draw(rect);
+  }
+}
