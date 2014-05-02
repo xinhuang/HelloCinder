@@ -32,13 +32,13 @@ void Cell::drawBackground(const ci::Rectf &rect) {
 void Cell::place(std::unique_ptr<Piece> &&p) {
   assert(!piece_);
   piece_ = move(p);
-  piece_anim_ += placePieceAnimation(value());
+  piece_anim_ = placePieceAnimation(value());
 }
 
 void Cell::moveTo(Cell &cell) {
   assert(piece_);
   cell.piece_ = std::move(piece_);
-  cell.piece_anim_ += movePieceAnimation(*this, cell);
+  cell.piece_anim_ = movePieceAnimation(*this, cell);
   piece_anim_ = emptyCellAnimation();
 }
 
@@ -47,6 +47,7 @@ void Cell::mergeTo(Cell &cell) {
   assert(!cell.piece_->merged);
   assert(piece_);
   cell.piece_->merged = std::move(piece_);
+  // 2 pieces are moving at same time to same cell
   cell.piece_anim_ = mergeAnimation(*this, cell) * cell.piece_anim_;
   piece_anim_ = emptyCellAnimation();
 }
