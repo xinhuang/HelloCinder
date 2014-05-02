@@ -99,3 +99,11 @@ TEST_F(ClipTest, given_move_fade_scale_should_draw_correctly) {
   sut.update(0.1f);
   sut.draw(Rectf(2, 2, 3, 3));
 }
+
+TEST_F(ClipTest, given_empty_clip_should_draw_nothing) {
+  sut = Clip().duration(3.f);
+  sut.update(2.f);
+  sut.draw({});
+  sut.update(1.1f);
+  ASSERT_TRUE(sut.finished());
+}

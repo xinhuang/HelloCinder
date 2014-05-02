@@ -20,8 +20,7 @@ Animation emptyCellAnimation() {
 
 Animation placePieceAnimation(int value) {
   auto tex = getTex(value);
-  return emptyCellAnimation() +
-    fade(tex, 0.f, 1.f, Config::ANIM_FRAMES);
+  return emptyCellAnimation() + fade(tex, 0.f, 1.f, Config::ANIM_FRAMES);
 }
 
 Animation movePieceAnimation(const Cell &src, const Cell &dst) {
@@ -42,15 +41,30 @@ Animation mergeAnimation(const Cell &src, const Cell &dst) {
 
 Sprite placePieceAnimation2(int value) {
   auto tex = getTex(value);
-  //return { Clip().duration(0.3f), Clip(tex).fadeby(1.f, 0.f).duration(0.3f) };
-  return {};
+  Animation2 anim = { Clip().duration(0.3f),
+                      Clip(tex).fadeby(1.f, 0.f).duration(0.3f) };
+  return { { 0, anim } };
 }
 
-Sprite movePieceAnimation2(const Cell &src, const Cell &dst);
-Sprite promotionPieceAnimation2(int level);
+Sprite movePieceAnimation2(const Cell &src, const Cell &dst) {
+  auto tex = getTex(dst.value());
+  auto offset = BoardLayout::distance(dst.coord(), src.coord());
+  Animation2 anim = { Clip(tex).moveby(offset).duration(0.3f) };
+  return { { 0, anim } };
+}
+
+Sprite promotionPieceAnimation2(int level) {
+  auto tex = getTex(level + 1);
+  Animation2 anim = {
+    Clip(tex).scaleby(Config::ENLARGE_RATIO).duration(0.3f),
+    Clip(tex).scaleby(1.f, Config::ENLARGE_RATIO).duration(0.3f)
+  };
+  return{ { 0, anim } };
+}
+
 Sprite mergeAnimation2(const Cell &src, const Cell &dst);
 
 Sprite emptyCellAnimation2() {
-  //return { Clip().duration(0.3f) };
-  return {};
+  Animation2 anim = { Clip().duration(0.3f) };
+  return { { 0, anim } };
 }

@@ -61,7 +61,7 @@ public:
 
   Clip &moveby(const ci::Vec2f &offset);
   Clip &fadeby(float delta, float from = 1.f);
-  Clip &scaleby(float scale);
+  Clip &scaleby(float scale, float from = 1.f);
   Clip &duration(float seconds);
 
   void update(float elapsed_seconds);

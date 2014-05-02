@@ -117,6 +117,7 @@ struct Clip::Data {
   float delta_alpha = 0.f;
   float alpha = 1.f;
   float scale = 0.f;
+  float initial_scale = 1.f;
   ci::Vec2f offset;
   shared_ptr<IRenderable> renderable;
 };
@@ -143,12 +144,12 @@ ci::Vec2f Clip::offset() const {
 
 float Clip::alpha() const {
   assert(d->elapsed <= d->duration);
-  return 1.f + d->delta_alpha * d->elapsed / d->duration;
+  return d->alpha + d->delta_alpha * d->elapsed / d->duration;
 }
 
 float Clip::scale() const {
   assert(d->elapsed <= d->duration);
-  return d->alpha + d->scale * d->elapsed / d->duration;
+  return d->initial_scale + d->scale * d->elapsed / d->duration;
 }
 
 float Clip::duration() const { return d->duration; }
@@ -166,8 +167,9 @@ Clip &Clip::fadeby(float delta, float from) {
   return *this;
 }
 
-Clip &Clip::scaleby(float scale) {
+Clip &Clip::scaleby(float scale, float from) {
   d->scale = scale;
+  d->initial_scale = from;
   return *this;
 }
 
@@ -181,7 +183,7 @@ void Clip::update(float elapsed_seconds) {
 }
 
 void Clip::draw(ci::Rectf rect) {
-  if (finished())
+  if (finished() || !d->renderable)
     return;
   
   auto scale_factor = scale();
