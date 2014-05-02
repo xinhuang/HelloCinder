@@ -71,29 +71,7 @@ Clip &Clip::duration(float seconds) {
   return *this;
 }
 
-void Clip::update(float elapsed_seconds) {
-  d->elapsed += elapsed_seconds;
-}
-
-void Clip::rewind() {
-  d->elapsed = 0.f;
-}
-
-void Clip::draw(ci::Rectf rect) {
-  if (finished() || !d->renderable)
-    return;
-
-  auto scale_factor = scale();
-  if (scale_factor != 1.f) {
-    auto size = rect.getSize() * scale_factor;
-    rect = { rect.getUpperLeft(), rect.getUpperLeft() + size };
-  }
-  rect += offset();
-  d->renderable->draw(rect, alpha());
-}
-
 void Clip::draw(float elapsed, ci::Rectf rect) {
-  float old_elapsed = d->elapsed;
   d->elapsed = elapsed;
 
   if (finished() || !d->renderable)
@@ -106,5 +84,5 @@ void Clip::draw(float elapsed, ci::Rectf rect) {
   }
   rect += offset();
   d->renderable->draw(rect, alpha());
-  d->elapsed = old_elapsed;
+  d->elapsed = NAN;
 }

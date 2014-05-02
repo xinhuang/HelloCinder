@@ -28,8 +28,6 @@ public:
   Clip &scaleby(float scale, float from = 1.f);
   Clip &duration(float seconds);
 
-  void update(float elapsed_seconds);
-  void rewind();
   bool finished() const;
 
   ci::Vec2f offset() const;
@@ -37,6 +35,5 @@ public:
   float scale() const;
   float duration() const;
 
-  void draw(ci::Rectf rect);
   void draw(float elapsed, ci::Rectf rect);
 };

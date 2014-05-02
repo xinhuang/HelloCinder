@@ -39,11 +39,6 @@ Animation& Animation::operator=(const Animation& anim) {
   return *this;
 }
 
-void Animation::rewind() {
-  for (auto& clip : d->clips)
-    clip.rewind();
-}
-
 Animation& Animation::cyclic(bool value) {
   d->cyclic = value;
   return *this;
@@ -64,7 +59,6 @@ void Animation::draw(const ci::Rectf &rect) {
   float elapsed = d->elapsed;
   for (auto &clip : d->clips) {
     if (elapsed <= clip.duration()) {
-      clip.update(frame_interval);
       clip.draw(elapsed, rect);
       return;
     } else {

@@ -13,8 +13,6 @@ class Animation {
   struct Data;
   std::unique_ptr<Data> d;
 
-  void rewind();
-
 public:
   Animation();
   ~Animation();

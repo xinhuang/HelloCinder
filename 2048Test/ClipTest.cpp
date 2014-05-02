@@ -28,8 +28,7 @@ TEST_F(ClipTest, given_move_when_tick_once_should_calculate_currect_location) {
 
   sut.moveby(Vec2f(3, 3)).duration(0.3f);
 
-  sut.update(0.1f);
-  sut.draw(Rectf(0, 0, 1, 1));
+  sut.draw(0.1f, Rectf(0, 0, 1, 1));
 }
 
 TEST_F(ClipTest, given_move_when_tick_twice_should_calculate_currect_location) {
@@ -38,8 +37,7 @@ TEST_F(ClipTest, given_move_when_tick_twice_should_calculate_currect_location) {
   auto offset = Vec2f(3, 3);
   sut.moveby(offset).duration(0.3f);
 
-  sut.update(0.25f);
-  sut.draw(Rectf(0, 0, 1, 1));
+  sut.draw(0.25f, Rectf(0, 0, 1, 1));
 }
 
 TEST_F(ClipTest, given_move_when_tick_longer_than_duration_should_not_draw) {
@@ -47,8 +45,7 @@ TEST_F(ClipTest, given_move_when_tick_longer_than_duration_should_not_draw) {
 
   sut.moveby(Vec2f(3, 3)).duration(0.3f);
 
-  sut.update(0.5);
-  sut.draw(Rectf());
+  sut.draw(0.5f, Rectf());
 }
 
 TEST_F(ClipTest, given_move_when_render_at_every_0_1_seconds) {
@@ -58,17 +55,9 @@ TEST_F(ClipTest, given_move_when_render_at_every_0_1_seconds) {
 
   sut.moveby(Vec2f(3, 3)).duration(0.3f);
 
-  sut.update(0.1f);
-  ASSERT_EQ(Vec2f(1, 1), sut.offset());
-  sut.draw(Rectf(0, 0, 1, 1));
-
-  sut.update(0.1f);
-  ASSERT_EQ(Vec2f(2, 2), sut.offset());
-  sut.draw(Rectf(0, 0, 1, 1));
-
-  sut.update(0.1f);
-  ASSERT_EQ(Vec2f(3, 3), sut.offset());
-  sut.draw(Rectf(0, 0, 1, 1));
+  sut.draw(0.1f, Rectf(0, 0, 1, 1));
+  sut.draw(0.2f, Rectf(0, 0, 1, 1));
+  sut.draw(0.3f, Rectf(0, 0, 1, 1));
 }
 
 TEST_F(ClipTest,
@@ -77,8 +66,7 @@ TEST_F(ClipTest,
 
   sut.fadeby(-0.6f).duration(0.3f);
 
-  sut.update(0.1f);
-  sut.draw({});
+  sut.draw(0.1f, {});
 }
 
 TEST_F(ClipTest,
@@ -87,8 +75,7 @@ TEST_F(ClipTest,
 
   sut.scaleby(6.f).duration(0.3f);
 
-  sut.update(0.1f);
-  sut.draw(Rectf(2, 2, 3, 3));
+  sut.draw(0.1f, Rectf(2, 2, 3, 3));
 }
 
 TEST_F(ClipTest, given_move_fade_scale_should_draw_correctly) {
@@ -96,14 +83,10 @@ TEST_F(ClipTest, given_move_fade_scale_should_draw_correctly) {
 
   sut.scaleby(6.f).fadeby(-0.6f).duration(0.3f);
 
-  sut.update(0.1f);
-  sut.draw(Rectf(2, 2, 3, 3));
+  sut.draw(0.1f, Rectf(2, 2, 3, 3));
 }
 
-TEST_F(ClipTest, given_empty_clip_should_draw_nothing) {
+TEST_F(ClipTest, given_empty_clip_when_draw_should_not_crash) {
   sut = Clip().duration(3.f);
-  sut.update(2.f);
-  sut.draw({});
-  sut.update(1.1f);
-  ASSERT_TRUE(sut.finished());
+  sut.draw(2.f, {});
 }
