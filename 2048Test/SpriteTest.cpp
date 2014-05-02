@@ -1,4 +1,4 @@
-#include "../2048/View/Animation.h"
+#include "../2048/View/Sprite.h"
 
 #include "TimerMock.h"
 #include "RenderableMock.h"
@@ -11,8 +11,8 @@ using namespace std;
 
 struct SpriteTest : public ::testing::Test {
   void SetUp() final {
-    old_timer = Animation2::timer();
-    Animation2::setTimer(&timer);
+    old_timer = Animation::timer();
+    Animation::setTimer(&timer);
 
     renderables.emplace_back(new RenderableMock());
     renderables.emplace_back(new RenderableMock());
@@ -21,7 +21,7 @@ struct SpriteTest : public ::testing::Test {
     clips.emplace_back(dynamic_pointer_cast<IRenderable>(renderables[1]));
   }
 
-  void TearDown() final { Animation2::setTimer(old_timer); }
+  void TearDown() final { Animation::setTimer(old_timer); }
 
   Timer *old_timer;
   TimerMock timer;
@@ -37,7 +37,7 @@ TEST_F(SpriteTest, when_has_2_layers_should_draw_bigger_layer_number_later) {
     EXPECT_CALL(*renderables[1], draw(_, _)).Times(1);
   }
 
-  Animation2 anim0 = { clips[0].fadeby(-3.f).duration(3.f) },
+  Animation anim0 = { clips[0].fadeby(-3.f).duration(3.f) },
              anim1 = { clips[1].fadeby(-3.f).duration(3.f) };
 
   sut = { { 0, anim0 },

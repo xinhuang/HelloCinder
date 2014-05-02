@@ -14,37 +14,52 @@
     <Filter Include="Util">
       <UniqueIdentifier>{59f452f4-906f-4aec-984a-f43430d9ba26}</UniqueIdentifier>
     </Filter>
+    <Filter Include="View\Sprite">
+      <UniqueIdentifier>{e3704270-188f-4d33-b3e4-fde868286afa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View\UI">
+      <UniqueIdentifier>{245f283b-e4ad-447a-a9a8-81ab9e591c3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View\Animation">
+      <UniqueIdentifier>{3a148f25-2b0c-4d6f-bcbd-927000bba778}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Presenter\Game2048App.cpp">
       <Filter>Presenter</Filter>
     </ClCompile>
-    <ClCompile Include="View\Animation.cpp">
-      <Filter>View</Filter>
-    </ClCompile>
     <ClCompile Include="Presenter\Cell.cpp">
       <Filter>Presenter</Filter>
-    </ClCompile>
-    <ClCompile Include="View\CellAnimation.cpp">
-      <Filter>View</Filter>
-    </ClCompile>
-    <ClCompile Include="View\CellRenderer.cpp">
-      <Filter>View</Filter>
     </ClCompile>
     <ClCompile Include="Presenter\Board.cpp">
       <Filter>Presenter</Filter>
     </ClCompile>
-    <ClCompile Include="View\Label.cpp">
-      <Filter>View</Filter>
-    </ClCompile>
     <ClCompile Include="Presenter\BoardLayout.cpp">
       <Filter>Presenter</Filter>
     </ClCompile>
-    <ClCompile Include="View\VerticalLabel.cpp">
-      <Filter>View</Filter>
-    </ClCompile>
     <ClCompile Include="View\Timer.cpp">
       <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="View\Animation.cpp">
+      <Filter>View\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="View\VerticalLabel.cpp">
+      <Filter>View\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="View\CellAnimation.cpp">
+      <Filter>View\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="View\CellRenderer.cpp">
+      <Filter>View\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="View\Label.cpp">
+      <Filter>View\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="View\Clip.cpp">
+      <Filter>View\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="View\Sprite.cpp">
+      <Filter>View\Sprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,20 +72,11 @@
     <ClInclude Include="Presenter\Game2048App.h">
       <Filter>Presenter</Filter>
     </ClInclude>
-    <ClInclude Include="View\Animation.h">
-      <Filter>View</Filter>
-    </ClInclude>
     <ClInclude Include="View\IRenderable.h">
       <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="Presenter\Cell.h">
       <Filter>Presenter</Filter>
-    </ClInclude>
-    <ClInclude Include="View\CellAnimation.h">
-      <Filter>View</Filter>
-    </ClInclude>
-    <ClInclude Include="View\CellRenderer.h">
-      <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="Presenter\Board.h">
       <Filter>Presenter</Filter>
@@ -78,14 +84,8 @@
     <ClInclude Include="Presenter\Piece.h">
       <Filter>Presenter</Filter>
     </ClInclude>
-    <ClInclude Include="View\Label.h">
-      <Filter>View</Filter>
-    </ClInclude>
     <ClInclude Include="Presenter\BoardLayout.h">
       <Filter>Presenter</Filter>
-    </ClInclude>
-    <ClInclude Include="View\VerticalLabel.h">
-      <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="View\Timer.h">
       <Filter>View</Filter>
@@ -95,6 +95,27 @@
     </ClInclude>
     <ClInclude Include="View\TextureRenderer.h">
       <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="View\Animation.h">
+      <Filter>View\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="View\VerticalLabel.h">
+      <Filter>View\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="View\CellAnimation.h">
+      <Filter>View\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="View\CellRenderer.h">
+      <Filter>View\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="View\Label.h">
+      <Filter>View\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="View\Clip.h">
+      <Filter>View\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="View\Sprite.h">
+      <Filter>View\Sprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

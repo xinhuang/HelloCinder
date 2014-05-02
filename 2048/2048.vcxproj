@@ -94,7 +94,9 @@
     <ClCompile Include="View\Animation.cpp" />
     <ClCompile Include="View\CellAnimation.cpp" />
     <ClCompile Include="View\CellRenderer.cpp" />
+    <ClCompile Include="View\Clip.cpp" />
     <ClCompile Include="View\Label.cpp" />
+    <ClCompile Include="View\Sprite.cpp" />
     <ClCompile Include="View\Timer.cpp" />
     <ClCompile Include="View\VerticalLabel.cpp" />
   </ItemGroup>
@@ -107,11 +109,13 @@
     <ClInclude Include="Presenter\Game2048App.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="View\Animation.h" />
+    <ClInclude Include="View\Clip.h" />
     <ClInclude Include="View\IRenderable.h" />
     <ClInclude Include="View\CellAnimation.h" />
     <ClInclude Include="View\CellRenderer.h" />
     <ClInclude Include="View\Label.h" />
     <ClInclude Include="View\NullRenderer.h" />
+    <ClInclude Include="View\Sprite.h" />
     <ClInclude Include="View\TextureRenderer.h" />
     <ClInclude Include="View\Timer.h" />
     <ClInclude Include="View\VerticalLabel.h" />

@@ -31,6 +31,12 @@
     <ClCompile Include="SpriteTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\2048\View\Clip.cpp">
+      <Filter>2048</Filter>
+    </ClCompile>
+    <ClCompile Include="..\2048\View\Sprite.cpp">
+      <Filter>2048</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\2048\View\Animation.h">
@@ -44,6 +50,12 @@
     </ClInclude>
     <ClInclude Include="RenderableMock.h">
       <Filter>Mocks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\2048\View\Clip.h">
+      <Filter>2048</Filter>
+    </ClInclude>
+    <ClInclude Include="..\2048\View\Sprite.h">
+      <Filter>2048</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
