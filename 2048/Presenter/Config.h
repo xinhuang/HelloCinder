@@ -17,7 +17,7 @@ const uint32_t BOARD_COLOR = 0xBBADA0;
 
 const uint32_t BK_COLOR = 0xFAF8EF;
 
-const float FRAME_RATE = 6.f;
+const float FRAME_RATE = 30.f;
 const int ANIM_FRAMES = 4;
 const float ENLARGE_RATIO = 1.2f;
 

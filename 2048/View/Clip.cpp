@@ -5,6 +5,7 @@ using namespace std;
 using namespace ci;
 
 struct Clip::Data {
+  bool reversed = false;
   float elapsed = 0;
   float duration = 0;
   float delta_alpha = 0.f;
@@ -32,17 +33,27 @@ Clip &Clip::operator=(const Clip &anim) {
 
 ci::Vec2f Clip::offset() const {
   assert(d->elapsed <= d->duration);
-  return d->offset * d->elapsed / d->duration;
+  auto elapsed = d->elapsed;
+  if (d->reversed)
+    elapsed = d->duration - d->elapsed;
+  return d->offset * elapsed / d->duration;
 }
 
 float Clip::alpha() const {
   assert(d->elapsed <= d->duration);
-  return d->alpha + d->delta_alpha * d->elapsed / d->duration;
+  auto elapsed = d->elapsed;
+  if (d->reversed)
+    elapsed = d->duration - d->elapsed;
+  return d->alpha + d->delta_alpha * elapsed / d->duration;
 }
 
 float Clip::scale() const {
   assert(d->elapsed <= d->duration);
-  return d->initial_scale + d->scale * d->elapsed / d->duration;
+  auto elapsed = d->elapsed;
+  if (d->reversed)
+    elapsed = d->duration - d->elapsed;
+  // TODO: size = size * scale, wrong formular
+  return d->initial_scale + d->scale * elapsed / d->duration;
 }
 
 float Clip::duration() const { return d->duration; }
@@ -68,6 +79,11 @@ Clip &Clip::scaleby(float scale, float from) {
 
 Clip &Clip::duration(float seconds) {
   d->duration = seconds;
+  return *this;
+}
+
+Clip &Clip::reverse(bool reversed) {
+  d->reversed = reversed;
   return *this;
 }
 

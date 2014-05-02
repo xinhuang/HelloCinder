@@ -31,6 +31,17 @@ TEST_F(ClipTest, given_move_when_tick_once_should_calculate_currect_location) {
   sut.draw(0.1f, Rectf(0, 0, 1, 1));
 }
 
+TEST_F(ClipTest, given_move_when_reversed_should_calculate_currect_location) {
+  InSequence s;
+  EXPECT_CALL(*renderable, draw(Rectf(3, 3, 4, 4), 1.f)).Times(1);
+  EXPECT_CALL(*renderable, draw(Rectf(2, 2, 3, 3), 1.f)).Times(1);
+
+  sut.moveby(Vec2f(3, 3)).duration(0.3f).reverse();
+
+  sut.draw(0.0f, Rectf(0, 0, 1, 1));
+  sut.draw(0.1f, Rectf(0, 0, 1, 1));
+}
+
 TEST_F(ClipTest, given_move_when_tick_twice_should_calculate_currect_location) {
   EXPECT_CALL(*renderable, draw(Rectf(2.5, 2.5, 3.5, 3.5), 1.f)).Times(1);
 
@@ -69,12 +80,33 @@ TEST_F(ClipTest,
   sut.draw(0.1f, {});
 }
 
-TEST_F(ClipTest,
-       given_animation_when_zoom_should_return_draw_with_correct_size) {
+TEST_F(ClipTest, given_fading_clip_when_reverse) {
+  InSequence s;
+  EXPECT_CALL(*renderable, draw(_, FloatNear(0.4f, 0.0001f))).Times(1);
+  EXPECT_CALL(*renderable, draw(_, FloatNear(0.6f, 0.0001f))).Times(1);
+
+  sut.fadeby(-0.6f).duration(0.3f).reverse();
+
+  sut.draw(0.0f, {});
+  sut.draw(0.1f, {});
+}
+
+TEST_F(ClipTest, given_scaling_clip_when_draw) {
   EXPECT_CALL(*renderable, draw(Rectf(2, 2, 5, 5), 1.f)).Times(1);
 
   sut.scaleby(6.f).duration(0.3f);
 
+  sut.draw(0.1f, Rectf(2, 2, 3, 3));
+}
+
+TEST_F(ClipTest, given_clip_when_reverse_scaling) {
+  InSequence s;
+  EXPECT_CALL(*renderable, draw(Rectf(2, 2, 9, 9), _)).Times(1);
+  EXPECT_CALL(*renderable, draw(Rectf(2, 2, 7, 7), _)).Times(1);
+
+  sut.scaleby(6.f).duration(0.3f).reverse();
+
+  sut.draw(0.0f, Rectf(2, 2, 3, 3));
   sut.draw(0.1f, Rectf(2, 2, 3, 3));
 }
 

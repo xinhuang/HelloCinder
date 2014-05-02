@@ -9,6 +9,8 @@
 
 using namespace std;
 
+using namespace ci;
+
 ci::gl::TextureRef getTex(int value) {
   return CellRenderer::instance().render(value, BoardLayout::cellSize());
 }
@@ -23,9 +25,9 @@ Sprite placePieceAnimation2(int value) {
 
 Sprite movePieceAnimation2(const Cell &src, const Cell &dst) {
   auto tex = getTex(dst.value());
-  auto offset = BoardLayout::distance(dst.coord(), src.coord());
-  Animation anim = { Clip(tex).moveby(offset).duration(0.3f) };
-  return { { 0, anim } };
+  auto offset = BoardLayout::distance(src.coord(), dst.coord());
+  Animation anim = { Clip(tex).moveby(offset).duration(0.3f).reverse(), Clip(tex) };
+  return { { 0, anim.wrap(WrapMode::CLAMP_FOREVER) } };
 }
 
 Sprite promotionPieceAnimation2(int level) {

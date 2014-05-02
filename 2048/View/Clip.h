@@ -27,6 +27,7 @@ public:
   Clip &fadeby(float delta, float from = 1.f);
   Clip &scaleby(float scale, float from = 1.f);
   Clip &duration(float seconds);
+  Clip &reverse(bool reversed = true);
 
   bool finished() const;
 
