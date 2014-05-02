@@ -246,6 +246,12 @@ void Animation2::setTimer(Timer *timer) {
 
 Timer *Animation2::timer() { return Data::timer.release(); }
 
+Animation2 operator+(Animation2 lhs, const Animation2 &rhs) {
+  lhs.d->clips.insert(lhs.d->clips.end(), rhs.d->clips.begin(),
+                      rhs.d->clips.end());
+  return lhs;
+}
+
 // ----------------------------------------------------------------- //
 
 #include <map>
@@ -267,6 +273,9 @@ Sprite& Sprite::operator=(const Sprite& sprite) {
   return *this;
 }
 
+Animation2& Sprite::layer(int i) {
+  return d->layers[i];
+}
 
 void Sprite::draw(const Rectf& rect) {
   for (auto& layer : d->layers) {

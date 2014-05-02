@@ -39,6 +39,8 @@ Animation mergeAnimation(const Cell &src, const Cell &dst) {
   return movePieceAnimation(src, dst) + promotionPieceAnimation(dst.value());
 }
 
+// ------------------------------------------------------ //
+
 Sprite placePieceAnimation2(int value) {
   auto tex = getTex(value);
   Animation2 anim = { Clip().duration(0.3f),
@@ -62,7 +64,10 @@ Sprite promotionPieceAnimation2(int level) {
   return{ { 0, anim } };
 }
 
-Sprite mergeAnimation2(const Cell &src, const Cell &dst);
+Sprite mergeAnimation2(const Cell &src, const Cell &dst) {
+  return { { 0, movePieceAnimation2(src, dst).layer(0) +
+                    promotionPieceAnimation2(dst.value()).layer(0) } };
+}
 
 Sprite emptyCellAnimation2() {
   Animation2 anim = { Clip().duration(0.3f) };

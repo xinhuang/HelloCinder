@@ -95,6 +95,8 @@ public:
 
   static void setTimer(Timer *timer);
   static Timer *timer();
+
+  friend Animation2 operator+(Animation2 lhs, const Animation2 &rhs);
 };
 
 // --------------------------------------------------------------- //
@@ -114,6 +116,8 @@ public:
   Sprite(std::initializer_list<Layer> layers);
 
   Sprite& operator=(const Sprite& sprite);
+
+  Animation2& layer(int);
 
   void draw(const ci::Rectf &rect);
 };
