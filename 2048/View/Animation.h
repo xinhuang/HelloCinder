@@ -97,6 +97,8 @@ public:
   Animation2& cyclic(bool value = true);
   void draw(const ci::Rectf &rect);
 
+  float duration() const;
+
   static void setTimer(Timer *timer);
   static Timer *timer();
 

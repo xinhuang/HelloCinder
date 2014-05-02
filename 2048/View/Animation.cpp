@@ -8,6 +8,8 @@ using namespace ci;
 
 #include <vector>
 #include <algorithm>
+#include <numeric>
+#include <cmath>
 
 using namespace std;
 
@@ -240,13 +242,14 @@ Animation2& Animation2::cyclic(bool value) {
 }
 
 void Animation2::draw(const ci::Rectf &rect) {
-  d->elapsed += (float)Data::timer->elapsed();
+  float frame_interval = (float)Data::timer->elapsed();
+  d->elapsed += frame_interval;
 
-  do {
+  do {   
     float elapsed = d->elapsed;
     for (auto &clip : d->clips) {
       if (elapsed <= clip.duration()) {
-        clip.update(elapsed);
+        clip.update(frame_interval);
         clip.draw(rect);
         return;
       } else {
@@ -254,10 +257,15 @@ void Animation2::draw(const ci::Rectf &rect) {
       }
     }
     if (d->cyclic) {
-      d->elapsed = elapsed;
+      d->elapsed = fmod(d->elapsed, duration());
       rewind();
     }
   } while (d->cyclic);
+}
+
+float Animation2::duration() const {
+  return accumulate(d->clips.begin(), d->clips.end(), 0.f,
+                    [&](float v, const Clip &c) { return v + c.duration(); });
 }
 
 void Animation2::setTimer(Timer *timer) {

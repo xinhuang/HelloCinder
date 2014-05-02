@@ -5,6 +5,7 @@
 #include "Cell.h"
 
 #include "../View/VerticalLabel.h"
+#include "../View/Animation.h"
 
 #include "../Util/Random.h"
 
@@ -47,6 +48,8 @@ void Game2048App::setup() {
   d->board.spawn();
   d->board.spawn();
   d->board.addListener(*this);
+
+  Animation2::timer()->reset();
 }
 
 void Game2048App::keyUp(ci::app::KeyEvent e) {
@@ -102,6 +105,8 @@ void Game2048App::draw() {
   }
 
   d->score.draw();
+
+  Animation2::timer()->reset();
 }
 
 void Game2048App::drawGameOver(const Rectf &rect) const {

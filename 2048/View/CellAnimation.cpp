@@ -43,8 +43,9 @@ Animation mergeAnimation(const Cell &src, const Cell &dst) {
 
 Sprite placePieceAnimation2(int value) {
   auto tex = getTex(value);
-  Animation2 anim = { Clip().duration(0.3f),
-                      Clip(tex).fadeby(1.f, 0.f).duration(0.3f) };
+  auto wait = Clip().duration(0.3f);
+  auto appear = Clip(tex).fadeby(1.f, 0.f).duration(0.3f);
+  Animation2 anim = { wait, appear };
   return { { 0, anim } };
 }
 
@@ -70,6 +71,7 @@ Sprite mergeAnimation2(const Cell &src, const Cell &dst) {
 }
 
 Sprite emptyCellAnimation2() {
-  Animation2 anim = { Clip().duration(0.3f) };
-  return { { 0, anim } };
+  auto tex = getTex(0);
+  Animation2 anim = { Clip(tex).duration(0.3f) };
+  return { { 0, anim.cyclic() } };
 }

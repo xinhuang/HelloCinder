@@ -10,8 +10,8 @@
 class Cell {
   const ci::Vec2i coord_;
   std::unique_ptr<Piece> piece_;
-  Animation anim_;
-  Animation piece_anim_;
+  Sprite anim_;
+  Sprite piece_anim_;
 
 public:
   Cell(const ci::Vec2i &coord);
