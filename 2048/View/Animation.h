@@ -65,6 +65,7 @@ public:
   Clip &duration(float seconds);
 
   void update(float elapsed_seconds);
+  void rewind();
   bool finished() const;
 
   ci::Vec2f offset() const;
@@ -83,6 +84,8 @@ class Animation2 {
   struct Data;
   std::unique_ptr<Data> d;
 
+  void rewind();
+
 public:
   Animation2();
   ~Animation2();
@@ -91,6 +94,7 @@ public:
 
   Animation2& operator=(const Animation2& anim);
 
+  Animation2& cyclic(bool value = true);
   void draw(const ci::Rectf &rect);
 
   static void setTimer(Timer *timer);
@@ -111,6 +115,7 @@ class Sprite {
 
 public:
   Sprite();
+  Sprite(const Sprite& sprite);
   ~Sprite();
   Sprite(Animation anim);
   Sprite(std::initializer_list<Layer> layers);

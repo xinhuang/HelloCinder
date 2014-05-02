@@ -182,6 +182,10 @@ void Clip::update(float elapsed_seconds) {
   d->elapsed += elapsed_seconds;
 }
 
+void Clip::rewind() {
+  d->elapsed = 0.f;
+}
+
 void Clip::draw(ci::Rectf rect) {
   if (finished() || !d->renderable)
     return;
@@ -200,6 +204,7 @@ void Clip::draw(ci::Rectf rect) {
 struct Animation2::Data {
   static unique_ptr<Timer> timer;
 
+  bool cyclic = false;
   float elapsed = 0;
   vector<Clip> clips;
 };
@@ -224,19 +229,35 @@ Animation2& Animation2::operator=(const Animation2& anim) {
   return *this;
 }
 
+void Animation2::rewind() {
+  for (auto& clip : d->clips)
+    clip.rewind();
+}
+
+Animation2& Animation2::cyclic(bool value) {
+  d->cyclic = value;
+  return *this;
+}
+
 void Animation2::draw(const ci::Rectf &rect) {
   d->elapsed += (float)Data::timer->elapsed();
 
-  float elapsed = d->elapsed;
-  for (auto &clip : d->clips) {
-    if (elapsed <= clip.duration()) {
-      clip.update(elapsed);
-      clip.draw(rect);
-      break;
-    } else {
-      elapsed -= clip.duration();
+  do {
+    float elapsed = d->elapsed;
+    for (auto &clip : d->clips) {
+      if (elapsed <= clip.duration()) {
+        clip.update(elapsed);
+        clip.draw(rect);
+        return;
+      } else {
+        elapsed -= clip.duration();
+      }
     }
-  }
+    if (d->cyclic) {
+      d->elapsed = elapsed;
+      rewind();
+    }
+  } while (d->cyclic);
 }
 
 void Animation2::setTimer(Timer *timer) {
@@ -244,7 +265,7 @@ void Animation2::setTimer(Timer *timer) {
   Data::timer.reset(timer);
 }
 
-Timer *Animation2::timer() { return Data::timer.release(); }
+Timer *Animation2::timer() { return Data::timer.get(); }
 
 Animation2 operator+(Animation2 lhs, const Animation2 &rhs) {
   lhs.d->clips.insert(lhs.d->clips.end(), rhs.d->clips.begin(),
@@ -261,6 +282,10 @@ struct Sprite::Data {
 };
 
 Sprite::Sprite() : d(make_unique<Data>()) {}
+
+Sprite::Sprite(const Sprite& sprite) : Sprite() {
+  *d = *(sprite.d);
+}
 
 Sprite::~Sprite() {}
 

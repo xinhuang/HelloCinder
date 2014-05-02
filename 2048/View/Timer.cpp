@@ -1,13 +1,14 @@
 #include "Timer.h"
 
-#include <cinder/app/app.h>
+#include <chrono>
 
-using namespace ci::app;
+using namespace std;
 
-//double Timer::last_;
-//
-//void Timer::frameStart() { last_ = getElapsedSeconds(); }
-//
-//double Timer::sinceLastFrame() {
-//  return getElapsedSeconds() - last_;
-//}
+Timer::time_point Timer::now() {
+  return std::chrono::steady_clock::now();
+}
+
+double Timer::elapsed() const {
+  auto duration = now() - last_;
+  return chrono::duration_cast<chrono::milliseconds>(duration).count() * 0.001;
+}

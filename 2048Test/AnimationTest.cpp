@@ -90,3 +90,29 @@ TEST_F(AnimationTest,
   sut.draw({});
   timer.reset();
 }
+
+TEST_F(AnimationTest, given_render_2_clips_anim_when_cyclic) {
+  {
+    InSequence s;
+    EXPECT_CALL(*renderables[0], draw(_, FloatNear(0.8f, 0.001f))).Times(1);
+    EXPECT_CALL(*renderables[1], draw(_, FloatNear(0.3f, 0.001f))).Times(1);
+    EXPECT_CALL(*renderables[0], draw(_, FloatNear(0.6f, 0.001f))).Times(1);
+  }
+
+  Animation2 sut = { clips[0].fadeby(-0.6f).duration(3),
+                     clips[1].fadeby(-0.7f).duration(1) };
+
+  sut.cyclic();
+
+  timer.tick(1);
+  sut.draw({});
+  timer.reset();
+
+  timer.tick(3);
+  sut.draw({});
+  timer.reset();
+
+  timer.tick(2);
+  sut.draw({});
+  timer.reset();
+}
