@@ -201,6 +201,24 @@ void Clip::draw(ci::Rectf rect) {
   d->renderable->draw(rect, alpha());
 }
 
+void Clip::draw(float elapsed, ci::Rectf rect) {
+  float old_elapsed = d->elapsed;
+  d->elapsed = elapsed;
+
+  if (finished() || !d->renderable)
+    return;
+
+  auto scale_factor = scale();
+  if (scale_factor != 1.f) {
+    auto size = rect.getSize() * scale_factor;
+    rect = { rect.getUpperLeft(), rect.getUpperLeft() + size };
+  }
+  rect += offset();
+  d->renderable->draw(rect, alpha());
+  d->elapsed = old_elapsed;
+}
+
+
 // ---------------------------------------------- //
 
 struct Animation2::Data {
@@ -245,22 +263,24 @@ void Animation2::draw(const ci::Rectf &rect) {
   float frame_interval = (float)Data::timer->elapsed();
   d->elapsed += frame_interval;
 
-  do {   
-    float elapsed = d->elapsed;
-    for (auto &clip : d->clips) {
-      if (elapsed <= clip.duration()) {
-        clip.update(frame_interval);
-        clip.draw(rect);
-        return;
-      } else {
-        elapsed -= clip.duration();
-      }
+  float anim_duration = duration();
+  if (d->cyclic && d->elapsed > anim_duration)
+    d->elapsed = fmod(d->elapsed, anim_duration);
+  if (anim_duration < d->elapsed) {
+    assert(!d->cyclic);
+    return;
+  }
+
+  float elapsed = d->elapsed;
+  for (auto &clip : d->clips) {
+    if (elapsed <= clip.duration()) {
+      clip.update(frame_interval);
+      clip.draw(elapsed, rect);
+      return;
+    } else {
+      elapsed -= clip.duration();
     }
-    if (d->cyclic) {
-      d->elapsed = fmod(d->elapsed, duration());
-      rewind();
-    }
-  } while (d->cyclic);
+  }
 }
 
 float Animation2::duration() const {

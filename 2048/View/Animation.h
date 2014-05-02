@@ -74,6 +74,7 @@ public:
   float duration() const;
 
   void draw(ci::Rectf rect);
+  void draw(float elapsed, ci::Rectf rect);
 };
 
 // --------------------------------------------------------------- //
