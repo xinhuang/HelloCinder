@@ -24,12 +24,12 @@ class Animation {
 public:
   Animation();
   ~Animation();
-  Animation(const Animation& anim);
+  Animation(const Animation &anim);
   Animation(const std::initializer_list<Clip> &clips);
 
-  Animation& operator=(const Animation& anim);
+  Animation &operator=(const Animation &anim);
 
-  Animation& wrap(WrapMode mode);
+  Animation &wrap(WrapMode mode);
   void draw(const ci::Rectf &rect);
 
   bool isPlaying() const;

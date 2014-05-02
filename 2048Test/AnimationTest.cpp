@@ -49,7 +49,7 @@ TEST_F(AnimationTest, given_render_2_clips_anim_when_no_interleaving) {
   }
 
   Animation sut = { clips[0].fadeby(-0.6f).duration(3),
-                     clips[1].fadeby(-0.7f).duration(1) };
+                    clips[1].fadeby(-0.7f).duration(1) };
 
   timer.tick(3);
   sut.draw({});
@@ -68,7 +68,7 @@ TEST_F(AnimationTest, given_render_2_clips_anim_when_there_is_interleaving) {
   }
 
   Animation sut = { clips[0].fadeby(-0.6f).duration(3),
-                     clips[1].fadeby(-0.7f).duration(1) };
+                    clips[1].fadeby(-0.7f).duration(1) };
 
   timer.tick(2);
   sut.draw({});
@@ -84,7 +84,7 @@ TEST_F(AnimationTest,
   EXPECT_CALL(*renderables[1], draw(_, FloatNear(0.3f, 0.001f))).Times(1);
 
   Animation sut = { clips[0].fadeby(-0.6f).duration(3),
-                     clips[1].fadeby(-0.7f).duration(1) };
+                    clips[1].fadeby(-0.7f).duration(1) };
 
   timer.tick(4);
   sut.draw({});
@@ -119,7 +119,7 @@ TEST_F(AnimationTest, given_render_2_clips_anim_when_wrap_as_loop) {
   }
 
   Animation sut = { clips[0].fadeby(-0.6f).duration(3),
-    clips[1].fadeby(-0.7f).duration(1) };
+                    clips[1].fadeby(-0.7f).duration(1) };
 
   sut.wrap(WrapMode::LOOP);
 

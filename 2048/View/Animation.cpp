@@ -25,16 +25,13 @@ Animation::Animation() : d(make_unique<Data>()) {}
 
 Animation::~Animation() {}
 
-Animation::Animation(const Animation& anim) : Animation() {
-  *this = anim;
-}
+Animation::Animation(const Animation &anim) : Animation() { *this = anim; }
 
-Animation::Animation(const std::initializer_list<Clip> &clips)
-    : Animation() {
+Animation::Animation(const std::initializer_list<Clip> &clips) : Animation() {
   d->clips = clips;
 }
 
-Animation& Animation::operator=(const Animation& anim) {
+Animation &Animation::operator=(const Animation &anim) {
   *d = *(anim.d);
   return *this;
 }
@@ -57,14 +54,12 @@ void Animation::wrap() {
   }
 }
 
-Animation& Animation::wrap(WrapMode mode) {
+Animation &Animation::wrap(WrapMode mode) {
   d->wrap_mode = mode;
   return *this;
 }
 
-bool Animation::isPlaying() const {
-  return d->elapsed <= duration();
-}
+bool Animation::isPlaying() const { return d->elapsed <= duration(); }
 
 void Animation::draw(const ci::Rectf &rect) {
   float frame_interval = (float)Data::timer->elapsed();
