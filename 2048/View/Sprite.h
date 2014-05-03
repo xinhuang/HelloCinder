@@ -13,14 +13,14 @@ class Sprite {
 
 public:
   Sprite();
-  Sprite(const Sprite& sprite);
+  Sprite(const Sprite &sprite);
   ~Sprite();
   Sprite(Animation anim);
   Sprite(std::initializer_list<Layer> layers);
 
-  Sprite& operator=(const Sprite& sprite);
+  Sprite &operator=(const Sprite &sprite);
 
-  Animation& layer(int);
+  Animation &layer(int);
 
   void draw(const ci::Rectf &rect);
 };

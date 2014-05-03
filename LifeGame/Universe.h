@@ -19,8 +19,7 @@ public:
   virtual ci::gl::Texture render() const = 0;
 };
 
-template <typename T>
-std::unique_ptr<T> bigBang(int width, int height) {
+template <typename T> std::unique_ptr<T> bigBang(int width, int height) {
   std::unique_ptr<T> u = std::make_unique<T>(width, height);
   for (int i = 0; i < width * height * GameConfig::BORN_RATE; ++i) {
     int x = Random::next<int>(width - 1);

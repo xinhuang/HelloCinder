@@ -18,12 +18,13 @@ class Sysinfo {
 public:
   void onPreGen(const IUniverse &u) {}
 
-  void onPostGen(const IUniverse& u) {
+  void onPostGen(const IUniverse &u) {
     ++ngen_;
     ++count_;
     size_ = u.size();
     auto now = std::chrono::steady_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - timestamp_);
+    auto elapsed =
+        std::chrono::duration_cast<std::chrono::seconds>(now - timestamp_);
     if (elapsed > std::chrono::seconds(1)) {
       fps_ = count_;
       count_ = 0;
@@ -36,7 +37,7 @@ public:
     return std::chrono::duration_cast<std::chrono::seconds>(now - timestamp_);
   }
 
-  void init(const IUniverse& u) {
+  void init(const IUniverse &u) {
     ngen_ = 0;
     count_ = 0;
     fps_ = 0;
@@ -45,11 +46,11 @@ public:
     strategy_ = u.name();
   }
 
-  std::string msg(const ci::app::App& app) const {
+  std::string msg(const ci::app::App &app) const {
     std::ostringstream oss;
     oss << "#GEN \t" << ngen_ << std::endl << "SIZE \t" << size_ << std::endl
-        << "FPS \t" << app.getAverageFps() << std::endl
-        << "Strategy \t" << strategy_;
+        << "FPS \t" << app.getAverageFps() << std::endl << "Strategy \t"
+        << strategy_;
     return oss.str();
   }
 };

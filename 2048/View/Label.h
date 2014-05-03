@@ -20,15 +20,17 @@ public:
 
   void draw() const;
 
-  void setText(const std::string& text);
-  void setForeColor(const ci::Color& color);
-  void setBackColor(const ci::Color& color);
-  void setFont(const ci::Font& font);
-  void setSize(const ci::Vec2f& size);
-  void setLocation(const ci::Vec2f& loc);
+  void setText(const std::string &text);
+  void setForeColor(const ci::Color &color);
+  void setBackColor(const ci::Color &color);
+  void setFont(const ci::Font &font);
+  void setSize(const ci::Vec2f &size);
+  void setLocation(const ci::Vec2f &loc);
 
-  const ci::Vec2f& size() const;
-  const ci::Vec2f& location() const;
-  const ci::Font& font() const;
-  ci::Rectf rect() const { return{ location(), location() + size() }; }
+  const ci::Vec2f &size() const;
+  const ci::Vec2f &location() const;
+  const ci::Font &font() const;
+  ci::Rectf rect() const {
+    return { location(), location() + size() };
+  }
 };

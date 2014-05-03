@@ -16,7 +16,7 @@ public:
   Clip();
   Clip(const std::shared_ptr<Slice> &renderable);
   Clip(ci::gl::TextureRef &tex)
-    : Clip(std::shared_ptr<Slice>(new Slice(tex))) {}
+      : Clip(std::shared_ptr<Slice>(new Slice(tex))) {}
   Clip(const Clip &anim);
   ~Clip();
 

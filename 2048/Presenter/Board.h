@@ -10,20 +10,20 @@ class Piece;
 
 class IBoardEventListener {
 public:
-  virtual void onPieceMerged(const Piece& from, const Piece& to) = 0;
+  virtual void onPieceMerged(const Piece &from, const Piece &to) = 0;
 };
 
 class Board {
   struct Data;
   std::unique_ptr<Data> d;
 
-  Cell& at(const ci::Vec2i& coord);
+  Cell &at(const ci::Vec2i &coord);
   const Cell &at(const ci::Vec2i &coord) const;
-  void place(const ci::Vec2i& coord, std::unique_ptr<Piece>&& p);
+  void place(const ci::Vec2i &coord, std::unique_ptr<Piece> &&p);
   bool slide(ci::Vec2i src, const ci::Vec2i &dir);
   std::vector<int> traversal(int max, int dir) const;
   std::vector<ci::Vec2i> freespaces() const;
-  bool isOccupied(const ci::Vec2i& coord) const;
+  bool isOccupied(const ci::Vec2i &coord) const;
 
   void onPieceMerged(const Piece &from, const Piece &to);
 
@@ -32,7 +32,7 @@ public:
   Board(int width, int height);
   ~Board();
 
-  Board& operator=(Board&& board);
+  Board &operator=(Board &&board);
 
   int width() const;
   int height() const;
@@ -41,7 +41,7 @@ public:
   bool slide(const ci::Vec2i &dir);
   void spawn();
 
-  void draw(const ci::Rectf& rect);
+  void draw(const ci::Rectf &rect);
 
-  void addListener(IBoardEventListener& listener);
+  void addListener(IBoardEventListener &listener);
 };

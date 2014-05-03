@@ -36,7 +36,7 @@ IppStatus ippInit();
 
 inline uint8_t *ippsMalloc_8u(int size) {
   assert(size >= sizeof(intptr_t));
-  return static_cast<uint8_t*>(aligned_malloc(size, 32));
+  return static_cast<uint8_t *>(aligned_malloc(size, 32));
 }
 
 inline void ippsFree(void *p) { return aligned_free(p); }

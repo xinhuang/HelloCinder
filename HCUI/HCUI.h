@@ -3,20 +3,25 @@
 #include <memory>
 #include "Common.h"
 
-namespace cinder { namespace app { class App; } }
+namespace cinder {
+namespace app {
+class App;
+}
+}
 
 namespace hcui {
 
 class UiSystem {
   struct Impl;
   std::unique_ptr<Impl> m;
+
 public:
   UiSystem();
   ~UiSystem();
 
   void do_events();
-  void add(EntityPtr& entity);
-  void hook(ci::app::App& app);
+  void add(EntityPtr &entity);
+  void hook(ci::app::App &app);
 };
 
 using UiSystemPtr = std::unique_ptr<UiSystem>;
