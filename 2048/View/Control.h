@@ -21,10 +21,10 @@ public:
   Control();
   virtual ~Control();
 
-  ci::Vec2f location() const;
+  const ci::Vec2f &location() const;
   void setLocation(const ci::Vec2f &loc);
 
-  ci::Vec2f size() const;
+  const ci::Vec2f &size() const;
   void setSize(const ci::Vec2f &size);
 
   Anchor anchor() const;

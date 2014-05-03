@@ -14,10 +14,10 @@ Control::Control() : d(make_unique<Data>()) {}
 
 Control::~Control() {}
 
-ci::Vec2f Control::location() const { return d->location; }
+const ci::Vec2f &Control::location() const { return d->location; }
 void Control::setLocation(const ci::Vec2f &loc) { d->location = loc; }
 
-ci::Vec2f Control::size() const { return d->size; }
+const ci::Vec2f &Control::size() const { return d->size; }
 void Control::setSize(const ci::Vec2f &size) {
   if ((int)(d->anchor) & (int)(Anchor::RIGHT)) {
     d->location.x -= size.x - d->size.x;

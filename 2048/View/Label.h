@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Control.h"
+
 #include <cinder/Rect.h>
 #include <cinder/Color.h>
 #include <cinder/Vector.h>
@@ -8,7 +10,7 @@
 #include <memory>
 #include <string>
 
-class Label {
+class Label : public Control {
   struct Data;
   std::unique_ptr<Data> d;
 
@@ -23,13 +25,11 @@ public:
   void setText(const std::string &text);
   void setForeColor(const ci::Color &color);
   void setBackColor(const ci::Color &color);
-  void setFont(const ci::Font &font);
   void setSize(const ci::Vec2f &size);
-  void setLocation(const ci::Vec2f &loc);
 
-  const ci::Vec2f &size() const;
-  const ci::Vec2f &location() const;
   const ci::Font &font() const;
+  void setFont(const ci::Font &font);
+
   ci::Rectf rect() const {
     return { location(), location() + size() };
   }
