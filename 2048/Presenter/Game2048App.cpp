@@ -4,6 +4,7 @@
 #include "BoardLayout.h"
 #include "Cell.h"
 
+#include "../View/CellRenderer.h"
 #include "../View/Graphics.h"
 #include "../View/VerticalLabel.h"
 #include "../View/Animation.h"
@@ -115,6 +116,10 @@ void Game2048App::draw() {
 
   Animation::timer()->reset();
   gfx().draw();
+}
+
+void Game2048App::resize() {
+  CellRenderer::instance().resize();
 }
 
 void Game2048App::drawGameOver(const Rectf &rect) const {

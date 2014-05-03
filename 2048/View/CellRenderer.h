@@ -22,4 +22,5 @@ public:
   }
 
   std::shared_ptr<Slice> render(int value, const ci::Vec2f &size);
+  void resize();
 };

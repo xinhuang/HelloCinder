@@ -27,4 +27,5 @@ public:
   void draw() final;
   void update() final;
   void keyUp(ci::app::KeyEvent e) final;
+  void resize() final;
 };

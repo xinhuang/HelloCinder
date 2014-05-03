@@ -1,6 +1,7 @@
 #include "CellRenderer.h"
 
 #include "../Presenter/Config.h"
+#include "../Presenter/BoardLayout.h"
 
 #include <cinder/gl/Fbo.h>
 #include <cinder/Text.h>
@@ -18,7 +19,7 @@ struct CellRenderer::Data {
   Font font;
   unordered_map<int, shared_ptr<Slice> > slices;
 
-  const shared_ptr<Slice> &newTexture(int value, const ci::Vec2i &size) {
+  shared_ptr<Slice> newTexture(int value, const ci::Vec2i &size) {
     if (!fbo || fbo.getWidth() != size.x || fbo.getHeight() != size.y)
       fbo = gl::Fbo(size.x, size.y, true);
 
@@ -52,8 +53,7 @@ struct CellRenderer::Data {
     gl::disableAlphaBlending();
     fbo.unbindFramebuffer();
     auto tex = gl::Texture::create(fbo.getTexture());
-    slices[value] = make_shared<Slice>(tex);
-    return slices[value];
+    return make_shared<Slice>(tex);
   }
 };
 
@@ -66,9 +66,17 @@ CellRenderer::~CellRenderer() {}
 shared_ptr<Slice> CellRenderer::render(int value, const ci::Vec2f &size) {
   shared_ptr<Slice> slice;
   auto iter = d->slices.find(value);
-  if (iter == d->slices.end())
+  if (iter == d->slices.end()) {
     slice = d->newTexture(value, size);
-  else
+    d->slices[value] = slice;
+  } else {
     slice = iter->second;
+  }
   return slice;
+}
+
+void CellRenderer::resize() {
+  for (auto &pair : d->slices) {
+    *pair.second = *render(pair.first, BoardLayout::cellSize());
+  }
 }
