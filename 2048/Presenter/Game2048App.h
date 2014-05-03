@@ -22,6 +22,7 @@ public:
   ~Game2048App();
 
   void setup() final;
+  void shutdown() final;
 
   void draw() final;
   void update() final;

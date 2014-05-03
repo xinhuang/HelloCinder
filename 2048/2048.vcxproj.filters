@@ -61,6 +61,9 @@
     <ClCompile Include="View\Sprite.cpp">
       <Filter>View\Sprite</Filter>
     </ClCompile>
+    <ClCompile Include="View\Graphics.cpp">
+      <Filter>View\Sprite</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Random.h">
@@ -109,6 +112,9 @@
       <Filter>View\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="View\Slice.h">
+      <Filter>View\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="View\Graphics.h">
       <Filter>View\Sprite</Filter>
     </ClInclude>
   </ItemGroup>

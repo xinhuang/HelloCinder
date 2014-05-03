@@ -4,6 +4,7 @@
 #include "BoardLayout.h"
 #include "Cell.h"
 
+#include "../View/Graphics.h"
 #include "../View/VerticalLabel.h"
 #include "../View/Animation.h"
 #include "../View/Timer.h"
@@ -33,6 +34,7 @@ Game2048App::Game2048App() : d(make_unique<Data>()) {}
 Game2048App::~Game2048App() {}
 
 void Game2048App::setup() {
+  gfx().setup();
   setFrameRate(Config::FRAME_RATE);
 
   d->score.setBackColor(Color::hex(Config::BOARD_COLOR));
@@ -51,6 +53,10 @@ void Game2048App::setup() {
   d->board.addListener(*this);
 
   Animation::timer()->reset();
+}
+
+void Game2048App::shutdown() {
+  gfx().tearDown();
 }
 
 void Game2048App::keyUp(ci::app::KeyEvent e) {
@@ -108,6 +114,7 @@ void Game2048App::draw() {
   d->score.draw();
 
   Animation::timer()->reset();
+  gfx().draw();
 }
 
 void Game2048App::drawGameOver(const Rectf &rect) const {

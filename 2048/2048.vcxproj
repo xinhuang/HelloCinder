@@ -95,6 +95,7 @@
     <ClCompile Include="View\CellAnimation.cpp" />
     <ClCompile Include="View\CellRenderer.cpp" />
     <ClCompile Include="View\Clip.cpp" />
+    <ClCompile Include="View\Graphics.cpp" />
     <ClCompile Include="View\Label.cpp" />
     <ClCompile Include="View\Sprite.cpp" />
     <ClCompile Include="View\Timer.cpp" />
@@ -112,6 +113,7 @@
     <ClInclude Include="View\Clip.h" />
     <ClInclude Include="View\CellAnimation.h" />
     <ClInclude Include="View\CellRenderer.h" />
+    <ClInclude Include="View\Graphics.h" />
     <ClInclude Include="View\Label.h" />
     <ClInclude Include="View\Sprite.h" />
     <ClInclude Include="View\Slice.h" />
