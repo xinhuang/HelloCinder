@@ -92,7 +92,7 @@ TEST_F(ClipTest, given_fading_clip_when_reverse) {
 }
 
 TEST_F(ClipTest, given_scaling_clip_when_draw) {
-  EXPECT_CALL(*renderable, draw(Rectf(2, 2, 4, 4), 1.f)).Times(1);
+  EXPECT_CALL(*renderable, draw(Rectf(1.5, 1.5, 3.5, 3.5), 1.f)).Times(1);
 
   sut.scale(0.f, 6.f).duration(0.3f);
 
@@ -101,8 +101,8 @@ TEST_F(ClipTest, given_scaling_clip_when_draw) {
 
 TEST_F(ClipTest, given_clip_when_reverse_scaling) {
   InSequence s;
-  EXPECT_CALL(*renderable, draw(Rectf(2, 2, 8, 8), _)).Times(1);
-  EXPECT_CALL(*renderable, draw(Rectf(2, 2, 6, 6), _)).Times(1);
+  EXPECT_CALL(*renderable, draw(Rectf(-0.5, -0.5, 5.5, 5.5), _)).Times(1);
+  EXPECT_CALL(*renderable, draw(Rectf(0.5, 0.5, 4.5, 4.5), _)).Times(1);
 
   sut.scale(0.f, 6.f).duration(0.3f).reverse();
 
@@ -111,7 +111,7 @@ TEST_F(ClipTest, given_clip_when_reverse_scaling) {
 }
 
 TEST_F(ClipTest, given_move_fade_scale_should_draw_correctly) {
-  EXPECT_CALL(*renderable, draw(Rectf(2, 2, 4, 4), 0.8f)).Times(1);
+  EXPECT_CALL(*renderable, draw(Rectf(1.5, 1.5, 3.5, 3.5), 0.8f)).Times(1);
 
   sut.scale(0.f, 6.f).fadeby(-0.6f).duration(0.3f);
 

@@ -96,7 +96,8 @@ void Clip::draw(float elapsed, ci::Rectf rect) {
   auto scale_factor = scale();
   if (scale_factor != 1.f) {
     auto size = rect.getSize() * scale_factor;
-    rect = { rect.getUpperLeft(), rect.getUpperLeft() + size };
+    auto delta = (rect.getSize() - size) / 2;
+    rect = { rect.getUpperLeft() + delta, rect.getUpperLeft() + size + delta };
   }
   rect += offset();
   d->renderable->draw(rect, alpha());
