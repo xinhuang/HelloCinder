@@ -13,13 +13,13 @@ using namespace std;
 using namespace ci;
 
 struct Label::Data {
-  Font font;
   Vec2f size;
   Vec2f location;
   Color foreColor = Color::white();
   Color backColor = Color::black();
   string text;
-  mutable unique_ptr<Slice> render;
+  Font font;
+  mutable gl::TextureRef clip;
 };
 
 Label::Label() : d(make_unique<Data>()) {}
@@ -28,22 +28,22 @@ Label::~Label() {}
 
 void Label::setForeColor(const Color &color) {
   d->foreColor = color;
-  d->render.reset();
+  d->clip.reset();
 }
 
 void Label::setBackColor(const Color &color) {
   d->backColor = color;
-  d->render.reset();
+  d->clip.reset();
 }
 
 void Label::setFont(const Font& font) {
   d->font = font;
-  d->render.reset();
+  d->clip.reset();
 }
 
 void Label::setSize(const ci::Vec2f &size) {
   d->size = size;
-  d->render.reset();
+  d->clip.reset();
 }
 
 void Label::setLocation(const ci::Vec2f &loc) { d->location = loc; }
@@ -56,7 +56,7 @@ const Font &Label::font() const { return d->font; }
 
 void Label::setText(const std::string &text) {
   d->text = text;
-  d->render.reset();
+  d->clip.reset();
 }
 
 void Label::updateCache() const {
@@ -65,17 +65,17 @@ void Label::updateCache() const {
   tb.setColor(d->foreColor);
   tb.setBackgroundColor(d->backColor);
 
-  d->render.reset(new Slice(gl::Texture::create(tb.render())));
+  d->clip = gl::Texture::create(tb.render());
 }
 
 void Label::draw() const {
-  if (!d->render)
+  if (!d->clip)
     updateCache();
 
   gl::enableAlphaBlending();
 
   gl::color(Color::white());
-  d->render->draw(rect());
+  gl::draw(d->clip, rect());
 
   gl::disableAlphaBlending();
 }

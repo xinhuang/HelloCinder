@@ -12,6 +12,7 @@ class CellRenderer {
 
   CellRenderer();
   ~CellRenderer();
+  ci::gl::TextureRef render(const int value, const ci::Vec2f &size);
 
 public:
   static CellRenderer &instance() {
@@ -19,6 +20,7 @@ public:
     return pr;
   }
 
-  void draw(const int value, ci::Rectf rect);
-  ci::gl::TextureRef render(const int value, const ci::Vec2f &size);
+  ci::gl::TextureRef wrender(int value, const ci::Vec2f &size) {
+    return render(value, size);
+  }
 };

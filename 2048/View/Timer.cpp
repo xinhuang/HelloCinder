@@ -9,7 +9,12 @@ Timer::time_point Timer::now() {
 }
 
 double Timer::elapsed() const {
-  //auto duration = now() - last_;
+//#define FIXED_TIMER 0.01
+#if !defined FIXED_TIMER
+  auto duration = now() - last_;
+  return chrono::duration_cast<chrono::milliseconds>(duration).count() * 0.001;
+#else
   auto duration = last_ - last_;
-  return chrono::duration_cast<chrono::milliseconds>(duration).count() * 0.001 + 0.1;
+  return chrono::duration_cast<chrono::milliseconds>(duration).count() + FIXED_TIMER;
+#endif
 }

@@ -14,13 +14,13 @@ class Clip {
 
 public:
   Clip();
-  Clip(const std::shared_ptr<Slice> &renderable);
-  Clip(ci::gl::TextureRef &tex)
+  Clip(const std::shared_ptr<Slice> &slice);
+  Clip(const ci::gl::TextureRef &tex)
       : Clip(std::shared_ptr<Slice>(new Slice(tex))) {}
-  Clip(const Clip &anim);
+  Clip(const Clip &clip);
   ~Clip();
 
-  Clip &operator=(const Clip &anim);
+  Clip &operator=(const Clip &clip);
 
   Clip &moveby(const ci::Vec2f &offset);
   Clip &fadeby(float delta, float from = 1.f);

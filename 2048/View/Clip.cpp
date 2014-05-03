@@ -18,16 +18,16 @@ struct Clip::Data {
 
 Clip::Clip() : d(make_unique<Data>()) {}
 
-Clip::Clip(const std::shared_ptr<Slice> &renderable) : Clip() {
-  d->renderable = renderable;
+Clip::Clip(const std::shared_ptr<Slice> &slice) : Clip() {
+  d->renderable = slice;
 }
 
-Clip::Clip(const Clip &anim) : Clip() { *d = *(anim.d); }
+Clip::Clip(const Clip &clip) : Clip() { *d = *(clip.d); }
 
 Clip::~Clip() {}
 
-Clip &Clip::operator=(const Clip &anim) {
-  *d = *(anim.d);
+Clip &Clip::operator=(const Clip &clip) {
+  *d = *(clip.d);
   return *this;
 }
 

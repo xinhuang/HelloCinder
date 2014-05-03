@@ -63,20 +63,6 @@ CellRenderer::CellRenderer() : d(make_unique<Data>()) {
 
 CellRenderer::~CellRenderer() {}
 
-void CellRenderer::draw(const int value, ci::Rectf rect) {
-  const auto &size = rect.getSize();
-  gl::TextureRef tex;
-
-  auto iter = d->texs.find(value);
-  if (iter == d->texs.end())
-    tex = d->newTexture(value, size);
-  else
-    tex = iter->second;
-
-  gl::color(Color::white());
-  gl::draw(tex, rect);
-}
-
 ci::gl::TextureRef CellRenderer::render(const int value,
                                         const ci::Vec2f &size) {
   gl::TextureRef tex;

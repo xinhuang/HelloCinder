@@ -62,7 +62,7 @@ Animation &Animation::wrap(WrapMode mode) {
 bool Animation::isPlaying() const { return d->elapsed <= duration(); }
 
 void Animation::draw(const ci::Rectf &rect) {
-  float frame_interval = (float)Data::timer->elapsed();
+  float frame_interval = (float)timer()->elapsed();
   d->elapsed += frame_interval;
 
   if (d->elapsed > duration())
@@ -80,6 +80,11 @@ void Animation::draw(const ci::Rectf &rect) {
       elapsed -= clip.duration();
     }
   }
+
+  // because of precision, we may miss last clip,
+  // esp. when wrap mode is CLAMP_FOREVER
+  auto &last = d->clips.back();
+  last.draw(last.duration(), rect);
 }
 
 float Animation::duration() const {
