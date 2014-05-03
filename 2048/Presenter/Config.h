@@ -14,7 +14,6 @@ const uint32_t FORE_COLORS[] = { 0x000000, 0x776E65, 0x776E65, 0xf9f6f2,
                                  0xf9f6f2, 0xf9f6f2, 0xf9f6f2, 0xf9f6f2, };
 
 const uint32_t BOARD_COLOR = 0xBBADA0;
-
 const uint32_t BK_COLOR = 0xFAF8EF;
 
 const float FRAME_RATE = 30.f;

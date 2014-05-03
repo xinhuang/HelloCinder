@@ -32,10 +32,9 @@ Sprite movePieceAnimation2(const Cell &src, const Cell &dst) {
 
 Sprite promotionPieceAnimation2(int level) {
   auto tex = getTex(level + 1);
-  Animation anim = {
-    Clip(tex).scaleby(Config::ENLARGE_RATIO).duration(0.3f),
-    Clip(tex).scaleby(1.f, Config::ENLARGE_RATIO).duration(0.3f)
-  };
+  auto clip0 = Clip(tex).scale(1.f, Config::ENLARGE_RATIO).duration(0.3f);
+  auto clip1 = Clip(tex).scale(Config::ENLARGE_RATIO, 1.f).duration(0.3f);
+  Animation anim = { clip0, clip1 };
   return{ { 0, anim.wrap(WrapMode::CLAMP_FOREVER) } };
 }
 

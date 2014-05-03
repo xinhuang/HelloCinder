@@ -92,28 +92,28 @@ TEST_F(ClipTest, given_fading_clip_when_reverse) {
 }
 
 TEST_F(ClipTest, given_scaling_clip_when_draw) {
-  EXPECT_CALL(*renderable, draw(Rectf(2, 2, 5, 5), 1.f)).Times(1);
+  EXPECT_CALL(*renderable, draw(Rectf(2, 2, 4, 4), 1.f)).Times(1);
 
-  sut.scaleby(6.f).duration(0.3f);
+  sut.scale(0.f, 6.f).duration(0.3f);
 
   sut.draw(0.1f, Rectf(2, 2, 3, 3));
 }
 
 TEST_F(ClipTest, given_clip_when_reverse_scaling) {
   InSequence s;
-  EXPECT_CALL(*renderable, draw(Rectf(2, 2, 9, 9), _)).Times(1);
-  EXPECT_CALL(*renderable, draw(Rectf(2, 2, 7, 7), _)).Times(1);
+  EXPECT_CALL(*renderable, draw(Rectf(2, 2, 8, 8), _)).Times(1);
+  EXPECT_CALL(*renderable, draw(Rectf(2, 2, 6, 6), _)).Times(1);
 
-  sut.scaleby(6.f).duration(0.3f).reverse();
+  sut.scale(0.f, 6.f).duration(0.3f).reverse();
 
   sut.draw(0.0f, Rectf(2, 2, 3, 3));
   sut.draw(0.1f, Rectf(2, 2, 3, 3));
 }
 
 TEST_F(ClipTest, given_move_fade_scale_should_draw_correctly) {
-  EXPECT_CALL(*renderable, draw(Rectf(2, 2, 5, 5), 0.8f)).Times(1);
+  EXPECT_CALL(*renderable, draw(Rectf(2, 2, 4, 4), 0.8f)).Times(1);
 
-  sut.scaleby(6.f).fadeby(-0.6f).duration(0.3f);
+  sut.scale(0.f, 6.f).fadeby(-0.6f).duration(0.3f);
 
   sut.draw(0.1f, Rectf(2, 2, 3, 3));
 }

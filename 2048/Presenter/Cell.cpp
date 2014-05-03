@@ -48,7 +48,7 @@ void Cell::mergeTo(Cell &cell) {
   assert(piece_);
   cell.piece_->merged = std::move(piece_);
   // 2 pieces are moving at same time to same cell
-  //cell.piece_anim_ = mergeAnimation2(*this, cell) * cell.piece_anim_;
+  cell.piece_anim_ = mergeAnimation2(*this, cell);
   piece_anim_ = emptyCellAnimation2();
 }
 
