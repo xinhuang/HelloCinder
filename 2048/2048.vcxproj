@@ -110,11 +110,9 @@
     <ClInclude Include="Random.h" />
     <ClInclude Include="View\Animation.h" />
     <ClInclude Include="View\Clip.h" />
-    <ClInclude Include="View\IRenderable.h" />
     <ClInclude Include="View\CellAnimation.h" />
     <ClInclude Include="View\CellRenderer.h" />
     <ClInclude Include="View\Label.h" />
-    <ClInclude Include="View\NullRenderer.h" />
     <ClInclude Include="View\Sprite.h" />
     <ClInclude Include="View\Slice.h" />
     <ClInclude Include="View\Timer.h" />

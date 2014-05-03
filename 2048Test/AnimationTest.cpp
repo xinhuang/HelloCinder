@@ -17,8 +17,8 @@ struct AnimationTest : public ::testing::Test {
     renderables.emplace_back(new RenderableMock());
     renderables.emplace_back(new RenderableMock());
 
-    clips.emplace_back(dynamic_pointer_cast<IRenderable>(renderables[0]));
-    clips.emplace_back(dynamic_pointer_cast<IRenderable>(renderables[1]));
+    clips.emplace_back(dynamic_pointer_cast<Slice>(renderables[0]));
+    clips.emplace_back(dynamic_pointer_cast<Slice>(renderables[1]));
   }
 
   void TearDown() final { Animation::setTimer(old_timer); }

@@ -13,12 +13,12 @@ struct Clip::Data {
   float scale_to = 1.f;
   float initial_scale = 1.f;
   ci::Vec2f offset;
-  shared_ptr<IRenderable> renderable;
+  shared_ptr<Slice> renderable;
 };
 
 Clip::Clip() : d(make_unique<Data>()) {}
 
-Clip::Clip(const std::shared_ptr<IRenderable> &renderable) : Clip() {
+Clip::Clip(const std::shared_ptr<Slice> &renderable) : Clip() {
   d->renderable = renderable;
 }
 

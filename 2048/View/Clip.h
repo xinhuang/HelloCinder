@@ -1,6 +1,5 @@
 #pragma once
 
-#include "IRenderable.h"
 #include "Slice.h"
 
 #include <cinder/gl/Texture.h>
@@ -15,9 +14,9 @@ class Clip {
 
 public:
   Clip();
-  Clip(const std::shared_ptr<IRenderable> &renderable);
+  Clip(const std::shared_ptr<Slice> &renderable);
   Clip(ci::gl::TextureRef &tex)
-    : Clip(std::shared_ptr<IRenderable>(new Slice(tex))) {}
+    : Clip(std::shared_ptr<Slice>(new Slice(tex))) {}
   Clip(const Clip &anim);
   ~Clip();
 

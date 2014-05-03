@@ -19,7 +19,7 @@ struct Label::Data {
   Color foreColor = Color::white();
   Color backColor = Color::black();
   string text;
-  mutable unique_ptr<IRenderable> render;
+  mutable unique_ptr<Slice> render;
 };
 
 Label::Label() : d(make_unique<Data>()) {}

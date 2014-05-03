@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../2048/View/IRenderable.h"
+#include "../2048/View/Slice.h"
 
 #include <gmock/gmock.h>
 
-struct RenderableMock : public IRenderable {
+struct RenderableMock : public Slice {
   MOCK_METHOD2(draw, void(const ci::Rectf &, float alpha));
 };
 

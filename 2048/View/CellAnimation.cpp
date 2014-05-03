@@ -2,7 +2,6 @@
 
 #include "CellRenderer.h"
 #include "Slice.h"
-#include "NullRenderer.h"
 
 #include "../Presenter/BoardLayout.h"
 #include "../Presenter/Config.h"

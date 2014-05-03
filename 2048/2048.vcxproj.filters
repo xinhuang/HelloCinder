@@ -72,9 +72,6 @@
     <ClInclude Include="Presenter\Game2048App.h">
       <Filter>Presenter</Filter>
     </ClInclude>
-    <ClInclude Include="View\IRenderable.h">
-      <Filter>View</Filter>
-    </ClInclude>
     <ClInclude Include="Presenter\Cell.h">
       <Filter>Presenter</Filter>
     </ClInclude>
@@ -88,9 +85,6 @@
       <Filter>Presenter</Filter>
     </ClInclude>
     <ClInclude Include="View\Timer.h">
-      <Filter>View</Filter>
-    </ClInclude>
-    <ClInclude Include="View\NullRenderer.h">
       <Filter>View</Filter>
     </ClInclude>
     <ClInclude Include="View\Animation.h">
@@ -115,7 +109,7 @@
       <Filter>View\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="View\Slice.h">
-      <Filter>View</Filter>
+      <Filter>View\Sprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -16,7 +16,7 @@ struct ClipTest : public ::testing::Test {
   void SetUp() final {
     renderable.reset(new RenderableMock());
 
-    sut = Clip(dynamic_pointer_cast<IRenderable>(renderable));
+    sut = Clip(dynamic_pointer_cast<Slice>(renderable));
   }
 
   shared_ptr<RenderableMock> renderable;

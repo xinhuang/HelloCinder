@@ -2,7 +2,6 @@
 
 #include "Piece.h"
 
-#include "../View/IRenderable.h"
 #include "../View/Sprite.h"
 
 #include <memory>
