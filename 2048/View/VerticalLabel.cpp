@@ -4,11 +4,8 @@ VerticalLabel::VerticalLabel() {}
 
 VerticalLabel::~VerticalLabel() {}
 
-const ci::Vec2f& VerticalLabel::location() const {
-  return label.location();
-}
-
 void VerticalLabel::setLocation(const ci::Vec2f &loc) {
+  Control::setLocation(loc);
   label.setLocation(loc);
   auto label_height = 0.f;
   if (label.font())
@@ -17,6 +14,7 @@ void VerticalLabel::setLocation(const ci::Vec2f &loc) {
 }
 
 void VerticalLabel::setSize(const ci::Vec2f &size) {
+  Control::setSize(size);
   label.setSize({ size.x, size.y / 2 });
   text.setSize({ size.x, size.y / 2 });
   const auto& loc = label.location();

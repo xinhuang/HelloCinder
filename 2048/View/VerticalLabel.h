@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Control.h"
 #include "Label.h"
 
 #include <string>
@@ -8,14 +9,13 @@
 #include <cinder/Color.h>
 #include <cinder/Font.h>
 
-class VerticalLabel {
+class VerticalLabel : public Control {
   Label label, text;
 
 public:
   VerticalLabel();
   ~VerticalLabel();
 
-  const ci::Vec2f &location() const;
   void setLocation(const ci::Vec2f &loc);
   void setSize(const ci::Vec2f &size);
   void setLabelColor(const ci::Color &color);
