@@ -64,6 +64,9 @@
     <ClCompile Include="View\Graphics.cpp">
       <Filter>View\Sprite</Filter>
     </ClCompile>
+    <ClCompile Include="View\Control.cpp">
+      <Filter>View\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Random.h">
@@ -116,6 +119,12 @@
     </ClInclude>
     <ClInclude Include="View\Graphics.h">
       <Filter>View\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="View\Control.h">
+      <Filter>View\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="View\UI.h">
+      <Filter>View\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
