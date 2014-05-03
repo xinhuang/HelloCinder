@@ -13,13 +13,13 @@ struct Clip::Data {
   float scale_to = 1.f;
   float initial_scale = 1.f;
   ci::Vec2f offset;
-  shared_ptr<Slice> renderable;
+  shared_ptr<Slice> slice;
 };
 
 Clip::Clip() : d(make_unique<Data>()) {}
 
 Clip::Clip(const std::shared_ptr<Slice> &slice) : Clip() {
-  d->renderable = slice;
+  d->slice = slice;
 }
 
 Clip::Clip(const Clip &clip) : Clip() { *d = *(clip.d); }
@@ -90,7 +90,7 @@ Clip &Clip::reverse(bool reversed) {
 void Clip::draw(float elapsed, ci::Rectf rect) {
   d->elapsed = elapsed;
 
-  if (finished() || !d->renderable)
+  if (finished() || !d->slice)
     return;
 
   auto scale_factor = scale();
@@ -100,6 +100,6 @@ void Clip::draw(float elapsed, ci::Rectf rect) {
     rect = { rect.getUpperLeft() + delta, rect.getUpperLeft() + size + delta };
   }
   rect += offset();
-  d->renderable->draw(rect, alpha());
+  d->slice->draw(rect, alpha());
   d->elapsed = NAN;
 }

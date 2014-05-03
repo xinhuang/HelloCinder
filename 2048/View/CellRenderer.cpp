@@ -16,9 +16,9 @@ using namespace std;
 struct CellRenderer::Data {
   gl::Fbo fbo;
   Font font;
-  unordered_map<int, gl::TextureRef> texs;
+  unordered_map<int, shared_ptr<Slice> > slices;
 
-  gl::TextureRef &newTexture(int value, const ci::Vec2i &size) {
+  const shared_ptr<Slice> &newTexture(int value, const ci::Vec2i &size) {
     if (!fbo || fbo.getWidth() != size.x || fbo.getHeight() != size.y)
       fbo = gl::Fbo(size.x, size.y, true);
 
@@ -51,9 +51,9 @@ struct CellRenderer::Data {
     }
     gl::disableAlphaBlending();
     fbo.unbindFramebuffer();
-    auto tex = fbo.getTexture();
-    texs[value] = gl::Texture::create(tex);
-    return texs[value];
+    auto tex = gl::Texture::create(fbo.getTexture());
+    slices[value] = make_shared<Slice>(tex);
+    return slices[value];
   }
 };
 
@@ -63,13 +63,12 @@ CellRenderer::CellRenderer() : d(make_unique<Data>()) {
 
 CellRenderer::~CellRenderer() {}
 
-ci::gl::TextureRef CellRenderer::render(const int value,
-                                        const ci::Vec2f &size) {
-  gl::TextureRef tex;
-  auto iter = d->texs.find(value);
-  if (iter == d->texs.end())
-    tex = d->newTexture(value, size);
+shared_ptr<Slice> CellRenderer::render(int value, const ci::Vec2f &size) {
+  shared_ptr<Slice> slice;
+  auto iter = d->slices.find(value);
+  if (iter == d->slices.end())
+    slice = d->newTexture(value, size);
   else
-    tex = iter->second;
-  return tex;
+    slice = iter->second;
+  return slice;
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Slice.h"
+
 #include <memory>
 
 #include <cinder/Rect.h>
@@ -12,7 +14,6 @@ class CellRenderer {
 
   CellRenderer();
   ~CellRenderer();
-  ci::gl::TextureRef render(const int value, const ci::Vec2f &size);
 
 public:
   static CellRenderer &instance() {
@@ -20,7 +21,5 @@ public:
     return pr;
   }
 
-  ci::gl::TextureRef wrender(int value, const ci::Vec2f &size) {
-    return render(value, size);
-  }
+  std::shared_ptr<Slice> render(int value, const ci::Vec2f &size);
 };

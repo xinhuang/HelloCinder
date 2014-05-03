@@ -10,30 +10,35 @@ using namespace std;
 
 using namespace ci;
 
-Clip getClip(int value) {
-  return Clip(CellRenderer::instance().wrender(value, BoardLayout::cellSize()));
+shared_ptr<Slice> getSlice(int value) {
+  return CellRenderer::instance().render(value, BoardLayout::cellSize());
 }
 
 Sprite placePieceAnimation2(int value) {
   auto wait = Clip().duration(Config::ANIM_DURATION);
-  auto appear = getClip(value).fadeby(1.f, 0.f).duration(Config::ANIM_DURATION);
+  Clip clip(getSlice(value));
+  auto appear = clip.fadeby(1.f, 0.f).duration(Config::ANIM_DURATION);
   Animation anim = { wait, appear };
-  return { { 0, anim.wrap(WrapMode::CLAMP_FOREVER) } };
+  return { anim.wrap(WrapMode::CLAMP_FOREVER) };
 }
 
 Sprite movePieceAnimation2(const Cell &src, const Cell &dst) {
-  auto tex = getClip(dst.value());
+  auto tex = getSlice(dst.value());
   auto offset = BoardLayout::distance(src.coord(), dst.coord());
-  Animation anim = { Clip(tex).moveby(offset).duration(Config::ANIM_DURATION).reverse(), Clip(tex) };
-  return { { 0, anim.wrap(WrapMode::CLAMP_FOREVER) } };
+  Animation anim = {
+    Clip(tex).moveby(offset).duration(Config::ANIM_DURATION).reverse()
+  };
+  return { anim.wrap(WrapMode::CLAMP_FOREVER) };
 }
 
 Sprite promotionPieceAnimation2(int level) {
-  auto tex = getClip(level + 1);
-  auto clip0 = Clip(tex).scale(1.f, Config::ENLARGE_RATIO).duration(Config::ANIM_DURATION);
-  auto clip1 = Clip(tex).scale(Config::ENLARGE_RATIO, 1.f).duration(Config::ANIM_DURATION);
+  auto tex = getSlice(level + 1);
+  auto clip0 = Clip(tex).scale(1.f, Config::ENLARGE_RATIO).duration(
+      Config::ANIM_DURATION);
+  auto clip1 = Clip(tex).scale(Config::ENLARGE_RATIO, 1.f).duration(
+      Config::ANIM_DURATION);
   Animation anim = { clip0, clip1 };
-  return{ { 0, anim.wrap(WrapMode::CLAMP_FOREVER) } };
+  return { anim.wrap(WrapMode::CLAMP_FOREVER) };
 }
 
 Sprite mergeAnimation2(const Cell &src, const Cell &dst) {
@@ -42,7 +47,7 @@ Sprite mergeAnimation2(const Cell &src, const Cell &dst) {
 }
 
 Sprite emptyCellAnimation2() {
-  auto tex = getClip(0);
+  auto tex = getSlice(0);
   Animation anim = { Clip(tex).duration(Config::ANIM_DURATION) };
-  return { { 0, anim.wrap(WrapMode::LOOP) } };
+  return { anim.wrap(WrapMode::LOOP) };
 }

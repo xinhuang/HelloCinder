@@ -15,7 +15,7 @@ public:
   Sprite();
   Sprite(const Sprite &sprite);
   ~Sprite();
-  Sprite(Animation anim);
+  Sprite(Animation anim) : Sprite({ { 0, anim } }) {}
   Sprite(std::initializer_list<Layer> layers);
 
   Sprite &operator=(const Sprite &sprite);

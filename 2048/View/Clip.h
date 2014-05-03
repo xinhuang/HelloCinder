@@ -14,6 +14,7 @@ class Clip {
 
 public:
   Clip();
+  Clip(const Slice& slice) : Clip(std::make_shared<Slice>(slice)) {}
   Clip(const std::shared_ptr<Slice> &slice);
   Clip(const ci::gl::TextureRef &tex)
       : Clip(std::shared_ptr<Slice>(new Slice(tex))) {}
