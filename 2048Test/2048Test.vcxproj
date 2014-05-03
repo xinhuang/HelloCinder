@@ -107,7 +107,7 @@
     <ClCompile Include="SpriteTest.cpp">
       <FileType>CppHeader</FileType>
     </ClCompile>
-    <ClInclude Include="RenderableMock.h" />
+    <ClInclude Include="SliceMock.h" />
     <ClInclude Include="TimerMock.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

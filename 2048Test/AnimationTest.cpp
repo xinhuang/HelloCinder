@@ -1,7 +1,7 @@
 #include "../2048/View/Animation.h"
 
 #include "TimerMock.h"
-#include "RenderableMock.h"
+#include "SliceMock.h"
 
 #include <gtest/gtest.h>
 
@@ -14,8 +14,8 @@ struct AnimationTest : public ::testing::Test {
     old_timer = Animation::timer();
     Animation::setTimer(&timer);
 
-    renderables.emplace_back(new RenderableMock());
-    renderables.emplace_back(new RenderableMock());
+    renderables.emplace_back(new SliceMock());
+    renderables.emplace_back(new SliceMock());
 
     clips.emplace_back(dynamic_pointer_cast<Slice>(renderables[0]));
     clips.emplace_back(dynamic_pointer_cast<Slice>(renderables[1]));
@@ -25,7 +25,7 @@ struct AnimationTest : public ::testing::Test {
 
   Timer *old_timer;
   TimerMock timer;
-  vector<shared_ptr<RenderableMock> > renderables;
+  vector<shared_ptr<SliceMock> > renderables;
   vector<Clip> clips;
   Animation sut;
 };

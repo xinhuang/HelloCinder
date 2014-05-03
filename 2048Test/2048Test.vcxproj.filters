@@ -48,14 +48,14 @@
     <ClInclude Include="TimerMock.h">
       <Filter>Mocks</Filter>
     </ClInclude>
-    <ClInclude Include="RenderableMock.h">
-      <Filter>Mocks</Filter>
-    </ClInclude>
     <ClInclude Include="..\2048\View\Clip.h">
       <Filter>2048</Filter>
     </ClInclude>
     <ClInclude Include="..\2048\View\Sprite.h">
       <Filter>2048</Filter>
+    </ClInclude>
+    <ClInclude Include="SliceMock.h">
+      <Filter>Mocks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

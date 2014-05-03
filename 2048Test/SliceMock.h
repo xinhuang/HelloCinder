@@ -4,7 +4,7 @@
 
 #include <gmock/gmock.h>
 
-struct RenderableMock : public Slice {
+struct SliceMock : public Slice {
   MOCK_METHOD2(draw, void(const ci::Rectf &, float alpha));
 };
 
