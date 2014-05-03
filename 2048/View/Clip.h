@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IRenderable.h"
-#include "TextureRenderer.h"
+#include "Slice.h"
 
 #include <cinder/gl/Texture.h>
 #include <cinder/Rect.h>
@@ -17,7 +17,7 @@ public:
   Clip();
   Clip(const std::shared_ptr<IRenderable> &renderable);
   Clip(ci::gl::TextureRef &tex)
-    : Clip(std::shared_ptr<IRenderable>(new TextureRenderer(tex))) {}
+    : Clip(std::shared_ptr<IRenderable>(new Slice(tex))) {}
   Clip(const Clip &anim);
   ~Clip();
 

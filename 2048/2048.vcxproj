@@ -116,7 +116,7 @@
     <ClInclude Include="View\Label.h" />
     <ClInclude Include="View\NullRenderer.h" />
     <ClInclude Include="View\Sprite.h" />
-    <ClInclude Include="View\TextureRenderer.h" />
+    <ClInclude Include="View\Slice.h" />
     <ClInclude Include="View\Timer.h" />
     <ClInclude Include="View\VerticalLabel.h" />
   </ItemGroup>

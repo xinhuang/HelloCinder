@@ -1,7 +1,7 @@
 #include "CellAnimation.h"
 
 #include "CellRenderer.h"
-#include "TextureRenderer.h"
+#include "Slice.h"
 #include "NullRenderer.h"
 
 #include "../Presenter/BoardLayout.h"

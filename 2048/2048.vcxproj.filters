@@ -93,9 +93,6 @@
     <ClInclude Include="View\NullRenderer.h">
       <Filter>View</Filter>
     </ClInclude>
-    <ClInclude Include="View\TextureRenderer.h">
-      <Filter>View</Filter>
-    </ClInclude>
     <ClInclude Include="View\Animation.h">
       <Filter>View\Sprite</Filter>
     </ClInclude>
@@ -116,6 +113,9 @@
     </ClInclude>
     <ClInclude Include="View\Sprite.h">
       <Filter>View\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="View\Slice.h">
+      <Filter>View</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

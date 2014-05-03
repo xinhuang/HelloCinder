@@ -1,6 +1,6 @@
 #include "Label.h"
 
-#include "TextureRenderer.h"
+#include "Slice.h"
 
 #include <cassert>
 
@@ -65,7 +65,7 @@ void Label::updateCache() const {
   tb.setColor(d->foreColor);
   tb.setBackgroundColor(d->backColor);
 
-  d->render.reset(new TextureRenderer(gl::Texture::create(tb.render())));
+  d->render.reset(new Slice(gl::Texture::create(tb.render())));
 }
 
 void Label::draw() const {
