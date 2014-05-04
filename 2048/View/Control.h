@@ -16,7 +16,7 @@ enum class Anchor {
 class Control;
 using ControlRef = std::shared_ptr<Control>;
 
-class Control : public std::enable_shared_from_this<Control> {
+class Control {
   struct Data;
   std::unique_ptr<Data> d;
 
@@ -35,9 +35,8 @@ public:
   Anchor anchor() const;
   void setAnchor(Anchor anchor);
 
-  ControlRef shared() { return shared_from_this(); }
-  const std::weak_ptr<Control> &parent();
-  void setParent(std::weak_ptr<Control> parent);
+  Control* parent();
+  void setParent(Control* parent);
 
   template <typename T>
   std::shared_ptr<T> create() {

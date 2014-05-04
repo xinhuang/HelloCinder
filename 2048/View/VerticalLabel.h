@@ -10,7 +10,7 @@
 #include <cinder/Font.h>
 
 class VerticalLabel : public Control {
-  Label label, text;
+  std::shared_ptr<Label> label, text;
 
 public:
   VerticalLabel();

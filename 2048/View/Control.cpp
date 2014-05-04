@@ -11,7 +11,7 @@ struct Control::Data {
   Vec2f location;
   Vec2f size;
   vector<ControlRef> children;
-  weak_ptr<Control> parent;
+  Control* parent;
 };
 
 Control::Control() : d(make_unique<Data>()) {}
@@ -20,11 +20,11 @@ Control::~Control() {}
 
 void Control::add(ControlRef child) {
   d->children.push_back(move(child));
-  d->children.back()->setParent(shared());
+  d->children.back()->setParent(this);
 }
 
-const weak_ptr<Control>& Control::parent() { return d->parent; }
-void Control::setParent(weak_ptr<Control> parent) { d->parent = move(parent); }
+Control* Control::parent() { return d->parent; }
+void Control::setParent(Control* parent) { d->parent = move(parent); }
 
 const ci::Vec2f &Control::location() const { return d->location; }
 void Control::setLocation(const ci::Vec2f &loc) { d->location = loc; }

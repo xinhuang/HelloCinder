@@ -26,11 +26,13 @@ using namespace std;
 struct Game2048App::Data {
   bool gameover = false;
   int score_value = 0;
-  VerticalLabel score;
+  shared_ptr<VerticalLabel> score;
   Board board;
 };
 
-Game2048App::Game2048App() : d(make_unique<Data>()) {}
+Game2048App::Game2048App() : d(make_unique<Data>()) {
+  d->score = make_shared<VerticalLabel>();
+}
 
 Game2048App::~Game2048App() {}
 
@@ -38,15 +40,15 @@ void Game2048App::setup() {
   gfx().setup();
   setFrameRate(Config::FRAME_RATE);
 
-  d->score.setBackColor(Color::hex(Config::BOARD_COLOR));
-  d->score.setSize({ 100.f, 100.f });
-  d->score.setLocation({ BoardLayout::boardRect().x2 - 100.f,
-                       BoardLayout::boardRect().y1 - 110.f });
-  d->score.setLabelColor(Color::hex(Config::LABEL_FORE_COLOR));
-  d->score.setLabel("SCORE");
-  d->score.setLabelFont(Font("Arial", 30));
-  d->score.setTextColor(Color::hex(Config::SCORE_COLOR));
-  d->score.setTextFont(Font("Arial", Config::FONT_WEIGHT));
+  d->score->setBackColor(Color::hex(Config::BOARD_COLOR));
+  d->score->setSize({ 100.f, 100.f });
+  d->score->setLocation({ BoardLayout::boardRect().x2 - 100.f,
+                         BoardLayout::boardRect().y1 - 110.f });
+  d->score->setLabelColor(Color::hex(Config::LABEL_FORE_COLOR));
+  d->score->setLabel("SCORE");
+  d->score->setLabelFont(Font("Arial", 30));
+  d->score->setTextColor(Color::hex(Config::SCORE_COLOR));
+  d->score->setTextFont(Font("Arial", Config::FONT_WEIGHT));
 
   d->board = Board(Config::SIZE, Config::SIZE);
   d->board.spawn();
@@ -56,9 +58,7 @@ void Game2048App::setup() {
   Animation::timer()->reset();
 }
 
-void Game2048App::shutdown() {
-  gfx().tearDown();
-}
+void Game2048App::shutdown() { gfx().tearDown(); }
 
 void Game2048App::keyUp(ci::app::KeyEvent e) {
   Vec2i offset;
@@ -95,7 +95,7 @@ void Game2048App::keyUp(ci::app::KeyEvent e) {
 }
 
 void Game2048App::update() {
-  d->score.setText(to_string(d->score_value));
+  d->score->setText(to_string(d->score_value));
 
   if (!d->board.moves_available()) {
     d->gameover = true;
@@ -112,15 +112,13 @@ void Game2048App::draw() {
     drawGameOver(BoardLayout::boardRect());
   }
 
-  d->score.draw();
+  d->score->draw();
 
   Animation::timer()->reset();
   gfx().draw();
 }
 
-void Game2048App::resize() {
-  CellRenderer::instance().resize();
-}
+void Game2048App::resize() { CellRenderer::instance().resize(); }
 
 void Game2048App::drawGameOver(const Rectf &rect) const {
   gl::enableAlphaBlending();
