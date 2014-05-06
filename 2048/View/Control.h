@@ -34,7 +34,7 @@ public:
   Control();
   virtual ~Control();
 
-  const ci::Vec2f &location() const;
+  ci::Vec2f location() const;
   void setLocation(const ci::Vec2f &loc);
 
   const ci::Vec2f &size() const;

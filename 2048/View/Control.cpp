@@ -11,7 +11,7 @@ struct Control::Data {
   Vec2f location;
   Vec2f size;
   vector<ControlRef> children;
-  Control *parent;
+  Control *parent = nullptr;
 };
 
 Control::Control() : d(make_unique<Data>()) {}
@@ -26,7 +26,13 @@ void Control::add(ControlRef child) {
 Control *Control::parent() { return d->parent; }
 void Control::setParent(Control *parent) { d->parent = move(parent); }
 
-const ci::Vec2f &Control::location() const { return d->location; }
+ci::Vec2f Control::location() const {
+  if (d->parent) {
+    return d->location + d->parent->location();
+  } else {
+    return d->location;
+  }
+}
 void Control::setLocation(const ci::Vec2f &loc) { d->location = loc; }
 
 const ci::Vec2f &Control::size() const { return d->size; }
