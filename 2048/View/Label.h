@@ -20,7 +20,7 @@ public:
   Label();
   ~Label();
 
-  void draw() const;
+  void draw() final;
 
   void setText(const std::string &text);
   void setForeColor(const ci::Color &color);

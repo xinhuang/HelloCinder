@@ -60,7 +60,7 @@ void Label::updateCache() const {
   d->clip = gl::Texture::create(tb.render());
 }
 
-void Label::draw() const {
+void Label::draw() {
   if (!d->clip)
     updateCache();
 

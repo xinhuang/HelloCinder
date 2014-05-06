@@ -25,6 +25,4 @@ public:
   void setLabelFont(const ci::Font &font);
   void setTextFont(const ci::Font &font);
   void setText(const std::string &text);
-
-  void draw() const;
 };

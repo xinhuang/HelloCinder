@@ -57,8 +57,3 @@ void VerticalLabel::setLabel(const std::string &text) {
 void VerticalLabel::setText(const std::string &text) {
   this->text->setText(text);
 }
-
-void VerticalLabel::draw() const {
-  label->draw();
-  text->draw();
-}

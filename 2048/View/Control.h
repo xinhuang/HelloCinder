@@ -38,6 +38,8 @@ public:
   Control* parent();
   void setParent(Control* parent);
 
+  virtual void draw();
+
   template <typename T>
   std::shared_ptr<T> create() {
     auto v = std::make_shared<T>();
