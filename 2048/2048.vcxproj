@@ -100,6 +100,7 @@
     <ClCompile Include="View\Label.cpp" />
     <ClCompile Include="View\Sprite.cpp" />
     <ClCompile Include="View\Timer.cpp" />
+    <ClCompile Include="View\UI.cpp" />
     <ClCompile Include="View\VerticalLabel.cpp" />
   </ItemGroup>
   <ItemGroup>

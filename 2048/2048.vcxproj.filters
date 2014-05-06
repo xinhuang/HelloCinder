@@ -67,6 +67,9 @@
     <ClCompile Include="View\Control.cpp">
       <Filter>View\UI</Filter>
     </ClCompile>
+    <ClCompile Include="View\UI.cpp">
+      <Filter>View\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Random.h">

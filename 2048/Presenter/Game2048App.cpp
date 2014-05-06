@@ -9,6 +9,7 @@
 #include "../View/VerticalLabel.h"
 #include "../View/Animation.h"
 #include "../View/Timer.h"
+#include "../View/UI.h"
 
 #include "../Util/Random.h"
 
@@ -28,22 +29,25 @@ struct Game2048App::Data {
   int score_value = 0;
   shared_ptr<VerticalLabel> score;
   Board board;
+  shared_ptr<UI> ui;
 };
 
 Game2048App::Game2048App() : d(make_unique<Data>()) {
-  d->score = make_shared<VerticalLabel>();
+  d->ui = make_shared<UI>();
 }
 
 Game2048App::~Game2048App() {}
 
 void Game2048App::setup() {
   gfx().setup();
+  d->ui->setup();
   setFrameRate(Config::FRAME_RATE);
 
+  d->score = d->ui->create<VerticalLabel>();
   d->score->setBackColor(Color::hex(Config::BOARD_COLOR));
   d->score->setSize({ 100.f, 100.f });
   d->score->setLocation({ BoardLayout::boardRect().x2 - 100.f,
-                         BoardLayout::boardRect().y1 - 110.f });
+                          BoardLayout::boardRect().y1 - 110.f });
   d->score->setLabelColor(Color::hex(Config::LABEL_FORE_COLOR));
   d->score->setLabel("SCORE");
   d->score->setLabelFont(Font("Arial", 30));
@@ -58,7 +62,10 @@ void Game2048App::setup() {
   Animation::timer()->reset();
 }
 
-void Game2048App::shutdown() { gfx().tearDown(); }
+void Game2048App::shutdown() {
+  gfx().tearDown();
+  d->ui->tearDown();
+}
 
 void Game2048App::keyUp(ci::app::KeyEvent e) {
   Vec2i offset;
@@ -112,7 +119,7 @@ void Game2048App::draw() {
     drawGameOver(BoardLayout::boardRect());
   }
 
-  d->score->draw();
+  d->ui->draw();
 
   Animation::timer()->reset();
   gfx().draw();
