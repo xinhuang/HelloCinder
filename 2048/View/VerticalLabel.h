@@ -12,11 +12,12 @@
 class VerticalLabel : public Control {
   std::shared_ptr<Label> label, text;
 
+  void performLayout();
+
 public:
   VerticalLabel();
   ~VerticalLabel();
 
-  void setLocation(const ci::Vec2f &loc);
   void setSize(const ci::Vec2f &size);
   void setLabelColor(const ci::Color &color);
   void setTextColor(const ci::Color &color);

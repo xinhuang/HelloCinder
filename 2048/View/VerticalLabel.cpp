@@ -3,28 +3,24 @@
 VerticalLabel::VerticalLabel() {
   label = create<Label>();
   text = create<Label>();
+  performLayout();
 }
 
 VerticalLabel::~VerticalLabel() {}
 
-void VerticalLabel::setLocation(const ci::Vec2f &loc) {
-  Control::setLocation(loc);
-  label->setLocation(loc);
-  auto label_height = 0.f;
-  if (label->font())
-    label_height = label->font().getDescent() + label->font().getSize();
-  text->setLocation({ loc.x, loc.y + label_height });
+void VerticalLabel::performLayout() {
+  label->setLocation({ 0.f, 0.f });
+  label->setSize({ size().x, size().y / 2 });
+  label->setAnchor(Anchor::LEFT_RIGHT | Anchor::TOP);
+
+  text->setLocation({ 0.f, size().y / 2 });
+  text->setSize({ size().x, size().y / 2 });
+  text->setAnchor(Anchor::LEFT_RIGHT | Anchor::TOP);
 }
 
 void VerticalLabel::setSize(const ci::Vec2f &size) {
   Control::setSize(size);
-  label->setSize({ size.x, size.y / 2 });
-  text->setSize({ size.x, size.y / 2 });
-  const auto& loc = label->location();
-  auto label_height = 0.f;
-  if (label->font())
-    label_height = label->font().getDescent() + label->font().getSize();
-  text->setLocation({ loc.x, loc.y + label_height });
+  performLayout();
 }
 
 void VerticalLabel::setLabelColor(const ci::Color &color) {
@@ -40,19 +36,11 @@ void VerticalLabel::setBackColor(const ci::Color &color) {
   text->setBackColor(color);
 }
 
-void VerticalLabel::setLabelFont(const ci::Font& font) {
-  label->setFont(font);
-  setLocation(location());
-}
+void VerticalLabel::setLabelFont(const ci::Font &font) { label->setFont(font); }
 
-void VerticalLabel::setTextFont(const ci::Font& font) {
-  text->setFont(font);
-  setLocation(location());
-}
+void VerticalLabel::setTextFont(const ci::Font &font) { text->setFont(font); }
 
-void VerticalLabel::setLabel(const std::string &text) {
-  label->setText(text);
-}
+void VerticalLabel::setLabel(const std::string &text) { label->setText(text); }
 
 void VerticalLabel::setText(const std::string &text) {
   this->text->setText(text);

@@ -20,4 +20,5 @@ public:
   void draw();
 };
 
+// TODO: remove global variable
 inline Graphics &gfx() { return Graphics::instance(); }

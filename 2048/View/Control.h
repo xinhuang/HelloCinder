@@ -13,6 +13,14 @@ enum class Anchor {
   ALL = LEFT_RIGHT | TOP_BOTTOM,
 };
 
+inline Anchor operator | (Anchor lhs, Anchor rhs) {
+  return (Anchor)((int)lhs | (int)rhs);
+}
+
+inline bool operator & (Anchor lhs, Anchor rhs) {
+  return ((int)lhs & (int)rhs) != 0;
+}
+
 class Control;
 using ControlRef = std::shared_ptr<Control>;
 

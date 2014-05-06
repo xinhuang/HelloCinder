@@ -58,3 +58,15 @@ TEST_F(ControlTest, given_child_control_anchor_right_when_expand_parent) {
 
   ASSERT_EQ(expect, sut->size().x - child->location().x);
 }
+
+TEST_F(ControlTest, given_child_control_anchor_left_right_when_expand_parent) {
+  const float CHILD_X = 2.f;
+  child->setSize(sut->size());
+  child->setLocation({});
+  child->setAnchor(Anchor::LEFT_RIGHT);
+
+  sut->setSize({ 10.f, 10.f });
+
+  ASSERT_EQ(Vec2f(), child->location());
+  ASSERT_EQ(Vec2f(10.f, 5.f), child->size());
+}

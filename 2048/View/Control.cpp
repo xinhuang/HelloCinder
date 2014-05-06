@@ -30,21 +30,33 @@ const ci::Vec2f &Control::location() const { return d->location; }
 void Control::setLocation(const ci::Vec2f &loc) { d->location = loc; }
 
 const ci::Vec2f &Control::size() const { return d->size; }
+
 void Control::setSize(const ci::Vec2f &size) {
-  if ((int)(d->anchor) & (int)(Anchor::RIGHT)) {
+  if (d->anchor == Anchor::RIGHT) {
     d->location.x -= size.x - d->size.x;
   }
-  if ((int)(d->anchor) & (int)(Anchor::BOTTOM)) {
+  if (d->anchor == Anchor::BOTTOM) {
     d->location.y -= size.y - d->size.y;
   }
 
   // layout children
   for (auto &child : d->children) {
-    if ((int)(child->anchor()) & (int)(Anchor::RIGHT)) {
+    switch (child->anchor()) {
+    case Anchor::RIGHT: {
       // d->location.x -= size.x - d->size.x;
       Vec2f loc = { child->location().x + size.x - this->size().x,
                     child->location().y };
       child->setLocation(loc);
+      break;
+    }
+
+    case Anchor::LEFT_RIGHT: {
+      Vec2f child_size = { size.x - (this->size().x - child->location().x -
+                                     child->size().x),
+                           child->size().y };
+      child->setSize(child_size);
+      break;
+    }
     }
   }
 
