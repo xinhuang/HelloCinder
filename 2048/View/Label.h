@@ -25,6 +25,7 @@ public:
   void setText(const std::string &text);
   void setForeColor(const ci::Color &color);
   void setBackColor(const ci::Color &color);
+  const ci::Color& backColor() const;
   void setSize(const ci::Vec2f &size);
 
   const ci::Font &font() const;

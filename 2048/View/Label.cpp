@@ -34,6 +34,10 @@ void Label::setBackColor(const Color &color) {
   d->clip.reset();
 }
 
+const ci::Color& Label::backColor() const {
+  return d->backColor;
+}
+
 void Label::setFont(const Font& font) {
   d->font = font;
   d->clip.reset();
