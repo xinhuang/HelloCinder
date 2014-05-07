@@ -2,6 +2,7 @@
 
 #include "TimerMock.h"
 #include "SliceMock.h"
+#include "MockGraphics.h"
 
 #include <gtest/gtest.h>
 
@@ -11,8 +12,8 @@ using namespace std;
 
 struct SpriteTest : public ::testing::Test {
   void SetUp() final {
-    old_timer = Animation::timer();
-    Animation::setTimer(&timer);
+    graphics = make_shared<MockGraphics>();
+    graphics->install();
 
     renderables.emplace_back(new SliceMock());
     renderables.emplace_back(new SliceMock());
@@ -21,25 +22,27 @@ struct SpriteTest : public ::testing::Test {
     clips.emplace_back(dynamic_pointer_cast<Slice>(renderables[1]));
   }
 
-  void TearDown() final { Animation::setTimer(old_timer); }
+  void TearDown() final { graphics->uninstall(); }
 
-  Timer *old_timer;
-  TimerMock timer;
+  shared_ptr<MockGraphics> graphics;
   vector<shared_ptr<SliceMock> > renderables;
   vector<Clip> clips;
   Sprite sut;
 };
 
 TEST_F(SpriteTest, when_has_2_layers_should_draw_bigger_layer_number_later) {
-  InSequence s;
-  EXPECT_CALL(*renderables[0], draw(_, _)).Times(1);
-  EXPECT_CALL(*renderables[1], draw(_, _)).Times(1);
+  {
+    InSequence s;
+    EXPECT_CALL(*renderables[0], draw(_, _)).Times(1);
+    EXPECT_CALL(*renderables[1], draw(_, _)).Times(1);
+  }
 
   Animation anim0 = { clips[0].fadeby(-3.f).duration(3.f) },
             anim1 = { clips[1].fadeby(-3.f).duration(3.f) };
 
   sut = { { 0, anim0 }, { 1, anim1 } };
 
-  timer.tick(2);
+  auto back = gfx();
+  EXPECT_CALL(*graphics, frameInterval()).WillRepeatedly(Return(2.f));
   sut.draw({});
 }

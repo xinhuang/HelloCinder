@@ -35,8 +35,5 @@ public:
   bool isPlaying() const;
   float duration() const;
 
-  static void setTimer(Timer *timer);
-  static Timer *timer();
-
   friend Animation operator+(Animation lhs, const Animation &rhs);
 };

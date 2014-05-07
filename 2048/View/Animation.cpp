@@ -1,6 +1,7 @@
 #include "Animation.h"
 
 #include "Timer.h"
+#include "Graphics.h"
 
 using namespace ci;
 
@@ -12,14 +13,10 @@ using namespace ci;
 using namespace std;
 
 struct Animation::Data {
-  static unique_ptr<Timer> timer;
-
   WrapMode wrap_mode = WrapMode::ONCE;
   float elapsed = 0;
   vector<Clip> clips;
 };
-
-unique_ptr<Timer> Animation::Data::timer = make_unique<Timer>();
 
 Animation::Animation() : d(make_unique<Data>()) {}
 
@@ -62,7 +59,7 @@ Animation &Animation::wrap(WrapMode mode) {
 bool Animation::isPlaying() const { return d->elapsed <= duration(); }
 
 void Animation::draw(const ci::Rectf &rect) {
-  float frame_interval = (float)timer()->elapsed();
+  float frame_interval = gfx()->frameInterval();
   d->elapsed += frame_interval;
 
   if (d->elapsed > duration())
@@ -91,13 +88,6 @@ float Animation::duration() const {
   return accumulate(d->clips.begin(), d->clips.end(), 0.f,
                     [&](float v, const Clip &c) { return v + c.duration(); });
 }
-
-void Animation::setTimer(Timer *timer) {
-  Data::timer.release();
-  Data::timer.reset(timer);
-}
-
-Timer *Animation::timer() { return Data::timer.get(); }
 
 Animation operator+(Animation lhs, const Animation &rhs) {
   lhs.d->clips.insert(lhs.d->clips.end(), rhs.d->clips.begin(),

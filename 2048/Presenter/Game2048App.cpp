@@ -39,7 +39,7 @@ Game2048App::Game2048App() : d(make_unique<Data>()) {
 Game2048App::~Game2048App() {}
 
 void Game2048App::setup() {
-  gfx().setup();
+  gfx()->setup();
   d->ui->setup();
   setFrameRate(Config::FRAME_RATE);
 
@@ -58,12 +58,10 @@ void Game2048App::setup() {
   d->board.spawn();
   d->board.spawn();
   d->board.addListener(*this);
-
-  Animation::timer()->reset();
 }
 
 void Game2048App::shutdown() {
-  gfx().tearDown();
+  gfx()->tearDown();
   d->ui->tearDown();
 }
 
@@ -121,8 +119,7 @@ void Game2048App::draw() {
 
   d->ui->draw();
 
-  Animation::timer()->reset();
-  gfx().draw();
+  gfx()->draw();
 }
 
 void Game2048App::resize() { CellRenderer::instance().resize(); }

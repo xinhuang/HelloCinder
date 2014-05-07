@@ -2,23 +2,27 @@
 
 #include <memory>
 
+class Timer;
+
 class Graphics {
-  static Graphics graphics;
+  static std::shared_ptr<Graphics> graphics;
 
   struct Data;
   std::unique_ptr<Data> d;
 
-  Graphics();
-
 public:
-  ~Graphics();
+  Graphics();
+  virtual ~Graphics();
 
-  static Graphics &instance();
+  Graphics(const Graphics&);
+
+  static std::shared_ptr<Graphics> &instance();
 
   void setup();
   void tearDown();
   void draw();
+
+  virtual float frameInterval() const;
 };
 
-// TODO: remove global variable
-inline Graphics &gfx() { return Graphics::instance(); }
+inline const std::shared_ptr<Graphics> &gfx() { return Graphics::instance(); }
