@@ -18,6 +18,8 @@ public:
   VerticalLabel();
   ~VerticalLabel();
 
+  void setLabelHeight(float height);
+  ci::Vec2f textSize() const;
   void setSize(const ci::Vec2f &size);
   void setLabelColor(const ci::Color &color);
   void setTextColor(const ci::Color &color);
