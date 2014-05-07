@@ -4,10 +4,9 @@ using namespace ci;
 
 VerticalLabel::VerticalLabel() {
   label = create<Label>();
-  label->setSize({ size().x, size().y / 2 });
-
   text = create<Label>();
 
+  label->setSize({ size().x, size().y / 2 });
   performLayout();
 }
 
@@ -18,21 +17,23 @@ void VerticalLabel::performLayout() {
   label->setAnchor(Anchor::LEFT_RIGHT | Anchor::TOP);
 
   text->setSize({ size().x, size().y - label->size().y });
-  text->setLocation({ 0.f, size().y - label->size().y });
+  text->setLocation({ 0.f, label->size().y });
   text->setAnchor(Anchor::LEFT_RIGHT | Anchor::TOP);
 }
 
 void VerticalLabel::setLabelHeight(float height) {
-  label->setSize({label->size().x, height});
+  label->setSize({ label->size().x, height });
   performLayout();
 }
 
-Vec2f VerticalLabel::textSize() const {
-  return text->size();
-}
+Vec2f VerticalLabel::textSize() const { return text->size(); }
+
+Vec2f VerticalLabel::textLocation() const { return text->location(); }
 
 void VerticalLabel::setSize(const ci::Vec2f &size) {
   Control::setSize(size);
+  label->setSize({ size.x, label->size().y });
+  text->setSize({ size.x, text->size().y });
   performLayout();
 }
 

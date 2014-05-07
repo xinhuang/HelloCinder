@@ -45,7 +45,8 @@ void Game2048App::setup() {
 
   d->score = d->ui->create<VerticalLabel>();
   d->score->setBackColor(Color::hex(Config::BOARD_COLOR));
-  d->score->setSize({ 100.f, 100.f });
+  d->score->setSize({ 100.f, 75.f });
+  d->score->setLabelHeight(40.f);
   d->score->setLocation({ BoardLayout::boardRect().x2 - 100.f,
                           BoardLayout::boardRect().y1 - 110.f });
   d->score->setLabelColor(Color::hex(Config::LABEL_FORE_COLOR));
