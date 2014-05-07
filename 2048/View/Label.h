@@ -30,8 +30,4 @@ public:
 
   const ci::Font &font() const;
   void setFont(const ci::Font &font);
-
-  ci::Rectf rect() const {
-    return { location(), location() + size() };
-  }
 };

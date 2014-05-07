@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cinder/vector.h>
+#include <cinder/Rect.h>
 
 enum class Anchor {
   NONE = 0x00,
@@ -30,6 +31,10 @@ class Control {
 
   void add(ControlRef child);
 
+protected:
+  ci::Vec2f screen(const ci::Vec2f& pt) const;
+  ci::Rectf screen(const ci::Rectf& rect) const;
+
 public:
   Control();
   virtual ~Control();
@@ -39,6 +44,10 @@ public:
 
   const ci::Vec2f &size() const;
   void setSize(const ci::Vec2f &size);
+
+  ci::Rectf rect() const {
+    return { location(), location() + size() };
+  }
 
   Anchor anchor() const;
   void setAnchor(Anchor anchor);

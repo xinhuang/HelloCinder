@@ -36,18 +36,18 @@ TEST_F(ControlTest, given_anchor_bottom_t_when_expand_height_should_move_up) {
   ASSERT_EQ(Vec2f(10.f, 9.f), sut->location());
 }
 
-TEST_F(ControlTest, given_child_control_anchor_left_when_expand_parent) {
-  const float CHILD_X = 2.f;
+TEST_F(ControlTest, given_child_control_anchor_left_when_expand_parent_should_child_stay) {
   child->setSize({ 1.f, 2.f });
-  child->setLocation({ CHILD_X, 3.f });
+  child->setLocation({ 2.f, 3.f });
   child->setAnchor(Anchor::LEFT);
+  auto expect = child->location();
 
   sut->setSize({ 10.f, 10.f });
 
-  ASSERT_EQ(CHILD_X, child->location().x);
+  ASSERT_EQ(expect, child->location());
 }
 
-TEST_F(ControlTest, given_child_control_anchor_right_when_expand_parent) {
+TEST_F(ControlTest, given_child_control_anchor_right_when_expand_parent_should_child_move_right) {
   const float CHILD_X = 2.f;
   child->setSize({ 1.f, 2.f });
   child->setLocation({ CHILD_X, 3.f });

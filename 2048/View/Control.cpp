@@ -27,13 +27,25 @@ Control *Control::parent() { return d->parent; }
 void Control::setParent(Control *parent) { d->parent = move(parent); }
 
 ci::Vec2f Control::location() const {
+  return d->location;
+}
+void Control::setLocation(const ci::Vec2f &loc) { d->location = loc; }
+
+ci::Rectf Control::screen(const ci::Rectf& rect) const {
   if (d->parent) {
-    return d->location + d->parent->location();
+    return this->rect() + d->parent->screen(d->parent->location());
+  } else {
+    return this->rect();
+  }
+}
+
+ci::Vec2f Control::screen(const ci::Vec2f& pt) const {
+  if (d->parent) {
+    return d->location + d->parent->screen(d->parent->location());
   } else {
     return d->location;
   }
 }
-void Control::setLocation(const ci::Vec2f &loc) { d->location = loc; }
 
 const ci::Vec2f &Control::size() const { return d->size; }
 

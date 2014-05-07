@@ -71,7 +71,7 @@ void Label::draw() {
   gl::enableAlphaBlending();
 
   gl::color(Color::white());
-  gl::draw(d->clip, rect());
+  gl::draw(d->clip, screen(rect()));
 
   gl::disableAlphaBlending();
 }
