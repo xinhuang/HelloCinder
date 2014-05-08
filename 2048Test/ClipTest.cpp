@@ -1,6 +1,5 @@
 #include "../2048/View/Animation.h"
-#include "TimerMock.h"
-#include "SliceMock.h"
+#include "MockSlice.h"
 
 using namespace ci;
 
@@ -14,12 +13,12 @@ using namespace std;
 
 struct ClipTest : public ::testing::Test {
   void SetUp() final {
-    slice.reset(new SliceMock());
+    slice.reset(new MockSlice());
 
     sut = Clip(dynamic_pointer_cast<Slice>(slice));
   }
 
-  shared_ptr<SliceMock> slice;
+  shared_ptr<MockSlice> slice;
   Clip sut;
 };
 

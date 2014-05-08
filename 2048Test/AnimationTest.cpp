@@ -1,7 +1,6 @@
 #include "../2048/View/Animation.h"
 
-#include "TimerMock.h"
-#include "SliceMock.h"
+#include "MockSlice.h"
 #include "MockGraphics.h"
 
 #include <gtest/gtest.h>
@@ -14,8 +13,8 @@ struct AnimationTest : public ::testing::Test {
   void SetUp() final {
     graphics = make_shared<MockGraphics>();
     graphics->install();
-    renderables.emplace_back(new SliceMock());
-    renderables.emplace_back(new SliceMock());
+    renderables.emplace_back(new MockSlice());
+    renderables.emplace_back(new MockSlice());
 
     clips.emplace_back(dynamic_pointer_cast<Slice>(renderables[0]));
     clips.emplace_back(dynamic_pointer_cast<Slice>(renderables[1]));
@@ -24,7 +23,7 @@ struct AnimationTest : public ::testing::Test {
   void TearDown() final { graphics->uninstall(); }
 
   shared_ptr<MockGraphics> graphics;
-  vector<shared_ptr<SliceMock> > renderables;
+  vector<shared_ptr<MockSlice> > renderables;
   vector<Clip> clips;
   Animation sut;
 };

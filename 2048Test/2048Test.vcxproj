@@ -118,8 +118,7 @@
     </ClCompile>
     <ClInclude Include="..\2048\View\VerticalLabel.h" />
     <ClInclude Include="MockGraphics.h" />
-    <ClInclude Include="SliceMock.h" />
-    <ClInclude Include="TimerMock.h" />
+    <ClInclude Include="MockSlice.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
