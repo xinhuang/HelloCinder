@@ -23,4 +23,5 @@ public:
   Animation &layer(int);
 
   void draw(const ci::Rectf &rect);
+  void draw();
 };

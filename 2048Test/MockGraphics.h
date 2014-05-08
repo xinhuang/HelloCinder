@@ -1,18 +1,18 @@
 #pragma once
 
-#include <../2048/View/Graphics.h>
+#include <../2048/View/Gfx.h>
 #include <gmock/gmock.h>
 
-struct MockGraphics : public Graphics, public std::enable_shared_from_this<Graphics> {
+struct MockGraphics : public Gfx, public std::enable_shared_from_this<Gfx> {
   MOCK_CONST_METHOD0(frameInterval, float());
 
   void install() {
-    back_ = Graphics::instance();
-    Graphics::instance() = shared_from_this();
+    back_ = Gfx::instance();
+    Gfx::instance() = shared_from_this();
   }
 
   void uninstall() {
-    Graphics::instance() = back_;
+    Gfx::instance() = back_;
     back_ = nullptr;
   }
 
@@ -21,5 +21,5 @@ struct MockGraphics : public Graphics, public std::enable_shared_from_this<Graph
   }
 
 private:
-  std::shared_ptr<Graphics> back_;
+  std::shared_ptr<Gfx> back_;
 };

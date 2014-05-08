@@ -43,9 +43,6 @@
     <ClCompile Include="..\2048\View\Control.cpp">
       <Filter>2048</Filter>
     </ClCompile>
-    <ClCompile Include="..\2048\View\Graphics.cpp">
-      <Filter>2048</Filter>
-    </ClCompile>
     <ClCompile Include="VerticalLabelTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -53,6 +50,9 @@
       <Filter>2048</Filter>
     </ClCompile>
     <ClCompile Include="..\2048\View\Label.cpp">
+      <Filter>2048</Filter>
+    </ClCompile>
+    <ClCompile Include="..\2048\View\Gfx.cpp">
       <Filter>2048</Filter>
     </ClCompile>
   </ItemGroup>
@@ -72,9 +72,6 @@
     <ClInclude Include="..\2048\View\Control.h">
       <Filter>2048</Filter>
     </ClInclude>
-    <ClInclude Include="..\2048\View\Graphics.h">
-      <Filter>2048</Filter>
-    </ClInclude>
     <ClInclude Include="MockGraphics.h">
       <Filter>Mocks</Filter>
     </ClInclude>
@@ -86,6 +83,9 @@
     </ClInclude>
     <ClInclude Include="MockSlice.h">
       <Filter>Mocks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\2048\View\Gfx.h">
+      <Filter>2048</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

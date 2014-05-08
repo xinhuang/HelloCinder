@@ -38,3 +38,7 @@ void Sprite::draw(const Rectf& rect) {
     get<1>(layer).draw(rect);
   }
 }
+
+void Sprite::draw() {
+
+}

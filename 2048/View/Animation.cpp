@@ -1,7 +1,7 @@
 #include "Animation.h"
 
 #include "Timer.h"
-#include "Graphics.h"
+#include "Gfx.h"
 
 using namespace ci;
 

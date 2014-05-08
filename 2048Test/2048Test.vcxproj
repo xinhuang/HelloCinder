@@ -94,7 +94,7 @@
     <ClCompile Include="..\2048\View\Animation.cpp" />
     <ClCompile Include="..\2048\View\Clip.cpp" />
     <ClCompile Include="..\2048\View\Control.cpp" />
-    <ClCompile Include="..\2048\View\Graphics.cpp" />
+    <ClCompile Include="..\2048\View\Gfx.cpp" />
     <ClCompile Include="..\2048\View\Label.cpp" />
     <ClCompile Include="..\2048\View\Sprite.cpp" />
     <ClCompile Include="..\2048\View\Timer.cpp" />
@@ -109,7 +109,7 @@
     <ClInclude Include="..\2048\View\Animation.h" />
     <ClInclude Include="..\2048\View\Clip.h" />
     <ClInclude Include="..\2048\View\Control.h" />
-    <ClInclude Include="..\2048\View\Graphics.h" />
+    <ClInclude Include="..\2048\View\Gfx.h" />
     <ClInclude Include="..\2048\View\Label.h" />
     <ClInclude Include="..\2048\View\Sprite.h" />
     <ClInclude Include="..\2048\View\Timer.h" />

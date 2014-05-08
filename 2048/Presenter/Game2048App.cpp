@@ -5,7 +5,7 @@
 #include "Cell.h"
 
 #include "../View/CellRenderer.h"
-#include "../View/Graphics.h"
+#include "../View/Gfx.h"
 #include "../View/VerticalLabel.h"
 #include "../View/Animation.h"
 #include "../View/Timer.h"
