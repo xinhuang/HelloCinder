@@ -111,6 +111,7 @@
     <ClInclude Include="Presenter\BoardLayout.h" />
     <ClInclude Include="Presenter\Game2048App.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="View\Anchor.h" />
     <ClInclude Include="View\Animation.h" />
     <ClInclude Include="View\Clip.h" />
     <ClInclude Include="View\CellAnimation.h" />

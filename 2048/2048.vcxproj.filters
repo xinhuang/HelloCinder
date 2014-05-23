@@ -129,6 +129,9 @@
     <ClInclude Include="View\Gfx.h">
       <Filter>View\Sprite</Filter>
     </ClInclude>
+    <ClInclude Include="View\Anchor.h">
+      <Filter>View\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
