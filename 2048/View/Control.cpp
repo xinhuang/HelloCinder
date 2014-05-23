@@ -26,25 +26,19 @@ void Control::add(ControlRef child) {
 Control *Control::parent() { return d->parent; }
 void Control::setParent(Control *parent) { d->parent = move(parent); }
 
-ci::Vec2f Control::location() const {
-  return d->location;
-}
+ci::Vec2f Control::location() const { return d->location; }
 void Control::setLocation(const ci::Vec2f &loc) { d->location = loc; }
 
-ci::Rectf Control::screen(const ci::Rectf& rect) const {
-  if (d->parent) {
-    return this->rect() + d->parent->screen(d->parent->location());
-  } else {
-    return this->rect();
-  }
+ci::Rectf Control::screen(const ci::Rectf &rect) const {
+  return rect + screen(rect.getUpperLeft());
 }
 
-ci::Vec2f Control::screen(const ci::Vec2f& pt) const {
-  if (d->parent) {
-    return d->location + d->parent->screen(d->parent->location());
-  } else {
-    return d->location;
+ci::Vec2f Control::screen(const ci::Vec2f &pt) const {
+  auto screen_pt = pt;
+  for (auto control = this; control->d->parent; control = control->d->parent) {
+    screen_pt += control->location();
   }
+  return screen_pt;
 }
 
 const ci::Vec2f &Control::size() const { return d->size; }
