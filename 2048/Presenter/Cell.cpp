@@ -14,7 +14,7 @@ using namespace ci::app;
 using namespace std;
 
 Cell::Cell(const ci::Vec2i &coord) : coord_(coord) {
-  anim_ = emptyCellAnimation2();
+  sprite_ = emptyCellAnimation2();
 }
 
 const std::unique_ptr<Piece> &Cell::piece() const { return piece_; }
@@ -22,24 +22,24 @@ const std::unique_ptr<Piece> &Cell::piece() const { return piece_; }
 const ci::Vec2i &Cell::coord() const { return coord_; }
 
 void Cell::draw(const ci::Rectf &rect) {
-  piece_anim_.draw(rect);
+  piece_sprite_.draw(rect);
 }
 
 void Cell::drawBackground(const ci::Rectf &rect) {
-  anim_.draw(rect);
+  sprite_.draw(rect);
 }
 
 void Cell::place(std::unique_ptr<Piece> &&p) {
   assert(!piece_);
   piece_ = move(p);
-  piece_anim_ = placePieceAnimation2(value());
+  piece_sprite_ = placePieceAnimation2(value());
 }
 
 void Cell::moveTo(Cell &cell) {
   assert(piece_);
   cell.piece_ = std::move(piece_);
-  cell.piece_anim_ = movePieceAnimation2(*this, cell);
-  piece_anim_ = {};
+  cell.piece_sprite_ = movePieceAnimation2(*this, cell);
+  piece_sprite_ = {};
 }
 
 void Cell::mergeTo(Cell &cell) {
@@ -49,8 +49,8 @@ void Cell::mergeTo(Cell &cell) {
   cell.piece_->merged = std::move(piece_);
   // TODO: the first piece animation is ereased.
   // first: the one prior in the movement direction
-  cell.piece_anim_ = mergeAnimation2(*this, cell);
-  piece_anim_ = {};
+  cell.piece_sprite_ = mergeAnimation2(*this, cell);
+  piece_sprite_ = {};
 }
 
 int Cell::value() const {
