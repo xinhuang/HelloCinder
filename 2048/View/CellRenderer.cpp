@@ -19,7 +19,8 @@ struct CellRenderer::Data {
   Font font;
   unordered_map<int, shared_ptr<Slice> > slices;
 
-  shared_ptr<Slice> newTexture(int value, const ci::Vec2i &size) {
+  shared_ptr<Slice> newTexture(int value, ci::Vec2i size) {
+    size *= 2;
     if (!fbo || fbo.getWidth() != size.x || fbo.getHeight() != size.y)
       fbo = gl::Fbo(size.x, size.y, true);
 
@@ -58,7 +59,7 @@ struct CellRenderer::Data {
 };
 
 CellRenderer::CellRenderer() : d(make_unique<Data>()) {
-  d->font = Font(Config::FONT, Config::FONT_WEIGHT);
+  d->font = Font(Config::FONT, Config::FONT_WEIGHT * 2);
 }
 
 CellRenderer::~CellRenderer() {}
