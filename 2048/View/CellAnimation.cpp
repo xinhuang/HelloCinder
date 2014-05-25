@@ -41,9 +41,12 @@ Sprite promotionPieceAnimation2(int level) {
   return { anim.wrap(WrapMode::CLAMP_FOREVER) };
 }
 
-Sprite mergeAnimation2(const Cell &src, const Cell &dst) {
-  return { { 0, movePieceAnimation2(src, dst).layer(0) +
-                    promotionPieceAnimation2(dst.value()).layer(0) } };
+Sprite mergeAnimation2(const Sprite &sprite, const Cell &src, const Cell &dst) {
+  auto anim = sprite.layer(sprite.layers() - 1);
+  anim.wrap(WrapMode::CLAMP_FOREVER);
+  return { { 1, movePieceAnimation2(src, dst).layer(0) +
+                    promotionPieceAnimation2(dst.value()).layer(0) },
+           { 0, anim } };
 }
 
 Sprite emptyCellAnimation2() {

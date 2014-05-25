@@ -20,7 +20,9 @@ public:
 
   Sprite &operator=(const Sprite &sprite);
 
+  int layers() const;
   Animation &layer(int);
+  const Animation &layer(int) const;
 
   void draw(const ci::Rectf &rect);
   void draw();

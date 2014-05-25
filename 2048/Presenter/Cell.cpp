@@ -47,9 +47,7 @@ void Cell::mergeTo(Cell &cell) {
   assert(!cell.piece_->merged);
   assert(piece_);
   cell.piece_->merged = std::move(piece_);
-  // TODO: the first piece animation is ereased.
-  // first: the one prior in the movement direction
-  cell.piece_sprite_ = mergeAnimation2(*this, cell);
+  cell.piece_sprite_ = mergeAnimation2(cell.piece_sprite_, *this, cell);
   piece_sprite_ = {};
 }
 
