@@ -13,6 +13,9 @@ class Slice {
 public:
   Slice() {}
   Slice(const ci::gl::TextureRef &tex) : tex_(tex) {}
+  ~Slice() {
+    int a = 0;
+  }
 
   virtual void draw(const ci::Rectf &rect, float alpha = 1.f) {
     if (!tex_) {

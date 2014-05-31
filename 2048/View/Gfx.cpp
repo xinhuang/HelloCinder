@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <cassert>
 
 using namespace std;
 
@@ -17,7 +18,9 @@ struct Gfx::Data {
 
 Gfx::Gfx() : d(make_unique<Data>()) {}
 
-Gfx::~Gfx() {}
+Gfx::~Gfx() {
+  assert(d->sprites.empty());
+}
 
 Gfx::Gfx(const Gfx&) {
   int a = 0;
@@ -32,8 +35,11 @@ void Gfx::setup() { d->timer.reset(); }
 void Gfx::tearDown() {}
 
 void Gfx::draw() {
-  d->timer.reset();
+  sort(d->sprites.begin(), d->sprites.end(),
+       [&](const Sprite *lhs,
+           const Sprite *rhs) { return lhs->depth() < rhs->depth(); });
   for_each(d->sprites.begin(), d->sprites.end(), [&](Sprite *s) { s->draw(); });
+  d->timer.reset();
 }
 
 void Gfx::add(Sprite& sprite) {
@@ -41,6 +47,7 @@ void Gfx::add(Sprite& sprite) {
 }
 
 void Gfx::remove(const Sprite& sprite) {
+  assert(find(d->sprites.begin(), d->sprites.end(), &sprite) != d->sprites.end());
   d->sprites.erase(remove_if(d->sprites.begin(), d->sprites.end(),
                              [&](const Sprite *s) { return s == &sprite; }));
 }

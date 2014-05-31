@@ -3,6 +3,9 @@
 #include "Timer.h"
 #include "Gfx.h"
 
+#include <cinder/app/app.h>
+using namespace ci::app;
+
 using namespace ci;
 
 #include <vector>
@@ -60,6 +63,7 @@ bool Animation::isPlaying() const { return d->elapsed <= duration(); }
 
 void Animation::draw(const ci::Rectf &rect) {
   float frame_interval = gfx()->frameInterval();
+  //console() << frame_interval << endl;
   d->elapsed += frame_interval;
 
   if (d->elapsed > duration())

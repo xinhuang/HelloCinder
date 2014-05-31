@@ -43,5 +43,5 @@ TEST_F(SpriteTest, when_has_2_layers_should_draw_bigger_layer_number_later) {
 
   auto back = gfx();
   EXPECT_CALL(*graphics, frameInterval()).WillRepeatedly(Return(2.f));
-  sut.draw({});
+  sut.draw();
 }

@@ -28,6 +28,10 @@ Board::Board(int width, int height) : Board() {
   for (int c = 0; c < width; ++c)
     for (int r = 0; r < height; ++r)
       d->cells.push_back({ Vec2i{ r, c } });
+
+  for (auto &cell : d->cells) {
+    cell.setRect(BoardLayout::cellRect(cell.coord()));
+  }
 }
 
 Board &Board::operator=(Board &&board) {
@@ -70,13 +74,9 @@ void Board::draw(const Rectf &rect) {
   gl::color(Color::hex(Config::BOARD_COLOR));
   gl::drawSolidRoundedRect(rect, 5.f);
 
-  for (auto &cell : d->cells) {
-    cell.drawBackground(BoardLayout::cellRect(cell.coord()));
-  }
-  for (auto &cell : d->cells) {
-    //if (cell.piece())
-      cell.draw(BoardLayout::cellRect(cell.coord()));
-  }
+  //for (auto &cell : d->cells) {
+  //  cell.draw(BoardLayout::cellRect(cell.coord()));
+  //}
 }
 
 bool Board::slide(const ci::Vec2i &dir) {

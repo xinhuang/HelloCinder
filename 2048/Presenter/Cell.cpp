@@ -21,24 +21,24 @@ const std::unique_ptr<Piece> &Cell::piece() const { return piece_; }
 
 const ci::Vec2i &Cell::coord() const { return coord_; }
 
-void Cell::draw(const ci::Rectf &rect) {
-  piece_sprite_.draw(rect);
-}
-
-void Cell::drawBackground(const ci::Rectf &rect) {
-  sprite_.draw(rect);
+void Cell::setRect(const ci::Rectf &rect) {
+  sprite_.setRect(rect);
 }
 
 void Cell::place(std::unique_ptr<Piece> &&p) {
   assert(!piece_);
   piece_ = move(p);
   piece_sprite_ = placePieceAnimation2(value());
+  piece_sprite_.setDepth(1);
+  piece_sprite_.setRect(sprite_.rect());
 }
 
 void Cell::moveTo(Cell &cell) {
   assert(piece_);
   cell.piece_ = std::move(piece_);
   cell.piece_sprite_ = movePieceAnimation2(*this, cell);
+  cell.piece_sprite_.setDepth(1);
+  cell.piece_sprite_.setRect(cell.sprite_.rect());
   piece_sprite_ = {};
 }
 
@@ -48,6 +48,8 @@ void Cell::mergeTo(Cell &cell) {
   assert(piece_);
   cell.piece_->merged = std::move(piece_);
   cell.piece_sprite_ = mergeAnimation2(cell.piece_sprite_, *this, cell);
+  cell.piece_sprite_.setDepth(1);
+  cell.piece_sprite_.setRect(cell.sprite_.rect());
   piece_sprite_ = {};
 }
 

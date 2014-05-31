@@ -22,8 +22,7 @@ public:
   const std::unique_ptr<Piece> &piece() const;
   const ci::Vec2i &coord() const;
 
-  void draw(const ci::Rectf &rect);
-  void drawBackground(const ci::Rectf &rect);
+  void setRect(const ci::Rectf &rect);
   void place(std::unique_ptr<Piece> &&p);
   void moveTo(Cell &cell);
   void mergeTo(Cell &cell);
