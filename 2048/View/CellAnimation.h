@@ -2,10 +2,10 @@
 
 #include "Sprite.h"
 
-#include "../Presenter/Cell.h"
+class Cell;
 
-Sprite placePieceAnimation2(int value);
-Sprite movePieceAnimation2(const Cell &src, const Cell &dst);
-Sprite promotionPieceAnimation2(int level);
-Sprite mergeAnimation2(const Sprite &sprite, const Cell &src, const Cell &dst);
-Sprite emptyCellAnimation2();
+Sprite createPlacePieceSprite(int value);
+Sprite createMovePieceSprite(const Cell &src, const Cell &dst);
+Sprite createPromotionPieceSprite(int level);
+Sprite createMergeSprite(const Sprite &sprite, const Cell &src, const Cell &dst);
+Sprite createEmptyCellSprite();

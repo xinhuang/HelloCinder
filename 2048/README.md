@@ -4,6 +4,7 @@ http://gabrielecirulli.github.io/2048/
 
 ## TODO
 
+* UI Animation
 * Lift piece animation to Piece class
 * Adjust piece font if cannot fit in
 * Acceleration

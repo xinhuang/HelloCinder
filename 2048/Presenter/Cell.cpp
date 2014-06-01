@@ -15,7 +15,7 @@ using namespace ci::app;
 using namespace std;
 
 Cell::Cell(const ci::Vec2i &coord) : coord_(coord) {
-  sprite_ = emptyCellAnimation2();
+  sprite_ = createEmptyCellSprite();
   setRect(BoardLayout::cellRect(coord_));
 }
 
@@ -30,7 +30,7 @@ void Cell::setRect(const ci::Rectf &rect) {
 void Cell::place(std::unique_ptr<Piece> &&p) {
   assert(!piece_);
   piece_ = move(p);
-  piece_sprite_ = placePieceAnimation2(value());
+  piece_sprite_ = createPlacePieceSprite(value());
   piece_sprite_.setDepth(1);
   piece_sprite_.setRect(sprite_.rect());
 }
@@ -38,7 +38,7 @@ void Cell::place(std::unique_ptr<Piece> &&p) {
 void Cell::moveTo(Cell &cell) {
   assert(piece_);
   cell.piece_ = std::move(piece_);
-  cell.piece_sprite_ = movePieceAnimation2(*this, cell);
+  cell.piece_sprite_ = createMovePieceSprite(*this, cell);
   cell.piece_sprite_.setDepth(1);
   cell.piece_sprite_.setRect(cell.sprite_.rect());
   piece_sprite_ = {};
@@ -49,7 +49,7 @@ void Cell::mergeTo(Cell &cell) {
   assert(!cell.piece_->merged);
   assert(piece_);
   cell.piece_->merged = std::move(piece_);
-  cell.piece_sprite_ = mergeAnimation2(cell.piece_sprite_, *this, cell);
+  cell.piece_sprite_ = createMergeSprite(cell.piece_sprite_, *this, cell);
   cell.piece_sprite_.setDepth(1);
   cell.piece_sprite_.setRect(cell.sprite_.rect());
   piece_sprite_ = {};
