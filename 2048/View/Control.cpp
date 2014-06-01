@@ -97,3 +97,9 @@ void Control::draw() {
     }
   }
 }
+
+void Control::update() {
+  for (auto &child : d->children) {
+    child->update();
+  }
+}

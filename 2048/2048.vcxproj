@@ -98,6 +98,7 @@
     <ClCompile Include="View\Control.cpp" />
     <ClCompile Include="View\GameOverWindow.cpp" />
     <ClCompile Include="View\Gfx.cpp" />
+    <ClCompile Include="View\IntLabel.cpp" />
     <ClCompile Include="View\Label.cpp" />
     <ClCompile Include="View\Sprite.cpp" />
     <ClCompile Include="View\Timer.cpp" />
@@ -120,6 +121,7 @@
     <ClInclude Include="View\Control.h" />
     <ClInclude Include="View\GameOverWindow.h" />
     <ClInclude Include="View\Gfx.h" />
+    <ClInclude Include="View\IntLabel.h" />
     <ClInclude Include="View\Label.h" />
     <ClInclude Include="View\Sprite.h" />
     <ClInclude Include="View\Slice.h" />

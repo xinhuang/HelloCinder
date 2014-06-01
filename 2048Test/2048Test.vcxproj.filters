@@ -55,6 +55,9 @@
     <ClCompile Include="..\2048\View\Gfx.cpp">
       <Filter>2048</Filter>
     </ClCompile>
+    <ClCompile Include="..\2048\View\IntLabel.cpp">
+      <Filter>2048</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\2048\View\Animation.h">
@@ -85,6 +88,9 @@
       <Filter>Mocks</Filter>
     </ClInclude>
     <ClInclude Include="..\2048\View\Gfx.h">
+      <Filter>2048</Filter>
+    </ClInclude>
+    <ClInclude Include="..\2048\View\IntLabel.h">
       <Filter>2048</Filter>
     </ClInclude>
   </ItemGroup>

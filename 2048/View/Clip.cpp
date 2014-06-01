@@ -7,7 +7,7 @@ using namespace ci;
 struct Clip::Data {
   bool reversed = false;
   float elapsed = 0;
-  float duration = 0;
+  float duration = 1.f;
   float delta_alpha = 0.f;
   float alpha = 1.f;
   float scale_to = 1.f;
@@ -18,9 +18,7 @@ struct Clip::Data {
 
 Clip::Clip() : d(make_unique<Data>()) {}
 
-Clip::Clip(const std::shared_ptr<Slice> &slice) : Clip() {
-  d->slice = slice;
-}
+Clip::Clip(const std::shared_ptr<Slice> &slice) : Clip() { d->slice = slice; }
 
 Clip::Clip(const Clip &clip) : Clip() { *d = *(clip.d); }
 

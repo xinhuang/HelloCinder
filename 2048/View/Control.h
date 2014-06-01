@@ -31,7 +31,11 @@ public:
   ci::Rectf rect() const {
     return { location(), location() + size() };
   }
-  void setRect(const ci::Rectf& rect);
+  void setRect(const ci::Rectf &rect);
+
+  ci::Rectf screenRect() const {
+    return screen({ {}, size() });
+  }
 
   Anchor anchor() const;
   void setAnchor(Anchor anchor);
@@ -43,6 +47,7 @@ public:
   void show();
   bool visible() const;
 
+  virtual void update();
   virtual void draw();
 
   template <typename T, typename... Vs> std::shared_ptr<T> create(Vs &&... vs) {

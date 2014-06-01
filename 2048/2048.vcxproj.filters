@@ -73,6 +73,9 @@
     <ClCompile Include="View\GameOverWindow.cpp">
       <Filter>View\UI</Filter>
     </ClCompile>
+    <ClCompile Include="View\IntLabel.cpp">
+      <Filter>View\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Random.h">
@@ -136,6 +139,9 @@
       <Filter>View\UI</Filter>
     </ClInclude>
     <ClInclude Include="View\GameOverWindow.h">
+      <Filter>View\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="View\IntLabel.h">
       <Filter>View\UI</Filter>
     </ClInclude>
   </ItemGroup>

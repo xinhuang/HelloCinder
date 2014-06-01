@@ -107,11 +107,13 @@ void Game2048App::keyUp(ci::app::KeyEvent e) {
 }
 
 void Game2048App::update() {
-  d->score->setText(to_string(d->score_value));
+  d->score->setValue(d->score_value);
 
   if (!d->board.moves_available()) {
     d->gameOverWindow->show();
   }
+
+  d->ui->update();
 }
 
 void Game2048App::draw() {

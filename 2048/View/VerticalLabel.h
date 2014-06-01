@@ -2,6 +2,7 @@
 
 #include "Control.h"
 #include "Label.h"
+#include "IntLabel.h"
 
 #include <string>
 
@@ -10,7 +11,8 @@
 #include <cinder/Font.h>
 
 class VerticalLabel : public Control {
-  std::shared_ptr<Label> label, text;
+  std::shared_ptr<Label> name;
+  std::shared_ptr<IntLabel> value;
 
   void performLayout();
 
@@ -28,5 +30,5 @@ public:
   void setLabel(const std::string &text);
   void setLabelFont(const ci::Font &font);
   void setTextFont(const ci::Font &font);
-  void setText(const std::string &text);
+  void setValue(int value);
 };
