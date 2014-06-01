@@ -39,6 +39,7 @@ Game2048App::Game2048App() : d(make_unique<Data>()) {
 Game2048App::~Game2048App() {}
 
 void Game2048App::setup() {
+  setWindowSize({ 400, 600 });
   gfx()->setup();
   d->ui->setup();
   setFrameRate(Config::FRAME_RATE);

@@ -11,7 +11,7 @@ using namespace std;
 
 struct BoardLayout::Data {
   int headerHeight = 150;
-  float borderSize = 2.f;
+  float borderSize = 10.f;
 };
 
 BoardLayout::BoardLayout() : d(make_unique<Data>()) {}

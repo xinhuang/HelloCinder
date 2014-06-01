@@ -3,6 +3,7 @@
 #include "Piece.h"
 
 #include "../View/CellAnimation.h"
+#include "BoardLayout.h"
 
 #include <cinder/app/app.h>
 #include <cinder/gl/gl.h>
@@ -15,6 +16,7 @@ using namespace std;
 
 Cell::Cell(const ci::Vec2i &coord) : coord_(coord) {
   sprite_ = emptyCellAnimation2();
+  setRect(BoardLayout::cellRect(coord_));
 }
 
 const std::unique_ptr<Piece> &Cell::piece() const { return piece_; }
