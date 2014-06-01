@@ -14,7 +14,6 @@ class Game2048App : public ci::app::AppBasic, public IBoardEventListener {
   struct Data;
   std::unique_ptr<Data> d;
 
-  void drawGameOver(const ci::Rectf &rect) const;
   void onPieceMerged(const Piece &from, const Piece &to) final;
 
 public:

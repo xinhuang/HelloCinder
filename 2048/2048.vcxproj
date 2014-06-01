@@ -96,6 +96,7 @@
     <ClCompile Include="View\CellRenderer.cpp" />
     <ClCompile Include="View\Clip.cpp" />
     <ClCompile Include="View\Control.cpp" />
+    <ClCompile Include="View\GameOverWindow.cpp" />
     <ClCompile Include="View\Gfx.cpp" />
     <ClCompile Include="View\Label.cpp" />
     <ClCompile Include="View\Sprite.cpp" />
@@ -117,6 +118,7 @@
     <ClInclude Include="View\CellAnimation.h" />
     <ClInclude Include="View\CellRenderer.h" />
     <ClInclude Include="View\Control.h" />
+    <ClInclude Include="View\GameOverWindow.h" />
     <ClInclude Include="View\Gfx.h" />
     <ClInclude Include="View\Label.h" />
     <ClInclude Include="View\Sprite.h" />

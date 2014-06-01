@@ -7,6 +7,7 @@ using namespace std;
 using namespace ci;
 
 struct Control::Data {
+  bool visible = true;
   Anchor anchor = Anchor::NONE;
   Vec2f location;
   Vec2f size;
@@ -22,6 +23,8 @@ void Control::add(ControlRef child) {
   d->children.push_back(move(child));
   d->children.back()->setParent(this);
 }
+
+bool Control::visible() const { return d->visible; }
 
 Control *Control::parent() { return d->parent; }
 void Control::setParent(Control *parent) { d->parent = move(parent); }
@@ -75,12 +78,22 @@ void Control::setSize(const ci::Vec2f &size) {
   d->size = size;
 }
 
+void Control::setRect(const ci::Rectf &rect) {
+  setSize(rect.getSize());
+  setLocation(rect.getUpperLeft());
+}
+
 Anchor Control::anchor() const { return d->anchor; }
 void Control::setAnchor(Anchor anchor) { d->anchor = anchor; }
+
+void Control::hide() { d->visible = false; }
+void Control::show() { d->visible = true; }
 
 // TODO: should draw be const?
 void Control::draw() {
   for (auto &child : d->children) {
-    child->draw();
+    if (child->visible()) {
+      child->draw();
+    }
   }
 }

@@ -7,6 +7,7 @@
 #include "../View/CellRenderer.h"
 #include "../View/Gfx.h"
 #include "../View/VerticalLabel.h"
+#include "../View/GameOverWindow.h"
 #include "../View/Animation.h"
 #include "../View/Timer.h"
 #include "../View/UI.h"
@@ -25,11 +26,11 @@ using namespace ci::app;
 using namespace std;
 
 struct Game2048App::Data {
-  bool gameover = false;
   int score_value = 0;
   shared_ptr<VerticalLabel> score;
   Board board;
   shared_ptr<UI> ui;
+  shared_ptr<GameOverWindow> gameOverWindow;
 };
 
 Game2048App::Game2048App() : d(make_unique<Data>()) {
@@ -55,6 +56,10 @@ void Game2048App::setup() {
   d->score->setLabelFont(Font("Arial", 30));
   d->score->setTextColor(Color::hex(Config::SCORE_COLOR));
   d->score->setTextFont(Font("Arial", Config::FONT_WEIGHT));
+
+  d->gameOverWindow = d->ui->create<GameOverWindow>();
+  d->gameOverWindow->setRect(BoardLayout::boardRect());
+  d->gameOverWindow->hide();
 
   d->board = Board(Config::SIZE, Config::SIZE);
   d->board.spawn();
@@ -94,7 +99,7 @@ void Game2048App::keyUp(ci::app::KeyEvent e) {
     return;
   }
 
-  if (d->gameover)
+  if (d->gameOverWindow->visible())
     return;
 
   if (offset != Vec2i{} && d->board.slide(offset))
@@ -105,7 +110,7 @@ void Game2048App::update() {
   d->score->setText(to_string(d->score_value));
 
   if (!d->board.moves_available()) {
-    d->gameover = true;
+    d->gameOverWindow->show();
   }
 }
 
@@ -115,32 +120,12 @@ void Game2048App::draw() {
   gl::setMatricesWindow(getWindowSize());
   d->board.draw(BoardLayout::boardRect());
 
-  if (d->gameover) {
-    drawGameOver(BoardLayout::boardRect());
-  }
+  gfx()->draw();
 
   d->ui->draw();
-
-  gfx()->draw();
 }
 
 void Game2048App::resize() { CellRenderer::instance().resize(); }
-
-void Game2048App::drawGameOver(const Rectf &rect) const {
-  gl::enableAlphaBlending();
-
-  gl::color(ColorA(1.f, 1.f, 1.f, 0.6f));
-  gl::drawSolidRect(rect);
-
-  gl::color(Color::white());
-  auto font = Font("Arial", 100.f);
-  auto tb = TextBox().alignment(TextBox::CENTER).font(font).text("Game over!");
-  tb.setSize(rect.getSize());
-  tb.setColor(Color::hex(0x776E65));
-  gl::draw(tb.render(), rect);
-
-  gl::disableAlphaBlending();
-}
 
 void Game2048App::onPieceMerged(const Piece &from, const Piece &to) {
   d->score_value += (1 << from.value) + (1 << to.value);

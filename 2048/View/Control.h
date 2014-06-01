@@ -31,6 +31,7 @@ public:
   ci::Rectf rect() const {
     return { location(), location() + size() };
   }
+  void setRect(const ci::Rectf& rect);
 
   Anchor anchor() const;
   void setAnchor(Anchor anchor);
@@ -38,10 +39,14 @@ public:
   Control *parent();
   void setParent(Control *parent);
 
+  void hide();
+  void show();
+  bool visible() const;
+
   virtual void draw();
 
-  template <typename T> std::shared_ptr<T> create() {
-    auto v = std::make_shared<T>();
+  template <typename T, typename... Vs> std::shared_ptr<T> create(Vs &&... vs) {
+    auto v = std::make_shared<T>(std::forward<Vs>(vs)...);
     add(std::dynamic_pointer_cast<Control>(v));
     return v;
   }
