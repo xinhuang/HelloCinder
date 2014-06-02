@@ -1,5 +1,7 @@
 #include "IntLabel.h"
 
+#include "../Presenter/Config.h"
+
 #include "Slice.h"
 #include "Sprite.h"
 
@@ -28,6 +30,7 @@ IntLabel::~IntLabel() {}
 
 void IntLabel::setForeColor(const Color &color) {
   d->foreColor = color;
+  // TODO: use invalidate method here
   d->dirty = true;
 }
 
@@ -59,14 +62,21 @@ void IntLabel::setValue(int value) {
 
 void IntLabel::updateCache() const {
   auto tb = TextBox().alignment(TextBox::CENTER).font(d->font).text(
-      to_string(d->value));
+    to_string(d->value));
   tb.setSize(size());
   tb.setColor(d->foreColor);
   tb.setBackgroundColor(d->backColor);
 
   auto tex = gl::Texture::create(tb.render());
-  auto anim = Animation{ tex };
-  d->sprite = Sprite(anim.wrap(WrapMode::CLAMP_FOREVER));
+  auto value_anim = Animation{ tex };
+
+  tb.setBackgroundColor(ColorA(0.f, 0.f, 0.f, 0.f));
+  auto effect_anim = Animation{ Clip(gl::Texture::create(tb.render()))
+                                    .fadeby(0.5f, 0.5f)
+                                    .moveby({ 0.f, -d->font.getSize() })
+                                    .duration(2.f /*Config::ANIM_DURATION*/) };
+  d->sprite = { { 0, value_anim.wrap(WrapMode::CLAMP_FOREVER) },
+                { 1, effect_anim } };
   d->sprite.setDepth(10);
   d->sprite.setRect(screenRect());
   d->sprite.setName("IntLabel");
