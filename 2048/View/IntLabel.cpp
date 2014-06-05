@@ -62,7 +62,7 @@ void IntLabel::setValue(int value) {
 
 void IntLabel::updateCache() const {
   auto tb = TextBox().alignment(TextBox::CENTER).font(d->font).text(
-    to_string(d->value));
+      to_string(d->value));
   tb.setSize(size());
   tb.setColor(d->foreColor);
   tb.setBackgroundColor(d->backColor);
@@ -70,14 +70,15 @@ void IntLabel::updateCache() const {
   auto tex = gl::Texture::create(tb.render());
   auto value_anim = Animation{ tex };
 
+  tb.setText("+" + tb.getText());
   tb.setBackgroundColor(ColorA(0.f, 0.f, 0.f, 0.f));
   auto effect_anim = Animation{ Clip(gl::Texture::create(tb.render()))
                                     .fadeby(0.5f, 0.5f)
                                     .moveby({ 0.f, -d->font.getSize() })
-                                    .duration(2.f /*Config::ANIM_DURATION*/) };
+                                    .duration(Config::EFFECT_DURATION) };
   d->sprite = { { 0, value_anim.wrap(WrapMode::CLAMP_FOREVER) },
                 { 1, effect_anim } };
-  d->sprite.setDepth(10);
+  d->sprite.setDepth(11);
   d->sprite.setRect(screenRect());
   d->sprite.setName("IntLabel");
 

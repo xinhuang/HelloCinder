@@ -1,6 +1,7 @@
 #include "Control.h"
 
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -102,4 +103,24 @@ void Control::update() {
   for (auto &child : d->children) {
     child->update();
   }
+}
+
+void Control::bringToFront() {
+  auto parent = this->parent();
+  assert(parent);
+  auto controls = parent->d->children;
+  auto iter = find_if(controls.begin(), controls.end(),
+                      [&](const ControlRef &c) { return c.get() == this; });
+  assert(iter != controls.end());
+  swap(*iter, *(controls.rbegin()));
+}
+
+void Control::sendToBottom() {
+  auto parent = this->parent();
+  assert(parent);
+  auto controls = parent->d->children;
+  auto iter = find_if(controls.begin(), controls.end(),
+                      [&](const ControlRef &c) { return c.get() == this; });
+  assert(iter != controls.end());
+  swap(*iter, *(controls.begin()));
 }

@@ -18,6 +18,7 @@ const uint32_t BK_COLOR = 0xFAF8EF;
 
 const float FRAME_RATE = 30.f;
 const float ANIM_DURATION = 0.1f;
+const float EFFECT_DURATION = 0.5f;
 const float ENLARGE_RATIO = 1.2f;
 
 const char FONT[] = "Arial";

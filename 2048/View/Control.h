@@ -47,6 +47,9 @@ public:
   void show();
   bool visible() const;
 
+  void bringToFront();
+  void sendToBottom();
+
   virtual void update();
   virtual void draw();
 
