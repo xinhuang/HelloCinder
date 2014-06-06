@@ -77,7 +77,7 @@ void IntLabel::updateCache() const {
                                     .moveby({ 0.f, -d->font.getSize() })
                                     .duration(Config::EFFECT_DURATION) };
   d->sprite = { { 0, value_anim.wrap(WrapMode::CLAMP_FOREVER) },
-                { 1, effect_anim } };
+                /*{ 1, effect_anim }*/ };
   d->sprite.setDepth(11);
   d->sprite.setRect(screenRect());
   d->sprite.setName("IntLabel");
