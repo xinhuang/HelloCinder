@@ -45,7 +45,7 @@ void VerticalLabel::setTextColor(const ci::Color &color) {
   value->setForeColor(color);
 }
 
-void VerticalLabel::setBackColor(const ci::Color &color) {
+void VerticalLabel::setBackColor(const ci::ColorA &color) {
   name->setBackColor(color);
   value->setBackColor(color);
 }

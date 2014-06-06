@@ -27,9 +27,10 @@ using namespace std;
 
 struct Game2048App::Data {
   int score_value = 0;
-  shared_ptr<VerticalLabel> score;
   Board board;
   shared_ptr<UI> ui;
+  shared_ptr<VerticalLabel> score;
+  shared_ptr<Label> title;
   shared_ptr<GameOverWindow> gameOverWindow;
 };
 
@@ -56,6 +57,14 @@ void Game2048App::setup() {
   d->score->setLabelFont(Font("Arial", 30));
   d->score->setTextColor(Color::hex(Config::SCORE_COLOR));
   d->score->setTextFont(Font("Arial", Config::FONT_WEIGHT));
+
+  d->title = d->ui->create<Label>();
+  d->title->setBackColor(ColorA::hexA(0x00000000));
+  d->title->setForeColor(ColorA::hexA(0xFF776E65));
+  d->title->setText("2048");
+  d->title->setFont(Font("Arial", 80));
+  auto title_rect = Rectf{ 10.f, 60.f, 200.f, 160.f };
+  d->title->setRect(title_rect);
 
   d->gameOverWindow = d->ui->create<GameOverWindow>();
   d->gameOverWindow->setRect(BoardLayout::boardRect());

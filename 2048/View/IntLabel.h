@@ -23,9 +23,9 @@ public:
   void update() final;
 
   void setValue(int value);
-  void setForeColor(const ci::Color &color);
-  void setBackColor(const ci::Color &color);
-  const ci::Color& backColor() const;
+  void setForeColor(const ci::ColorA &color);
+  void setBackColor(const ci::ColorA &color);
+  const ci::ColorA& backColor() const;
   void setSize(const ci::Vec2f &size);
 
   const ci::Font &font() const;

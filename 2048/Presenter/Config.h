@@ -4,6 +4,7 @@
 
 namespace Config {
 const int SIZE = 4;
+const float HEADER_HEIGHT = 150.f;
 
 const uint32_t CELL_COLORS[] = { 0xCDC0B4, 0xEEE4DA, 0xEDE0C8, 0xf2b179,
                                  0xf59563, 0xf67c5f, 0xf65e3b, 0xedcf72,

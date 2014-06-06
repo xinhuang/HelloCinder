@@ -23,10 +23,11 @@ public:
   void draw() final;
 
   void setText(const std::string &text);
-  void setForeColor(const ci::Color &color);
-  void setBackColor(const ci::Color &color);
-  const ci::Color& backColor() const;
+  void setForeColor(const ci::ColorA &color);
+  void setBackColor(const ci::ColorA &color);
+  const ci::ColorA& backColor() const;
   void setSize(const ci::Vec2f &size);
+  void setCornerRadius(float value);
 
   const ci::Font &font() const;
   void setFont(const ci::Font &font);

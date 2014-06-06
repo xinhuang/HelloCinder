@@ -17,8 +17,8 @@ using namespace ci;
 
 struct IntLabel::Data {
   bool dirty = true;
-  Color foreColor = Color::white();
-  Color backColor = Color::black();
+  ColorA foreColor = Color::white();
+  ColorA backColor = Color::black();
   int value;
   Font font;
   mutable Sprite sprite;
@@ -28,18 +28,18 @@ IntLabel::IntLabel() : d(make_unique<Data>()) {}
 
 IntLabel::~IntLabel() {}
 
-void IntLabel::setForeColor(const Color &color) {
+void IntLabel::setForeColor(const ColorA &color) {
   d->foreColor = color;
   // TODO: use invalidate method here
   d->dirty = true;
 }
 
-void IntLabel::setBackColor(const Color &color) {
+void IntLabel::setBackColor(const ColorA &color) {
   d->backColor = color;
   d->dirty = true;
 }
 
-const ci::Color &IntLabel::backColor() const { return d->backColor; }
+const ci::ColorA &IntLabel::backColor() const { return d->backColor; }
 
 void IntLabel::setFont(const Font &font) {
   d->font = font;

@@ -26,7 +26,7 @@ public:
   void setSize(const ci::Vec2f &size);
   void setLabelColor(const ci::Color &color);
   void setTextColor(const ci::Color &color);
-  void setBackColor(const ci::Color &color);
+  void setBackColor(const ci::ColorA &color);
   void setLabel(const std::string &text);
   void setLabelFont(const ci::Font &font);
   void setTextFont(const ci::Font &font);

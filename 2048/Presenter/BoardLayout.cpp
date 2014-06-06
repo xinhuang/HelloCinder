@@ -10,7 +10,6 @@ using namespace ci::app;
 using namespace std;
 
 struct BoardLayout::Data {
-  int headerHeight = 150;
   float borderSize = 10.f;
 };
 
@@ -37,12 +36,14 @@ ci::Vec2f BoardLayout::distance(const ci::Vec2i &from, const ci::Vec2i &to) {
 
 float BoardLayout::boardWidth() {
   return static_cast<float>(
-      min(getWindowWidth(), getWindowHeight() - data()->headerHeight) - 14);
+      min(getWindowWidth(), getWindowHeight() - (int)Config::HEADER_HEIGHT) -
+      14);
 }
 
 float BoardLayout::boardHeight() { return boardWidth(); }
 
 ci::Vec2f BoardLayout::boardPos() {
   return {(getWindowWidth() - boardWidth()) / 2.f,
-          (getWindowHeight() - boardHeight() + data()->headerHeight) / 2.f, };
+          (getWindowHeight() - boardHeight() + (int)Config::HEADER_HEIGHT) /
+              2.f, };
 }
