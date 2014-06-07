@@ -144,6 +144,9 @@
     <ClInclude Include="View\IntLabel.h">
       <Filter>View\UI</Filter>
     </ClInclude>
+    <ClInclude Include="View\Button.h">
+      <Filter>View\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

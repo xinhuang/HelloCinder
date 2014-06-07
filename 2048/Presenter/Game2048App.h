@@ -15,6 +15,7 @@ class Game2048App : public ci::app::AppBasic, public IBoardEventListener {
   std::unique_ptr<Data> d;
 
   void onPieceMerged(const Piece &from, const Piece &to) final;
+  void startNewGame();
 
 public:
   Game2048App();

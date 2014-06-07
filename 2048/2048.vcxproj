@@ -115,6 +115,7 @@
     <ClInclude Include="Random.h" />
     <ClInclude Include="View\Anchor.h" />
     <ClInclude Include="View\Animation.h" />
+    <ClInclude Include="View\Button.h" />
     <ClInclude Include="View\Clip.h" />
     <ClInclude Include="View\CellAnimation.h" />
     <ClInclude Include="View\CellRenderer.h" />

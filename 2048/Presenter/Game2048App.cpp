@@ -68,12 +68,8 @@ void Game2048App::setup() {
 
   d->gameOverWindow = d->ui->create<GameOverWindow>();
   d->gameOverWindow->setRect(BoardLayout::boardRect());
-  d->gameOverWindow->hide();
 
-  d->board = Board(Config::SIZE, Config::SIZE);
-  d->board.spawn();
-  d->board.spawn();
-  d->board.addListener(*this);
+  startNewGame();
 }
 
 void Game2048App::shutdown() {
@@ -102,6 +98,10 @@ void Game2048App::keyUp(ci::app::KeyEvent e) {
 
   case KeyEvent::KEY_ESCAPE:
     quit();
+    return;
+
+  case KeyEvent::KEY_n:
+    startNewGame();
     return;
 
   default:
@@ -140,6 +140,16 @@ void Game2048App::resize() { CellRenderer::instance().resize(); }
 
 void Game2048App::onPieceMerged(const Piece &from, const Piece &to) {
   d->score_value += (1 << from.value) + (1 << to.value);
+}
+
+void Game2048App::startNewGame() {
+  d->board = Board(Config::SIZE, Config::SIZE);
+  d->board.spawn();
+  d->board.spawn();
+  d->board.addListener(*this);
+  d->gameOverWindow->hide();
+  d->score->setValue(0);
+  d->score_value = 0;
 }
 
 CINDER_APP_BASIC(Game2048App, RendererGl);
