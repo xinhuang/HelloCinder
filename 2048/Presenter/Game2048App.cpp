@@ -41,7 +41,7 @@ Game2048App::Game2048App() : d(make_unique<Data>()) {
 Game2048App::~Game2048App() {}
 
 void Game2048App::setup() {
-  setWindowSize({ 400, 600 });
+  setWindowSize({ 400, 500 });
   gfx()->setup();
   d->ui->setup();
   setFrameRate(Config::FRAME_RATE);
@@ -50,8 +50,8 @@ void Game2048App::setup() {
   d->score->setBackColor(Color::hex(Config::BOARD_COLOR));
   d->score->setSize({ 100.f, 75.f });
   d->score->setLabelHeight(40.f);
-  d->score->setLocation({ BoardLayout::boardRect().x2 - 100.f,
-                          BoardLayout::boardRect().y1 - 110.f });
+  d->score->setLocation(
+      { BoardLayout::boardRect().x2 - 100.f, Config::BORDER_WIDTH });
   d->score->setLabelColor(Color::hex(Config::LABEL_FORE_COLOR));
   d->score->setLabel("SCORE");
   d->score->setLabelFont(Font("Arial", 30));
@@ -63,7 +63,7 @@ void Game2048App::setup() {
   d->title->setForeColor(ColorA::hexA(0xFF776E65));
   d->title->setText("2048");
   d->title->setFont(Font("Arial", 80));
-  auto title_rect = Rectf{ 10.f, 60.f, 200.f, 160.f };
+  auto title_rect = Rectf{ Config::BORDER_WIDTH, Config::BORDER_WIDTH, 200.f, 100.f };
   d->title->setRect(title_rect);
 
   d->gameOverWindow = d->ui->create<GameOverWindow>();
