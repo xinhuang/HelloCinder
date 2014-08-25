@@ -1,7 +1,7 @@
 #include "CellAnimation.h"
 
 #include "CellRenderer.h"
-#include "Slice.h"
+#include "animation/Slice.h"
 using namespace animation;
 
 #include "../Presenter/Cell.h"

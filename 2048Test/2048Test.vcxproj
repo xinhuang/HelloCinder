@@ -91,13 +91,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\2048\View\Animation.cpp" />
-    <ClCompile Include="..\2048\View\Clip.cpp" />
+    <ClCompile Include="..\2048\View\animation\Animation.cpp" />
+    <ClCompile Include="..\2048\View\animation\Clip.cpp" />
+    <ClCompile Include="..\2048\View\animation\Gfx.cpp" />
+    <ClCompile Include="..\2048\View\animation\Sprite.cpp" />
     <ClCompile Include="..\2048\View\Control.cpp" />
-    <ClCompile Include="..\2048\View\Gfx.cpp" />
     <ClCompile Include="..\2048\View\IntLabel.cpp" />
     <ClCompile Include="..\2048\View\Label.cpp" />
-    <ClCompile Include="..\2048\View\Sprite.cpp" />
     <ClCompile Include="..\2048\View\Timer.cpp" />
     <ClCompile Include="..\2048\View\VerticalLabel.cpp" />
     <ClCompile Include="AnimationTest.cpp" />
@@ -107,13 +107,14 @@
     <ClCompile Include="VerticalLabelTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\2048\View\Animation.h" />
-    <ClInclude Include="..\2048\View\Clip.h" />
+    <ClInclude Include="..\2048\View\animation\Animation.h" />
+    <ClInclude Include="..\2048\View\animation\Clip.h" />
+    <ClInclude Include="..\2048\View\animation\Gfx.h" />
+    <ClInclude Include="..\2048\View\animation\Slice.h" />
+    <ClInclude Include="..\2048\View\animation\Sprite.h" />
     <ClInclude Include="..\2048\View\Control.h" />
-    <ClInclude Include="..\2048\View\Gfx.h" />
     <ClInclude Include="..\2048\View\IntLabel.h" />
     <ClInclude Include="..\2048\View\Label.h" />
-    <ClInclude Include="..\2048\View\Sprite.h" />
     <ClInclude Include="..\2048\View\Timer.h" />
     <ClCompile Include="SpriteTest.cpp">
       <FileType>CppHeader</FileType>

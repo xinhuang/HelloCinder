@@ -1,6 +1,6 @@
 #include "Gfx.h"
 
-#include "Timer.h"
+#include "../Timer.h"
 #include "Sprite.h"
 
 #include <vector>

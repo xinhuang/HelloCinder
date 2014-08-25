@@ -4,11 +4,11 @@
 #include "BoardLayout.h"
 #include "Cell.h"
 
+#include "../View/animation/Gfx.h"
+#include "../View/animation/Animation.h"
 #include "../View/CellRenderer.h"
-#include "../View/Gfx.h"
 #include "../View/VerticalLabel.h"
 #include "../View/GameOverWindow.h"
-#include "../View/Animation.h"
 #include "../View/Timer.h"
 #include "../View/UI.h"
 #include "../View/Button.h"

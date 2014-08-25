@@ -1,4 +1,4 @@
-#include "../2048/View/Animation.h"
+#include "../2048/View/animation/Animation.h"
 
 #include "MockSlice.h"
 #include "MockGraphics.h"

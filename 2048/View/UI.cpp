@@ -2,7 +2,7 @@
 
 using namespace std;
 
-#include "Gfx.h"
+#include "animation/Gfx.h"
 
 namespace ui {
 

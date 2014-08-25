@@ -2,7 +2,7 @@
 
 #include "Piece.h"
 
-#include "../View/Sprite.h"
+#include "../View/animation/Sprite.h"
 
 #include <memory>
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../View/Animation.h"
+#include "../View/animation/Animation.h"
 
 #include <cinder/Rect.h>
 

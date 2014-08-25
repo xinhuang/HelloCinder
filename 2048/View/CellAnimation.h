@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Sprite.h"
+#include "animation/Sprite.h"
 
 class Cell;
 

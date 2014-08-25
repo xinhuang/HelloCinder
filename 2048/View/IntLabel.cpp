@@ -2,8 +2,8 @@
 
 #include "../Presenter/Config.h"
 
-#include "Slice.h"
-#include "Sprite.h"
+#include "animation/Slice.h"
+#include "animation/Sprite.h"
 using namespace animation;
 
 #include <cassert>

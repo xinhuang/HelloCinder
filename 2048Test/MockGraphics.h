@@ -1,6 +1,6 @@
 #pragma once
 
-#include <../2048/View/Gfx.h>
+#include <../2048/View/animation/Gfx.h>
 #include <gmock/gmock.h>
 
 struct MockGraphics : public animation::Gfx, public std::enable_shared_from_this<animation::Gfx> {

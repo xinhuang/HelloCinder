@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../2048/View/Slice.h"
+#include "../2048/View/animation/Slice.h"
 
 #include <gmock/gmock.h>
 

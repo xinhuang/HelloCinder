@@ -1,6 +1,6 @@
 #include "Animation.h"
 
-#include "Timer.h"
+#include "../Timer.h"
 #include "Gfx.h"
 
 #include <cinder/app/app.h>

@@ -1,4 +1,4 @@
-#include "../2048/View/Sprite.h"
+#include "../2048/View/animation/Sprite.h"
 
 #include "MockSlice.h"
 #include "MockGraphics.h"
