@@ -5,6 +5,10 @@
 
 #include "Anchor.h"
 
+namespace animation { class Gfx; }
+
+namespace ui {
+
 class Control;
 using ControlRef = std::shared_ptr<Control>;
 
@@ -59,3 +63,5 @@ public:
     return v;
   }
 };
+
+}

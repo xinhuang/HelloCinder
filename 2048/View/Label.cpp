@@ -13,6 +13,8 @@ using namespace std;
 
 using namespace ci;
 
+namespace ui {
+
 struct Label::Data {
   float cornerRadius = 0.f;
   ColorA foreColor = Color::white();
@@ -95,4 +97,6 @@ void Label::draw() {
   gl::draw(d->clip, screenRect());
 
   gl::disableAlphaBlending();
+}
+
 }

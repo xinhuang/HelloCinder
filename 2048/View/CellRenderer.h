@@ -21,6 +21,6 @@ public:
     return pr;
   }
 
-  std::shared_ptr<Slice> render(int value, const ci::Vec2f &size);
+  std::shared_ptr<animation::Slice> render(int value, const ci::Vec2f &size);
   void resize();
 };

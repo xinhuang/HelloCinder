@@ -5,6 +5,8 @@
 #include <tuple>
 #include <memory>
 
+namespace animation {
+
 using Layer = std::pair<const int, Animation>;
 
 class Sprite {
@@ -35,8 +37,10 @@ public:
   Animation &layer(int);
   const Animation &layer(int) const;
 
-  const ci::Rectf& rect() const;
+  const ci::Rectf &rect() const;
   void setRect(const ci::Rectf &rect);
 
   void draw();
 };
+
+}

@@ -4,6 +4,8 @@ using namespace std;
 
 using namespace ci;
 
+namespace animation {
+
 struct Clip::Data {
   bool reversed = false;
   float elapsed = 0;
@@ -100,4 +102,6 @@ void Clip::draw(float elapsed, ci::Rectf rect) {
   rect += offset();
   d->slice->draw(rect, alpha());
   d->elapsed = NAN;
+}
+
 }

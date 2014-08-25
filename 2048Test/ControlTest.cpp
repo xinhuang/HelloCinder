@@ -1,4 +1,5 @@
 #include "../2048/View/Control.h"
+using namespace ui;
 
 #include <gtest/gtest.h>
 

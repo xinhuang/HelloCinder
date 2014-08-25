@@ -9,9 +9,9 @@
 class Cell {
   const ci::Vec2i coord_;
   std::unique_ptr<Piece> piece_;
-  Sprite sprite_;
+  animation::Sprite sprite_;
   // TODO: lift piece_anim_ to Piece class
-  Sprite piece_sprite_;
+  animation::Sprite piece_sprite_;
 
 public:
   Cell(const ci::Vec2i &coord);

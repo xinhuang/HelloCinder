@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+namespace ui {
+
 enum class Anchor {
   NONE = 0x00,
   LEFT = 0x01,
@@ -31,4 +33,6 @@ inline bool operator&(Anchor lhs, Anchor rhs) {
   validate(lhs);
   validate(rhs);
   return ((int)lhs & (int)rhs) != 0;
+}
+
 }

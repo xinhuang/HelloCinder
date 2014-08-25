@@ -14,6 +14,8 @@ using namespace ci;
 
 using namespace std;
 
+using namespace animation;
+
 struct CellRenderer::Data {
   gl::Fbo fbo;
   Font font;

@@ -9,6 +9,8 @@
 
 class Timer;
 
+namespace animation {
+
 enum class WrapMode {
   ONCE,
   CLAMP_FOREVER,
@@ -37,3 +39,5 @@ public:
 
   friend Animation operator+(Animation lhs, const Animation &rhs);
 };
+
+}

@@ -10,6 +10,8 @@
 #include <cinder/Color.h>
 #include <cinder/Font.h>
 
+namespace ui {
+
 class VerticalLabel : public Control {
   std::shared_ptr<Label> name;
   std::shared_ptr<IntLabel> value;
@@ -32,3 +34,5 @@ public:
   void setTextFont(const ci::Font &font);
   void setValue(int value);
 };
+
+}

@@ -92,6 +92,7 @@
     <ClCompile Include="Presenter\BoardLayout.cpp" />
     <ClCompile Include="Presenter\Game2048App.cpp" />
     <ClCompile Include="View\Animation.cpp" />
+    <ClCompile Include="View\Button.cpp" />
     <ClCompile Include="View\CellAnimation.cpp" />
     <ClCompile Include="View\CellRenderer.cpp" />
     <ClCompile Include="View\Clip.cpp" />

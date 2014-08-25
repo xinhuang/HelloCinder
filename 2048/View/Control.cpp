@@ -7,6 +7,8 @@ using namespace std;
 
 using namespace ci;
 
+namespace ui {
+
 struct Control::Data {
   bool visible = true;
   Anchor anchor = Anchor::NONE;
@@ -123,4 +125,5 @@ void Control::sendToBottom() {
                       [&](const ControlRef &c) { return c.get() == this; });
   assert(iter != controls.end());
   swap(*iter, *(controls.begin()));
+}
 }

@@ -11,6 +11,8 @@
 #include "../View/Animation.h"
 #include "../View/Timer.h"
 #include "../View/UI.h"
+#include "../View/Button.h"
+using namespace ui;
 
 #include "../Util/Random.h"
 
@@ -31,6 +33,7 @@ struct Game2048App::Data {
   shared_ptr<UI> ui;
   shared_ptr<VerticalLabel> score;
   shared_ptr<Label> title;
+  shared_ptr<Button> newGameButton;
   shared_ptr<GameOverWindow> gameOverWindow;
 };
 
@@ -42,7 +45,7 @@ Game2048App::~Game2048App() {}
 
 void Game2048App::setup() {
   setWindowSize({ 400, 500 });
-  gfx()->setup();
+  animation::gfx()->setup();
   d->ui->setup();
   setFrameRate(Config::FRAME_RATE);
 
@@ -57,6 +60,8 @@ void Game2048App::setup() {
   d->score->setLabelFont(Font("Arial", 30));
   d->score->setTextColor(Color::hex(Config::SCORE_COLOR));
   d->score->setTextFont(Font("Arial", Config::FONT_WEIGHT));
+
+  d->newGameButton = d->ui->create<Button>();
 
   d->title = d->ui->create<Label>();
   d->title->setBackColor(ColorA::hexA(0x00000000));
@@ -73,7 +78,7 @@ void Game2048App::setup() {
 }
 
 void Game2048App::shutdown() {
-  gfx()->tearDown();
+  animation::gfx()->tearDown();
   d->ui->tearDown();
 }
 
@@ -131,7 +136,7 @@ void Game2048App::draw() {
   gl::setMatricesWindow(getWindowSize());
   d->board.draw(BoardLayout::boardRect());
 
-  gfx()->draw();
+  animation::gfx()->draw();
 
   d->ui->draw();
 }

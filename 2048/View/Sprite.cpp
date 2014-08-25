@@ -9,6 +9,8 @@ using namespace ci;
 #include <string>
 #include <map>
 
+namespace animation {
+
 using namespace std;
 
 struct Sprite::Data {
@@ -60,3 +62,5 @@ void Sprite::draw(const Rectf &rect) {
 }
 
 void Sprite::draw() { draw(d->rect); }
+
+}

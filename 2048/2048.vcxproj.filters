@@ -76,6 +76,9 @@
     <ClCompile Include="View\IntLabel.cpp">
       <Filter>View\UI</Filter>
     </ClCompile>
+    <ClCompile Include="View\Button.cpp">
+      <Filter>View\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Random.h">

@@ -3,6 +3,9 @@
 #include <memory>
 
 class Timer;
+
+namespace animation {
+
 class Sprite;
 
 class Gfx {
@@ -12,14 +15,14 @@ class Gfx {
   std::unique_ptr<Data> d;
 
   friend class Sprite;
-  void add(Sprite& sprite);
-  void remove(const Sprite& sprite);
+  void add(Sprite &sprite);
+  void remove(const Sprite &sprite);
 
 public:
   Gfx();
   virtual ~Gfx();
 
-  Gfx(const Gfx&);
+  Gfx(const Gfx &) = delete;
 
   static std::shared_ptr<Gfx> &instance();
 
@@ -31,3 +34,4 @@ public:
 };
 
 inline const std::shared_ptr<Gfx> &gfx() { return Gfx::instance(); }
+}

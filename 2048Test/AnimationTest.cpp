@@ -9,6 +9,8 @@ using namespace testing;
 
 using namespace std;
 
+using namespace animation;
+
 struct AnimationTest : public ::testing::Test {
   void SetUp() final {
     graphics = make_shared<MockGraphics>();

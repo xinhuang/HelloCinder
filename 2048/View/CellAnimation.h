@@ -4,8 +4,8 @@
 
 class Cell;
 
-Sprite createPlacePieceSprite(int value);
-Sprite createMovePieceSprite(const Cell &src, const Cell &dst);
-Sprite createPromotionPieceSprite(int level);
-Sprite createMergeSprite(const Sprite &sprite, const Cell &src, const Cell &dst);
-Sprite createEmptyCellSprite();
+animation::Sprite createPlacePieceSprite(int value);
+animation::Sprite createMovePieceSprite(const Cell &src, const Cell &dst);
+animation::Sprite createPromotionPieceSprite(int level);
+animation::Sprite createMergeSprite(const animation::Sprite &sprite, const Cell &src, const Cell &dst);
+animation::Sprite createEmptyCellSprite();

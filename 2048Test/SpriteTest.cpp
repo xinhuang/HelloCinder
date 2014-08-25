@@ -9,6 +9,8 @@ using namespace testing;
 
 using namespace std;
 
+using namespace animation;
+
 struct SpriteTest : public ::testing::Test {
   void SetUp() final {
     graphics = make_shared<MockGraphics>();
@@ -41,7 +43,7 @@ TEST_F(SpriteTest, when_has_2_layers_should_draw_bigger_layer_number_later) {
 
   sut = { { 0, anim0 }, { 1, anim1 } };
 
-  auto back = gfx();
+  auto back = animation::gfx();
   EXPECT_CALL(*graphics, frameInterval()).WillRepeatedly(Return(2.f));
   sut.draw();
 }

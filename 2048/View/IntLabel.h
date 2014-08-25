@@ -10,6 +10,8 @@
 #include <memory>
 #include <string>
 
+namespace ui {
+
 class IntLabel : public Control {
   struct Data;
   std::unique_ptr<Data> d;
@@ -31,3 +33,5 @@ public:
   const ci::Font &font() const;
   void setFont(const ci::Font &font);
 };
+
+}

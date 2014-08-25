@@ -8,6 +8,8 @@
 
 #include <memory>
 
+namespace animation {
+
 class Clip {
   struct Data;
   std::unique_ptr<Data> d;
@@ -38,3 +40,5 @@ public:
 
   void draw(float elapsed, ci::Rectf rect);
 };
+
+}

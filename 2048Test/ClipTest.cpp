@@ -11,6 +11,8 @@ using namespace ::testing;
 
 using namespace std;
 
+using namespace animation;
+
 struct ClipTest : public ::testing::Test {
   void SetUp() final {
     slice.reset(new MockSlice());

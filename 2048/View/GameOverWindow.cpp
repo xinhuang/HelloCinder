@@ -9,6 +9,8 @@ using namespace std;
 
 using namespace ci;
 
+using namespace ui;
+
 struct GameOverWindow::Data {
 
 };

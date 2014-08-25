@@ -7,6 +7,8 @@
 #include <cassert>
 #include <stdexcept>
 
+namespace animation {
+
 class Slice {
   ci::gl::TextureRef tex_;
 
@@ -28,3 +30,5 @@ public:
     ci::gl::disableAlphaBlending();
   }
 };
+
+}

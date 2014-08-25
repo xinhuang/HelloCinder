@@ -4,7 +4,7 @@
 
 #include <gmock/gmock.h>
 
-struct MockSlice : public Slice {
+struct MockSlice : public animation::Slice {
   MOCK_METHOD2(draw, void(const ci::Rectf &, float alpha));
 };
 

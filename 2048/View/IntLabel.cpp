@@ -4,6 +4,7 @@
 
 #include "Slice.h"
 #include "Sprite.h"
+using namespace animation;
 
 #include <cassert>
 
@@ -15,13 +16,15 @@ using namespace std;
 
 using namespace ci;
 
+namespace ui {
+
 struct IntLabel::Data {
   bool dirty = true;
   ColorA foreColor = Color::white();
   ColorA backColor = Color::black();
   int value;
   Font font;
-  mutable Sprite sprite;
+  mutable animation::Sprite sprite;
 };
 
 IntLabel::IntLabel() : d(make_unique<Data>()) {}
@@ -89,4 +92,6 @@ void IntLabel::update() {
   Control::update();
   if (d->dirty)
     updateCache();
+}
+
 }

@@ -2,6 +2,8 @@
 
 using namespace ci;
 
+namespace ui {
+
 VerticalLabel::VerticalLabel() {
   name = create<Label>();
   value = create<IntLabel>();
@@ -58,4 +60,6 @@ void VerticalLabel::setLabel(const std::string &text) { name->setText(text); }
 
 void VerticalLabel::setValue(int value) {
   this->value->setValue(value);
+}
+
 }

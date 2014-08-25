@@ -15,6 +15,8 @@ using namespace ci;
 
 using namespace std;
 
+namespace animation { 
+
 struct Animation::Data {
   WrapMode wrap_mode = WrapMode::ONCE;
   float elapsed = 0;
@@ -97,4 +99,6 @@ Animation operator+(Animation lhs, const Animation &rhs) {
   lhs.d->clips.insert(lhs.d->clips.end(), rhs.d->clips.begin(),
                       rhs.d->clips.end());
   return lhs;
+}
+
 }
