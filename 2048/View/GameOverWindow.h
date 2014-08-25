@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Control.h"
+#include "ui/Control.h"
 
 class GameOverWindow : public ui::Control {
   struct Data;

@@ -1,4 +1,4 @@
-#include "../2048/View/Control.h"
+#include "../2048/View/ui/Control.h"
 using namespace ui;
 
 #include <gtest/gtest.h>

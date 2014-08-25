@@ -1,6 +1,6 @@
 #include "Label.h"
 
-#include "animation/Slice.h"
+#include "../animation/Slice.h"
 
 #include <cassert>
 

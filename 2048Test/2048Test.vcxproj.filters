@@ -14,6 +14,9 @@
     <Filter Include="2048\animation">
       <UniqueIdentifier>{9305157a-50c9-4b4d-8f44-eb978ad79785}</UniqueIdentifier>
     </Filter>
+    <Filter Include="2048\ui">
+      <UniqueIdentifier>{78243c39-1fd8-4ab1-868f-82616838e0c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -34,20 +37,8 @@
     <ClCompile Include="ControlTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\2048\View\Control.cpp">
-      <Filter>2048</Filter>
-    </ClCompile>
     <ClCompile Include="VerticalLabelTest.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\2048\View\VerticalLabel.cpp">
-      <Filter>2048</Filter>
-    </ClCompile>
-    <ClCompile Include="..\2048\View\Label.cpp">
-      <Filter>2048</Filter>
-    </ClCompile>
-    <ClCompile Include="..\2048\View\IntLabel.cpp">
-      <Filter>2048</Filter>
     </ClCompile>
     <ClCompile Include="..\2048\View\animation\Sprite.cpp">
       <Filter>2048\animation</Filter>
@@ -61,28 +52,34 @@
     <ClCompile Include="..\2048\View\animation\Gfx.cpp">
       <Filter>2048\animation</Filter>
     </ClCompile>
+    <ClCompile Include="..\2048\View\ui\Control.cpp">
+      <Filter>2048\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\2048\View\ui\IntLabel.cpp">
+      <Filter>2048\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\2048\View\ui\Label.cpp">
+      <Filter>2048\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\2048\View\ui\UI.cpp">
+      <Filter>2048\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\2048\View\ui\VerticalLabel.cpp">
+      <Filter>2048\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\2048\View\ui\Button.cpp">
+      <Filter>2048\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\2048\View\Timer.h">
       <Filter>2048</Filter>
     </ClInclude>
-    <ClInclude Include="..\2048\View\Control.h">
-      <Filter>2048</Filter>
-    </ClInclude>
     <ClInclude Include="MockGraphics.h">
       <Filter>Mocks</Filter>
     </ClInclude>
-    <ClInclude Include="..\2048\View\VerticalLabel.h">
-      <Filter>2048</Filter>
-    </ClInclude>
-    <ClInclude Include="..\2048\View\Label.h">
-      <Filter>2048</Filter>
-    </ClInclude>
     <ClInclude Include="MockSlice.h">
       <Filter>Mocks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\2048\View\IntLabel.h">
-      <Filter>2048</Filter>
     </ClInclude>
     <ClInclude Include="..\2048\View\animation\Gfx.h">
       <Filter>2048\animation</Filter>
@@ -98,6 +95,27 @@
     </ClInclude>
     <ClInclude Include="..\2048\View\animation\Clip.h">
       <Filter>2048\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\2048\View\ui\Button.h">
+      <Filter>2048\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\2048\View\ui\Control.h">
+      <Filter>2048\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\2048\View\ui\IntLabel.h">
+      <Filter>2048\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\2048\View\ui\Label.h">
+      <Filter>2048\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\2048\View\ui\UI.h">
+      <Filter>2048\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\2048\View\ui\VerticalLabel.h">
+      <Filter>2048\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\2048\View\ui\Anchor.h">
+      <Filter>2048\ui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

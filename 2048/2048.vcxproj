@@ -95,16 +95,16 @@
     <ClCompile Include="View\animation\Clip.cpp" />
     <ClCompile Include="View\animation\Gfx.cpp" />
     <ClCompile Include="View\animation\Sprite.cpp" />
-    <ClCompile Include="View\Button.cpp" />
     <ClCompile Include="View\CellAnimation.cpp" />
     <ClCompile Include="View\CellRenderer.cpp" />
-    <ClCompile Include="View\Control.cpp" />
     <ClCompile Include="View\GameOverWindow.cpp" />
-    <ClCompile Include="View\IntLabel.cpp" />
-    <ClCompile Include="View\Label.cpp" />
     <ClCompile Include="View\Timer.cpp" />
-    <ClCompile Include="View\UI.cpp" />
-    <ClCompile Include="View\VerticalLabel.cpp" />
+    <ClCompile Include="View\ui\Button.cpp" />
+    <ClCompile Include="View\ui\Control.cpp" />
+    <ClCompile Include="View\ui\IntLabel.cpp" />
+    <ClCompile Include="View\ui\Label.cpp" />
+    <ClCompile Include="View\ui\UI.cpp" />
+    <ClCompile Include="View\ui\VerticalLabel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Presenter\Board.h" />
@@ -114,22 +114,22 @@
     <ClInclude Include="Presenter\BoardLayout.h" />
     <ClInclude Include="Presenter\Game2048App.h" />
     <ClInclude Include="Random.h" />
-    <ClInclude Include="View\Anchor.h" />
     <ClInclude Include="View\animation\Animation.h" />
     <ClInclude Include="View\animation\Clip.h" />
     <ClInclude Include="View\animation\Gfx.h" />
     <ClInclude Include="View\animation\Slice.h" />
     <ClInclude Include="View\animation\Sprite.h" />
-    <ClInclude Include="View\Button.h" />
     <ClInclude Include="View\CellAnimation.h" />
     <ClInclude Include="View\CellRenderer.h" />
-    <ClInclude Include="View\Control.h" />
     <ClInclude Include="View\GameOverWindow.h" />
-    <ClInclude Include="View\IntLabel.h" />
-    <ClInclude Include="View\Label.h" />
     <ClInclude Include="View\Timer.h" />
-    <ClInclude Include="View\UI.h" />
-    <ClInclude Include="View\VerticalLabel.h" />
+    <ClInclude Include="View\ui\Anchor.h" />
+    <ClInclude Include="View\ui\Button.h" />
+    <ClInclude Include="View\ui\Control.h" />
+    <ClInclude Include="View\ui\IntLabel.h" />
+    <ClInclude Include="View\ui\Label.h" />
+    <ClInclude Include="View\ui\UI.h" />
+    <ClInclude Include="View\ui\VerticalLabel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

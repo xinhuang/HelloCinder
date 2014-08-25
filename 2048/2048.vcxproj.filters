@@ -14,14 +14,14 @@
     <Filter Include="Util">
       <UniqueIdentifier>{59f452f4-906f-4aec-984a-f43430d9ba26}</UniqueIdentifier>
     </Filter>
-    <Filter Include="View\UI">
-      <UniqueIdentifier>{245f283b-e4ad-447a-a9a8-81ab9e591c3c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="View\CellAnimation">
       <UniqueIdentifier>{3a148f25-2b0c-4d6f-bcbd-927000bba778}</UniqueIdentifier>
     </Filter>
     <Filter Include="animation">
       <UniqueIdentifier>{73602468-654a-459c-8511-6e76e3a59bb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui">
+      <UniqueIdentifier>{245f283b-e4ad-447a-a9a8-81ab9e591c3c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -40,32 +40,11 @@
     <ClCompile Include="View\Timer.cpp">
       <Filter>View</Filter>
     </ClCompile>
-    <ClCompile Include="View\VerticalLabel.cpp">
-      <Filter>View\UI</Filter>
-    </ClCompile>
     <ClCompile Include="View\CellAnimation.cpp">
       <Filter>View\CellAnimation</Filter>
     </ClCompile>
     <ClCompile Include="View\CellRenderer.cpp">
       <Filter>View\CellAnimation</Filter>
-    </ClCompile>
-    <ClCompile Include="View\Label.cpp">
-      <Filter>View\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="View\Control.cpp">
-      <Filter>View\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="View\UI.cpp">
-      <Filter>View\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="View\GameOverWindow.cpp">
-      <Filter>View\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="View\IntLabel.cpp">
-      <Filter>View\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="View\Button.cpp">
-      <Filter>View\UI</Filter>
     </ClCompile>
     <ClCompile Include="View\animation\Animation.cpp">
       <Filter>animation</Filter>
@@ -78,6 +57,27 @@
     </ClCompile>
     <ClCompile Include="View\animation\Sprite.cpp">
       <Filter>animation</Filter>
+    </ClCompile>
+    <ClCompile Include="View\GameOverWindow.cpp">
+      <Filter>View</Filter>
+    </ClCompile>
+    <ClCompile Include="View\ui\Label.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="View\ui\UI.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="View\ui\VerticalLabel.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="View\ui\Button.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="View\ui\Control.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="View\ui\IntLabel.cpp">
+      <Filter>ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -105,35 +105,11 @@
     <ClInclude Include="View\Timer.h">
       <Filter>View</Filter>
     </ClInclude>
-    <ClInclude Include="View\VerticalLabel.h">
-      <Filter>View\UI</Filter>
-    </ClInclude>
     <ClInclude Include="View\CellAnimation.h">
       <Filter>View\CellAnimation</Filter>
     </ClInclude>
     <ClInclude Include="View\CellRenderer.h">
       <Filter>View\CellAnimation</Filter>
-    </ClInclude>
-    <ClInclude Include="View\Label.h">
-      <Filter>View\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="View\Control.h">
-      <Filter>View\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="View\UI.h">
-      <Filter>View\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="View\Anchor.h">
-      <Filter>View\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="View\GameOverWindow.h">
-      <Filter>View\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="View\IntLabel.h">
-      <Filter>View\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="View\Button.h">
-      <Filter>View\UI</Filter>
     </ClInclude>
     <ClInclude Include="View\animation\Animation.h">
       <Filter>animation</Filter>
@@ -149,6 +125,30 @@
     </ClInclude>
     <ClInclude Include="View\animation\Sprite.h">
       <Filter>animation</Filter>
+    </ClInclude>
+    <ClInclude Include="View\GameOverWindow.h">
+      <Filter>View</Filter>
+    </ClInclude>
+    <ClInclude Include="View\ui\IntLabel.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="View\ui\Label.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="View\ui\UI.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="View\ui\VerticalLabel.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="View\ui\Anchor.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="View\ui\Button.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="View\ui\Control.h">
+      <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-#include "../2048/View/VerticalLabel.h"
+#include "../2048/View/ui/VerticalLabel.h"
 using namespace ui;
 
 #include <gtest/gtest.h>
