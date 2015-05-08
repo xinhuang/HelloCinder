@@ -1,5 +1,8 @@
 #pragma once
 
+#include "GameConfig.h"
+#include "Random.h"
+
 #include <cinder/gl/Texture.h>
 
 #include <memory>
@@ -17,6 +20,8 @@ public:
   virtual int height() const = 0;
   virtual int size() const = 0;
   virtual ci::gl::Texture render() const = 0;
+
+  const static uint8_t ALIVE_COLOR = 0xFF;
 };
 
 template <typename T> std::unique_ptr<T> bigBang(int width, int height) {
@@ -36,23 +41,23 @@ public:
   AbstractCpuUniverse(AbstractCpuUniverse &&u);
   AbstractCpuUniverse &operator=(AbstractCpuUniverse &&u);
 
-  ~AbstractCpuUniverse();
+  ~AbstractCpuUniverse() override;
 
-  int size() const;
+  int size() const final;
 
-  ci::gl::Texture texture() const;
-  ci::gl::Texture render() const { return texture(); }
+  ci::gl::Texture render() const final { return texture(); }
 
-  void next();
+  void next() final;
 
-  void add(const ci::Vec2i &p);
+  void add(const ci::Vec2i &p) final;
 
-  int width() const;
-  int height() const;
+  int width() const final;
+  int height() const final;
 
 protected:
   virtual void next(ci::Channel &src, ci::Channel &dst) const = 0;
 
+  ci::gl::Texture texture() const;
   void nextLoop(ci::Channel &src, ci::Channel &dst) const;
   void nextLoopOmp(ci::Channel &src, ci::Channel &dst) const;
   void nextIpp(ci::Channel &src, ci::Channel &dst) const;

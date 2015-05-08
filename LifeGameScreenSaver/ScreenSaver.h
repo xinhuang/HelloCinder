@@ -7,6 +7,7 @@
 #include <chrono>
 
 #include "../LifeGame/Universe.h"
+#include "../LifeGame/GpuGlslUniverse.h"
 #include "../LifeGame/Sysinfo.h"
 
 class ScreenSaver : public ci::app::AppScreenSaver {
@@ -19,9 +20,10 @@ public:
 
 private:
   const std::chrono::seconds REFRESH_TIME = { 300 };
+  //typedef GpuGlslUniverse universe_t;
+  typedef CpuIppUniverse universe_t;
 
   Sysinfo sysinfo_;
   ci::gl::TextureFontRef font_;
-  Universe now_;
-  Universe next_;
+  std::unique_ptr<IUniverse> u_;
 };

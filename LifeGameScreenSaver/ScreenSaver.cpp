@@ -25,34 +25,30 @@ using namespace ci;
 using namespace ci::app;
 using namespace ci::gl;
 
-ScreenSaver::ScreenSaver() {
-}
+ScreenSaver::ScreenSaver() {}
 
 void ScreenSaver::setup() {
   font_ = TextureFont::create(Font("Consolas", 20));
-  now_ = Universe::bigBang(getWindowWidth(), getWindowHeight());
-  next_ = Universe::bigBang(getWindowWidth(), getWindowHeight());
-  sysinfo_.init(now_);
+  u_ = bigBang<universe_t>(getWindowWidth(), getWindowHeight());
+  sysinfo_.init(*u_);
   ippInit();
 }
 
 void ScreenSaver::draw() {
-  gl::draw(now_.texture());
-  font_->drawString(sysinfo_.msg(), getWindowBounds());
+  gl::draw(u_->render());
+  font_->drawString(sysinfo_.msg(*this), getWindowBounds());
 }
 
 void ScreenSaver::update() {
   if (sysinfo_.elapsed() >= REFRESH_TIME) {
-    now_ = Universe::bigBang(getWindowWidth(), getWindowHeight());
-    next_ = Universe::bigBang(getWindowWidth(), getWindowHeight());
-    sysinfo_.init(now_);
+    u_ = bigBang<universe_t>(getWindowWidth(), getWindowHeight());
+	sysinfo_.init(*u_);
   } else {
-    sysinfo_.onPreGen(now_);
+    sysinfo_.onPreGen(*u_);
 
-    now_.next(next_);
-    swap(now_, next_);
+    u_->next();
 
-    sysinfo_.onPostGen(now_);
+    sysinfo_.onPostGen(*u_);
   }
 }
 

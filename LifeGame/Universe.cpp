@@ -98,15 +98,20 @@ void AbstractCpuUniverse::nextLoop(ci::Channel &src, ci::Channel &dst) const {
   auto width = bounds.getWidth();
 
   for (int r = 0; r < height; ++r) {
-    *(pSrcData + r *cbSrcRow) = 0x00;
-    *(pSrcData + r *cbSrcRow + (width - 1) *cbSrcInc) = 0x00;
+    *(pSrcData + r * cbSrcRow) = 0x00;
+    *(pSrcData + r * cbSrcRow + (width - 1) * cbSrcInc) = 0x00;
   }
   fill(pSrcData, pSrcData + (width - 1) * cbSrcInc, 0x00);
   fill(pSrcData + (height - 1) * cbSrcRow,
-       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc, 0xFF);
+       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc,
+       ALIVE_COLOR);
 
-  static const int x[] = { 1, 1, 0, -1, -1, -1, 0, 1, };
-  static const int y[] = { 0, 1, 1, 1, 0, -1, -1, -1, };
+  static const int x[] = {
+      1, 1, 0, -1, -1, -1, 0, 1,
+  };
+  static const int y[] = {
+      0, 1, 1, 1, 0, -1, -1, -1,
+  };
   for (int r = 1; r < height - 1; ++r) {
     for (int c = 1; c < width - 1; ++c) {
       auto pixel = pDstData + r * cbDestRow + cbDestInc * c;
@@ -114,13 +119,13 @@ void AbstractCpuUniverse::nextLoop(ci::Channel &src, ci::Channel &dst) const {
       int count = 0;
       for (int i = 0; i < 8; ++i) {
         auto ptr = srcpixel + x[i] * cbSrcInc + y[i] * cbSrcRow;
-        if (*ptr == 0xFF)
+        if (*ptr == ALIVE_COLOR)
           ++count;
       }
 
       switch (count) {
       case 3:
-        *pixel = 0xFF;
+        *pixel = ALIVE_COLOR;
         break;
 
       case 2:
@@ -153,15 +158,20 @@ void AbstractCpuUniverse::nextLoopOmp(ci::Channel &src,
   auto width = bounds.getWidth();
 
   for (int r = 0; r < height; ++r) {
-    *(pSrcData + r *cbSrcRow) = 0x00;
-    *(pSrcData + r *cbSrcRow + (width - 1) *cbSrcInc) = 0x00;
+    *(pSrcData + r * cbSrcRow) = 0x00;
+    *(pSrcData + r * cbSrcRow + (width - 1) * cbSrcInc) = 0x00;
   }
   fill(pSrcData, pSrcData + (width - 1) * cbSrcInc, 0x00);
   fill(pSrcData + (height - 1) * cbSrcRow,
-       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc, 0xFF);
+       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc,
+       ALIVE_COLOR);
 
-  static const int x[] = { 1, 1, 0, -1, -1, -1, 0, 1, };
-  static const int y[] = { 0, 1, 1, 1, 0, -1, -1, -1, };
+  static const int x[] = {
+      1, 1, 0, -1, -1, -1, 0, 1,
+  };
+  static const int y[] = {
+      0, 1, 1, 1, 0, -1, -1, -1,
+  };
 #pragma omp parallel for
   for (int r = 1; r < height - 1; ++r) {
     for (int c = 1; c < width - 1; ++c) {
@@ -174,7 +184,7 @@ void AbstractCpuUniverse::nextLoopOmp(ci::Channel &src,
           ++*pixel;
       }
       if (*pixel == 3)
-        *pixel = 0xFF;
+        *pixel = ALIVE_COLOR;
       else if (*pixel == 2)
         *pixel = *srcpixel;
       else
@@ -200,22 +210,23 @@ void AbstractCpuUniverse::nextIpp(ci::Channel &src, ci::Channel &dst) const {
   auto width = bounds.getWidth();
 
   for (int r = 0; r < height; ++r) {
-    *(pSrcData + r *cbSrcRow) = 0x00;
-    *(pSrcData + r *cbSrcRow + (width - 1) *cbSrcInc) = 0x00;
+    *(pSrcData + r * cbSrcRow) = 0x00;
+    *(pSrcData + r * cbSrcRow + (width - 1) * cbSrcInc) = 0x00;
   }
   fill(pSrcData, pSrcData + (width - 1) * cbSrcInc, 0x00);
   fill(pSrcData + (height - 1) * cbSrcRow,
-       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc, 0xFF);
+       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc,
+       ALIVE_COLOR);
 
   ippiAndC_8u_C1R(pSrcData, cbSrcRow, 1, pSrcData, cbSrcRow,
-                  { width, height }); // map 0xFF -> 1
-  ippiSet_8u_C1R(0, pDstData, cbDestRow, { width, height });
+                  {width, height}); // map ALIVE_COLOR -> 1
+  ippiSet_8u_C1R(0, pDstData, cbDestRow, {width, height});
 
   const int step = 1;
   for (int r = 1; r < height - 1; r += step) {
     auto srcblock = pSrcData + r * cbSrcRow + cbSrcInc;
     auto destBlock = pDstData + r * cbDestRow + cbDestInc;
-    next(srcblock, cbSrcRow, destBlock, cbDestRow, { width - 2, step });
+    next(srcblock, cbSrcRow, destBlock, cbDestRow, {width - 2, step});
   }
 }
 
@@ -236,23 +247,24 @@ void AbstractCpuUniverse::nextIppOmp(ci::Channel &src, ci::Channel &dst) const {
   auto width = bounds.getWidth();
 
   for (int r = 0; r < height; ++r) {
-    *(pSrcData + r *cbSrcRow) = 0x00;
-    *(pSrcData + r *cbSrcRow + (width - 1) *cbSrcInc) = 0x00;
+    *(pSrcData + r * cbSrcRow) = 0x00;
+    *(pSrcData + r * cbSrcRow + (width - 1) * cbSrcInc) = 0x00;
   }
   fill(pSrcData, pSrcData + (width - 1) * cbSrcInc, 0x00);
   fill(pSrcData + (height - 1) * cbSrcRow,
-       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc, 0xFF);
+       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc,
+       ALIVE_COLOR);
 
   ippiAndC_8u_C1R(pSrcData, cbSrcRow, 1, pSrcData, cbSrcRow,
-                  { width, height }); // map 0xFF -> 1
-  ippiSet_8u_C1R(0, pDstData, cbDestRow, { width, height });
+                  {width, height}); // map ALIVE_COLOR -> 1
+  ippiSet_8u_C1R(0, pDstData, cbDestRow, {width, height});
 
   const int step = 1;
 #pragma omp parallel for
   for (int r = 1; r < height - 1; r += step) {
     auto srcblock = pSrcData + r * cbSrcRow + cbSrcInc;
     auto destBlock = pDstData + r * cbDestRow + cbDestInc;
-    next(srcblock, cbSrcRow, destBlock, cbDestRow, { width - 2, step });
+    next(srcblock, cbSrcRow, destBlock, cbDestRow, {width - 2, step});
   }
 }
 
@@ -274,16 +286,17 @@ void AbstractCpuUniverse::nextIppTbb(ci::Channel &src, ci::Channel &dst) const {
   auto width = bounds.getWidth();
 
   for (int r = 0; r < height; ++r) {
-    *(pSrcData + r *cbSrcRow) = 0x00;
-    *(pSrcData + r *cbSrcRow + (width - 1) *cbSrcInc) = 0x00;
+    *(pSrcData + r * cbSrcRow) = 0x00;
+    *(pSrcData + r * cbSrcRow + (width - 1) * cbSrcInc) = 0x00;
   }
   fill(pSrcData, pSrcData + (width - 1) * cbSrcInc, 0x00);
   fill(pSrcData + (height - 1) * cbSrcRow,
-       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc, 0xFF);
+       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc,
+       ALIVE_COLOR);
 
   ippiAndC_8u_C1R(pSrcData, cbSrcRow, 1, pSrcData, cbSrcRow,
-                  { width, height }); // map 0xFF -> 1
-  ippiSet_8u_C1R(0, pDstData, cbDestRow, { width, height });
+                  {width, height}); // map ALIVE_COLOR -> 1
+  ippiSet_8u_C1R(0, pDstData, cbDestRow, {width, height});
 
 // auto block = blocked_range<int>(1, height - 1);
 // parallel_for(block, [&](const blocked_range<int> &range) {
@@ -303,7 +316,7 @@ void AbstractCpuUniverse::nextIppTbb(ci::Channel &src, ci::Channel &dst) const {
 
 void AbstractCpuUniverse::next(uint8_t *src, int srcStride, uint8_t *dest,
                                int destStride, const ci::Vec2i &_roi) const {
-  IppiSize roi = { _roi.x, _roi.y };
+  IppiSize roi = {_roi.x, _roi.y};
 
   const int width = roi.width + 2;
   const int height = roi.height + 2;
@@ -311,8 +324,12 @@ void AbstractCpuUniverse::next(uint8_t *src, int srcStride, uint8_t *dest,
 
   int offset = 1;
 
-  int x[] = { 1, 1, 0, -1, -1, -1, 0, 1, };
-  int y[] = { 0, 1, 1, 1, 0, -1, -1, -1, };
+  int x[] = {
+      1, 1, 0, -1, -1, -1, 0, 1,
+  };
+  int y[] = {
+      0, 1, 1, 1, 0, -1, -1, -1,
+  };
   for (int i = 0; i < 8; ++i) {
     // add src to dest with offset [x, y]
     auto ptr = src + offset + x[i] * 1 + y[i] * srcStride;
@@ -342,5 +359,5 @@ int AbstractCpuUniverse::height() const { return d->src().getHeight(); }
 void AbstractCpuUniverse::add(const Vec2i &p) {
   assert(p.x < width() && p.x >= 0);
   assert(p.y < height() && p.y >= 0);
-  d->src().setValue({ p.x, p.y }, 0xFF);
+  d->src().setValue({p.x, p.y}, ALIVE_COLOR);
 }
