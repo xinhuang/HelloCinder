@@ -32,10 +32,15 @@ void ScreenSaver::setup() {
   u_ = bigBang<universe_t>(getWindowWidth(), getWindowHeight());
   sysinfo_.init(*u_);
   ippInit();
+  gl::setMatricesWindow(getWindowWidth(), getWindowHeight(), false);
+  gl::scale(Vec3f(1, -1, 1));
 }
 
 void ScreenSaver::draw() {
-  gl::draw(u_->render());
+  auto &tex = u_->render();
+  gl::setViewport(tex.getBounds());
+  gl::setMatricesWindow(tex.getSize());
+  gl::draw(tex);
   font_->drawString(sysinfo_.msg(*this), getWindowBounds());
 }
 

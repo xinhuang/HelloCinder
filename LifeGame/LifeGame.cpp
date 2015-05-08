@@ -20,9 +20,10 @@ using namespace std;
 #include <omp.h>
 #include "vax.h"
 
-//#include <tbb/task_scheduler_init.h>
-
-// using namespace tbb;
+#if defined USE_TBB
+#include <tbb/tbb.h>
+using namespace tbb;
+#endif
 
 struct LifeGame::Data {
   bool suspend_ = false;
@@ -57,7 +58,6 @@ void LifeGame::setup() {
   createUniverse(getWindowWidth(), getWindowHeight());
 
   ippInit();
-  // task_scheduler_init init(4);
 }
 
 void LifeGame::createUniverse(int width, int height) {
