@@ -47,10 +47,9 @@ public:
   }
 
   std::string msg(const ci::app::App &app) const {
-    std::ostringstream oss;
-    oss << "#GEN \t" << ngen_ << std::endl << "SIZE \t" << size_ << std::endl
-        << "FPS \t" << app.getAverageFps() << std::endl << "Strategy \t"
-        << strategy_;
-    return oss.str();
+    char buf[128];
+    _snprintf_s(buf, sizeof(buf) - 1, "GEN \t#%d\nSIZE\t%d\nFPS \t%f\n%s\n", ngen_,
+              size_, app.getAverageFps(), strategy_.c_str());
+    return buf;
   }
 };
