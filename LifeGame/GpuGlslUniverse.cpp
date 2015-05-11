@@ -18,11 +18,12 @@ GpuGlslUniverse::GpuGlslUniverse(int width, int height) {
                                     loadResource(RES_LIFEGAME_FRAG));
   }
   catch (gl::GlslProgCompileExc &exc) {
-    std::cout << "Shader compile error: " << std::endl;
-    std::cout << exc.what();
+    std::cout << "Shader compile error: \n" << exc.what() << std::endl;
+	throw;
   }
   catch (...) {
     std::cout << "Unable to load shader" << std::endl;
+	throw;
   }
 
   fbos_[0] = gl::Fbo(width, height, false);

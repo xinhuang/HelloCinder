@@ -40,8 +40,8 @@ struct LifeGame::Data {
 };
 
 LifeGame::LifeGame() : d(make_unique<Data>()) {
-  d->creators_.push_back(bigBang<GpuGlslUniverse>);
   d->creators_.push_back(bigBang<CpuLoopUniverse>);
+  d->creators_.push_back(bigBang<GpuGlslUniverse>);
   d->creators_.push_back(bigBang<CpuLoopOmpUniverse>);
   d->creators_.push_back(bigBang<CpuIppUniverse>);
   d->creators_.push_back(bigBang<CpuIppOmpUniverse>);
