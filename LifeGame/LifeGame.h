@@ -26,6 +26,7 @@ public:
   void mouseDown(ci::app::MouseEvent e) override;
   void mouseUp(ci::app::MouseEvent e) override;
   void mouseWheel(ci::app::MouseEvent e) override;
+  void resize() final;
 
 private:
   void createUniverse(int width, int height);

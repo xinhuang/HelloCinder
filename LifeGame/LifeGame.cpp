@@ -32,9 +32,11 @@ struct LifeGame::Data {
   ci::Font font_;
   ci::Vec2f offset_;
   ci::Vec2f mouseDownOffset_;
+  ci::Area windowBounds_;
+  ci::Vec2i windowSize_;
 
   int iuniverse_ = 0;
-  vector<function<unique_ptr<IUniverse>(int, int)> > creators_;
+  vector<function<unique_ptr<IUniverse>(int, int)>> creators_;
   unique_ptr<IUniverse> u_;
   Sysinfo sysinfo_;
 };
@@ -68,9 +70,9 @@ void LifeGame::createUniverse(int width, int height) {
 
 void LifeGame::draw() {
   auto tex = d->u_->render();
-  gl::setViewport(tex.getBounds());
-  gl::setMatricesWindow(tex.getSize());
-  gl::draw(tex, getWindowBounds());
+  gl::setViewport(d->windowBounds_);
+  gl::setMatricesWindow(d->windowSize_);
+  gl::draw(tex, d->windowBounds_);
 
   TextBox label;
   label.setFont(d->font_);
@@ -86,6 +88,11 @@ void LifeGame::update() {
   }
 }
 
+void LifeGame::resize() {
+  d->windowBounds_ = getWindowBounds();
+  d->windowSize_ = getWindowSize();
+}
+
 void LifeGame::keyUp(KeyEvent e) {
   switch (e.getCode()) {
   case KeyEvent::KEY_RETURN:
@@ -98,7 +105,8 @@ void LifeGame::keyUp(KeyEvent e) {
     break;
 
   case KeyEvent::KEY_LEFT:
-    d->iuniverse_ = (d->iuniverse_ + d->creators_.size() - 1) % d->creators_.size();
+    d->iuniverse_ =
+        (d->iuniverse_ + d->creators_.size() - 1) % d->creators_.size();
     createUniverse(getWindowWidth(), getWindowHeight());
     break;
 
@@ -148,7 +156,7 @@ void LifeGame::keyDown(KeyEvent e) {
 
 Vec2i LifeGame::screenToUniverse(const Vec2i &v) const {
   return {(int)((v.x - d->offset_.x) / d->cellSize_),
-          (int)((v.y - d->offset_.y) / d->cellSize_) };
+          (int)((v.y - d->offset_.y) / d->cellSize_)};
 }
 
 void LifeGame::mouseUp(MouseEvent e) {
@@ -196,4 +204,4 @@ void LifeGame::zoom(float scale) {
     d->cellSize_ = GameConfig::MAX_CELL_SIZE;
 }
 
-CINDER_APP_BASIC(LifeGame, RendererGl)
+CINDER_APP_BASIC(LifeGame, RendererGl(RendererGl::AA_NONE))
