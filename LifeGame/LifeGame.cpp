@@ -7,7 +7,7 @@
 #include "Random.h"
 
 #include <cinder/cinder.h>
-#include <cinder/Font.h>
+#include <cinder/gl/TextureFont.h>
 
 using namespace ci;
 using namespace ci::app;
@@ -29,7 +29,7 @@ struct LifeGame::Data {
   bool suspend_ = false;
   bool dragging_ = false;
   float cellSize_ = GameConfig::INIT_CELL_SIZE;
-  ci::Font font_;
+  ci::gl::TextureFontRef font_;
   ci::Vec2f offset_;
   ci::Vec2f mouseDownOffset_;
   ci::Area windowBounds_;
@@ -53,7 +53,7 @@ LifeGame::LifeGame() : d(make_unique<Data>()) {
 }
 
 void LifeGame::setup() {
-  d->font_ = Font("Helvetica", 16);
+  d->font_ = TextureFont::create(Font("Arial", 20));
   gl::disableVerticalSync();
   setFrameRate(99999.f);
 
@@ -74,10 +74,7 @@ void LifeGame::draw() {
   gl::setMatricesWindow(d->windowSize_);
   gl::draw(tex, d->windowBounds_);
 
-  TextBox label;
-  label.setFont(d->font_);
-  label.setText(d->sysinfo_.msg(*this));
-  gl::draw(gl::Texture(label.render()));
+  d->font_->drawString(d->sysinfo_.msg(*this), d->windowBounds_);
 }
 
 void LifeGame::update() {
