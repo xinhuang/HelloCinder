@@ -51,15 +51,15 @@ public:
   }
 
   std::string msg(const ci::app::App &app) const {
-    char buf[128];
-    if (error_.empty())
-      _snprintf_s(buf, sizeof(buf) - 1, "GEN \t#%d\nSIZE\t%d\nFPS \t%f\n%s\n",
-                  ngen_, size_, app.getAverageFps(), strategy_.c_str());
-    else
-      _snprintf_s(buf, sizeof(buf) - 1,
-                  "GEN \t#%d\nSIZE\t%d\nFPS \t%f\n%s\nERROR\t%s\n", ngen_, size_,
-                  app.getAverageFps(), strategy_.c_str(), error_.c_str());
-    return buf;
+    char buf[256];
+    _snprintf_s(buf, sizeof(buf) - 1,
+                "<Left>/<Right>: Change "
+                "algorithm <Enter>: Re-generate "
+                "universe <Space>: Pause <G>: Toggle info display\nGEN "
+                "\t#%d\nSIZE\t%d\nFPS \t%f\n%s\n",
+                ngen_, size_, app.getAverageFps(), strategy_.c_str());
+
+    return error_.empty() ? buf : buf + ("\n" + error_);
   }
 
   void setError(const std::string &reason) { error_ = "Error: " + reason; }

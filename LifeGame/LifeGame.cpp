@@ -28,6 +28,7 @@ using namespace tbb;
 struct LifeGame::Data {
   bool suspend_ = false;
   bool dragging_ = false;
+  bool displayInfo_ = true;
   float cellSize_ = GameConfig::INIT_CELL_SIZE;
   ci::gl::TextureFontRef font_;
   ci::Vec2f offset_;
@@ -86,7 +87,8 @@ void LifeGame::draw() {
   gl::setMatricesWindow(d->windowSize_);
   gl::draw(tex, d->windowBounds_);
 
-  d->font_->drawString(d->sysinfo_.msg(*this), d->windowBounds_);
+  if (d->displayInfo_)
+	d->font_->drawString(d->sysinfo_.msg(*this), d->windowBounds_);
 }
 
 void LifeGame::update() {
@@ -138,6 +140,10 @@ void LifeGame::keyUp(KeyEvent e) {
   case KeyEvent::KEY_HOME:
   case KeyEvent::KEY_r:
     d->offset_ = {};
+    break;
+
+  case KeyEvent::KEY_g:
+    d->displayInfo_ = !d->displayInfo_;
     break;
   }
 }

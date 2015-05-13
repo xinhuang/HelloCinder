@@ -161,8 +161,7 @@ void AbstractCpuUniverse::nextLoopOmp(ci::Channel &src,
   }
   fill(pSrcData, pSrcData + (width - 1) * cbSrcInc, 0x00);
   fill(pSrcData + (height - 1) * cbSrcRow,
-       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc,
-       ALIVE_COLOR);
+       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc, 0x00);
 
   static const int x[] = { 1, 1, 0, -1, -1, -1, 0, 1, };
   static const int y[] = { 0, 1, 1, 1, 0, -1, -1, -1, };
@@ -401,7 +400,7 @@ void AbstractCpuUniverse::nextAvxOmp(ci::Channel &src, ci::Channel &dst) const {
     ui8vcmpcu(width - 2, dst_row, dst_row, 3, ivEq);
 
     ui8voru(width - 2, sum, dst_row, dst_row);
-	aligned_free(sum);
+    aligned_free(sum);
   }
 }
 
