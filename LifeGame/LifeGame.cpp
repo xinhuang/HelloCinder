@@ -39,17 +39,18 @@ struct LifeGame::Data {
   vector<function<unique_ptr<IUniverse>(int, int)>> creators_;
   unique_ptr<IUniverse> u_;
   Sysinfo sysinfo_;
-
+  
   const int FALLBACK = 0;
 };
 
 LifeGame::LifeGame() : d(make_unique<Data>()) {
   d->creators_.push_back(bigBang<CpuLoopUniverse>);
+  d->creators_.push_back(bigBang<CpuAvxUniverse>);
+  d->creators_.push_back(bigBang<CpuAvxOmpUniverse>);
   d->creators_.push_back(bigBang<GpuGlslUniverse>);
   d->creators_.push_back(bigBang<CpuLoopOmpUniverse>);
   d->creators_.push_back(bigBang<CpuIppUniverse>);
   d->creators_.push_back(bigBang<CpuIppOmpUniverse>);
-  d->creators_.push_back(bigBang<CpuAvxUniverse>);
 #if defined USE_TBB
   d->creators_.push_back(bigBang<CpuIppTbbUniverse>);
 #endif // USE_TBB

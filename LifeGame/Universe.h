@@ -64,6 +64,7 @@ protected:
   void nextIppTbb(ci::Channel &src, ci::Channel &dst) const;
   void nextIppOmp(ci::Channel &src, ci::Channel &dst) const;
   void nextAvx(ci::Channel &src, ci::Channel &dst) const;
+  void nextAvxOmp(ci::Channel &src, ci::Channel &dst) const;
   void next(uint8_t *src, int srcStride, uint8_t *dest, int destStride,
             const ci::Vec2i &roi) const;
 
@@ -144,5 +145,18 @@ public:
 protected:
 	void next(ci::Channel &src, ci::Channel &dst) const final {
 		nextAvx(src, dst);
+	}
+};
+
+class CpuAvxOmpUniverse : public AbstractCpuUniverse {
+public:
+	CpuAvxOmpUniverse(int width, int height)
+		: AbstractCpuUniverse(width, height) {}
+
+	std::string name() const { return "CPU AVX OpenMP"; }
+
+protected:
+	void next(ci::Channel &src, ci::Channel &dst) const final {
+		nextAvxOmp(src, dst);
 	}
 };

@@ -15,11 +15,13 @@ using namespace ci;
 #include "vax.h"
 #include "ivlib.h"
 
-//#include "tbb/task_scheduler_init.h"
-//#include "tbb/blocked_range.h"
-//#include "tbb/parallel_for.h"
-//
-// using namespace tbb;
+#ifdef USE_TBB
+#include "tbb/task_scheduler_init.h"
+#include "tbb/blocked_range.h"
+#include "tbb/parallel_for.h"
+
+using namespace tbb;
+#endif // USE_TBB
 
 #include "Random.h"
 #include "GameConfig.h"
@@ -104,8 +106,7 @@ void AbstractCpuUniverse::nextLoop(ci::Channel &src, ci::Channel &dst) const {
   }
   fill(pSrcData, pSrcData + (width - 1) * cbSrcInc, 0x00);
   fill(pSrcData + (height - 1) * cbSrcRow,
-       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc,
-       ALIVE_COLOR);
+       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc, 0x00);
 
   static const int x[] = { 1, 1, 0, -1, -1, -1, 0, 1, };
   static const int y[] = { 0, 1, 1, 1, 0, -1, -1, -1, };
@@ -208,8 +209,7 @@ void AbstractCpuUniverse::nextIpp(ci::Channel &src, ci::Channel &dst) const {
   }
   fill(pSrcData, pSrcData + (width - 1) * cbSrcInc, 0x00);
   fill(pSrcData + (height - 1) * cbSrcRow,
-       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc,
-       ALIVE_COLOR);
+       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc, 0x00);
 
   ippiAndC_8u_C1R(pSrcData, cbSrcRow, 1, pSrcData, cbSrcRow,
                   { width, height }); // map ALIVE_COLOR -> 1
@@ -245,8 +245,7 @@ void AbstractCpuUniverse::nextIppOmp(ci::Channel &src, ci::Channel &dst) const {
   }
   fill(pSrcData, pSrcData + (width - 1) * cbSrcInc, 0x00);
   fill(pSrcData + (height - 1) * cbSrcRow,
-       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc,
-       ALIVE_COLOR);
+       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc, 0x00);
 
   ippiAndC_8u_C1R(pSrcData, cbSrcRow, 1, pSrcData, cbSrcRow,
                   { width, height }); // map ALIVE_COLOR -> 1
@@ -320,13 +319,12 @@ void AbstractCpuUniverse::nextAvx(ci::Channel &src, ci::Channel &dst) const {
   auto cbDestInc = dst.getIncrement();
 
   for (int r = 0; r < height; ++r) {
-	  *(pSrcData + r *cbSrcRow) = 0x00;
-	  *(pSrcData + r *cbSrcRow + (width - 1) *cbSrcInc) = 0x00;
+    *(pSrcData + r *cbSrcRow) = 0x00;
+    *(pSrcData + r *cbSrcRow + (width - 1) *cbSrcInc) = 0x00;
   }
   fill(pSrcData, pSrcData + (width - 1) * cbSrcInc, 0x00);
   fill(pSrcData + (height - 1) * cbSrcRow,
-	  pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc,
-	  ALIVE_COLOR);
+       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc, 0x00);
 
   for (int r = 0; r < height; ++r)
     ui8vandcu(width, src.getData() + src.getRowBytes() * r,
@@ -338,25 +336,76 @@ void AbstractCpuUniverse::nextAvx(ci::Channel &src, ci::Channel &dst) const {
   auto sum = aligned_malloc<uint8_t>(width - 2, 32);
   for (int r = 1; r < height - 1; ++r) {
     uint8_t *row = src.getData() + src.getRowBytes() * r + src.getIncrement();
-    uint8_t *dst_row = dst.getData() + dst.getRowBytes() * r + dst.getIncrement();
+    uint8_t *dst_row =
+        dst.getData() + dst.getRowBytes() * r + dst.getIncrement();
     memcpy(sum, row + y[0] * src.getRowBytes() + x[0] * src.getIncrement(),
            width - 2);
-	for (int i = 1; i < 8; ++i)
-          ui8vaddu(width - 2, sum,
-                   row + y[i] * src.getRowBytes() + x[i] * src.getIncrement(),
-                   sum);
+    for (int i = 1; i < 8; ++i)
+      ui8vaddu(width - 2, sum,
+               row + y[i] * src.getRowBytes() + x[i] * src.getIncrement(), sum);
 
     memcpy(dst_row, sum, width - 2);
 
     ui8vcmpcu(width - 2, sum, sum, 2, ivEq);
     ui8vandu(width - 2, sum, row, sum);
 
-	ui8vcmpcu(width - 2, dst_row, dst_row, 3, ivEq);
+    ui8vcmpcu(width - 2, dst_row, dst_row, 3, ivEq);
 
     ui8voru(width - 2, sum, dst_row, dst_row);
   }
 
   aligned_free(sum);
+}
+
+void AbstractCpuUniverse::nextAvxOmp(ci::Channel &src, ci::Channel &dst) const {
+  const int width = src.getWidth();
+  const int height = src.getHeight();
+
+  auto pSrcData = src.getData();
+  auto cbSrcRow = src.getRowBytes();
+  auto cbSrcInc = src.getIncrement();
+
+  auto pDstData = dst.getData();
+  auto cbDestRow = dst.getRowBytes();
+  auto cbDestInc = dst.getIncrement();
+
+  for (int r = 0; r < height; ++r) {
+    *(pSrcData + r *cbSrcRow) = 0x00;
+    *(pSrcData + r *cbSrcRow + (width - 1) *cbSrcInc) = 0x00;
+  }
+  fill(pSrcData, pSrcData + (width - 1) * cbSrcInc, 0x00);
+  fill(pSrcData + (height - 1) * cbSrcRow,
+       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc, 0x00);
+
+  for (int r = 0; r < height; ++r)
+    ui8vandcu(width, src.getData() + src.getRowBytes() * r,
+              src.getData() + src.getRowBytes() * r, 1);
+
+  const int x[] = { 1, 1, 0, -1, -1, -1, 0, 1, };
+  const int y[] = { 0, 1, 1, 1, 0, -1, -1, -1, };
+
+#pragma omp parallel for
+  for (int r = 1; r < height - 1; ++r) {
+    auto sum = aligned_malloc<uint8_t>(width - 2, 32);
+    uint8_t *row = src.getData() + src.getRowBytes() * r + src.getIncrement();
+    uint8_t *dst_row =
+        dst.getData() + dst.getRowBytes() * r + dst.getIncrement();
+    memcpy(sum, row + y[0] * src.getRowBytes() + x[0] * src.getIncrement(),
+           width - 2);
+    for (int i = 1; i < 8; ++i)
+      ui8vaddu(width - 2, sum,
+               row + y[i] * src.getRowBytes() + x[i] * src.getIncrement(), sum);
+
+    memcpy(dst_row, sum, width - 2);
+
+    ui8vcmpcu(width - 2, sum, sum, 2, ivEq);
+    ui8vandu(width - 2, sum, row, sum);
+
+    ui8vcmpcu(width - 2, dst_row, dst_row, 3, ivEq);
+
+    ui8voru(width - 2, sum, dst_row, dst_row);
+	aligned_free(sum);
+  }
 }
 
 void AbstractCpuUniverse::next(uint8_t *src, int srcStride, uint8_t *dest,
