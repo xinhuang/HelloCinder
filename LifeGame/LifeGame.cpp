@@ -39,6 +39,8 @@ struct LifeGame::Data {
   vector<function<unique_ptr<IUniverse>(int, int)>> creators_;
   unique_ptr<IUniverse> u_;
   Sysinfo sysinfo_;
+
+  const int FALLBACK = 1;
 };
 
 LifeGame::LifeGame() : d(make_unique<Data>()) {
@@ -63,9 +65,15 @@ void LifeGame::setup() {
 }
 
 void LifeGame::createUniverse(int width, int height) {
-  d->u_ = d->creators_[d->iuniverse_](width, height);
-  d->sysinfo_.init(*(d->u_));
-  d->offset_ = {};
+  try {
+    d->u_ = d->creators_[d->iuniverse_](width, height);
+    d->sysinfo_.init(*(d->u_));   // rename to bind
+    d->offset_ = {};
+  } catch (std::runtime_error &e) {
+	d->u_ = d->creators_[d->FALLBACK](width, height);
+	d->sysinfo_.init(*(d->u_), e.what());
+	d->offset_ = {};
+  }
 }
 
 void LifeGame::draw() {

@@ -17,12 +17,11 @@ GpuGlslUniverse::GpuGlslUniverse(int width, int height) {
     mShader_ = gl::GlslProg::create(loadResource(RES_PASSTHRU_VERT),
                                     loadResource(RES_LIFEGAME_FRAG));
   }
-  catch (gl::GlslProgCompileExc &exc) {
-    std::cout << "Shader compile error: " << std::endl;
-    std::cout << exc.what();
+  catch (gl::GlslProgCompileExc &e) {
+	throw std::runtime_error(std::string("Unable to create GPU universe. GLSL compile error: ") + e.what());
   }
   catch (...) {
-    std::cout << "Unable to load shader" << std::endl;
+	throw std::runtime_error("Unable to create GPU universe. Failed to load shader.");
   }
 
   fbos_[0] = gl::Fbo(width, height, false);
