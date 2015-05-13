@@ -56,6 +56,9 @@
     <ClCompile Include="..\LifeGame\GpuGlslUniverse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\LifeGame\ivlib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\LifeGame\resources\LifeGame_frag.glsl">

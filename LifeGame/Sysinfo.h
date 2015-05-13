@@ -14,6 +14,7 @@ class Sysinfo {
   size_t count_ = 0;
   size_t fps_ = 0;
   std::string strategy_;
+  std::string error_;
 
 public:
   void onPreGen(const IUniverse &u) {}
@@ -37,19 +38,29 @@ public:
     return std::chrono::duration_cast<std::chrono::seconds>(now - timestamp_);
   }
 
-  void init(const IUniverse &u) {
+  void init(const IUniverse &u) { init(u, ""); }
+
+  void init(const IUniverse &u, const std::string &errmsg) {
     ngen_ = 0;
     count_ = 0;
     fps_ = 0;
     size_ = u.size();
     timestamp_ = std::chrono::steady_clock::now();
     strategy_ = u.name();
+    error_ = errmsg;
   }
 
   std::string msg(const ci::app::App &app) const {
     char buf[128];
-    _snprintf_s(buf, sizeof(buf) - 1, "GEN \t#%d\nSIZE\t%d\nFPS \t%f\n%s\n", ngen_,
-              size_, app.getAverageFps(), strategy_.c_str());
+    if (error_.empty())
+      _snprintf_s(buf, sizeof(buf) - 1, "GEN \t#%d\nSIZE\t%d\nFPS \t%f\n%s\n",
+                  ngen_, size_, app.getAverageFps(), strategy_.c_str());
+    else
+      _snprintf_s(buf, sizeof(buf) - 1,
+                  "GEN \t#%d\nSIZE\t%d\nFPS \t%f\n%s\nERROR\t%s\n", ngen_, size_,
+                  app.getAverageFps(), strategy_.c_str(), error_.c_str());
     return buf;
   }
+
+  void setError(const std::string &reason) { error_ = "Error: " + reason; }
 };

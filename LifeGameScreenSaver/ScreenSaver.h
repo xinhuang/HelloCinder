@@ -20,7 +20,8 @@ public:
 
 private:
   const std::chrono::seconds REFRESH_TIME = { 300 };
-  typedef GpuGlslUniverse universe_t;
+  //typedef GpuGlslUniverse universe_t;
+  typedef CpuLoopOmpUniverse universe_t;
 
   Sysinfo sysinfo_;
   ci::gl::TextureFontRef font_;

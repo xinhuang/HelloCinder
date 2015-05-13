@@ -63,6 +63,7 @@ protected:
   void nextIpp(ci::Channel &src, ci::Channel &dst) const;
   void nextIppTbb(ci::Channel &src, ci::Channel &dst) const;
   void nextIppOmp(ci::Channel &src, ci::Channel &dst) const;
+  void nextAvx(ci::Channel &src, ci::Channel &dst) const;
   void next(uint8_t *src, int srcStride, uint8_t *dest, int destStride,
             const ci::Vec2i &roi) const;
 
@@ -122,13 +123,26 @@ protected:
 
 class CpuIppTbbUniverse : public AbstractCpuUniverse {
 public:
-  CpuIppTbbUniverse(int width, int height)
-      : AbstractCpuUniverse(width, height) {}
+	CpuIppTbbUniverse(int width, int height)
+		: AbstractCpuUniverse(width, height) {}
 
-  std::string name() const { return "CPU IPP with TBB"; }
+	std::string name() const { return "CPU IPP with TBB"; }
 
 protected:
-  void next(ci::Channel &src, ci::Channel &dst) const final {
-    nextIppTbb(src, dst);
-  }
+	void next(ci::Channel &src, ci::Channel &dst) const final {
+		nextIppTbb(src, dst);
+	}
+};
+
+class CpuAvxUniverse : public AbstractCpuUniverse {
+public:
+	CpuAvxUniverse(int width, int height)
+		: AbstractCpuUniverse(width, height) {}
+
+	std::string name() const { return "CPU AVX"; }
+
+protected:
+	void next(ci::Channel &src, ci::Channel &dst) const final {
+		nextAvx(src, dst);
+	}
 };

@@ -6,7 +6,7 @@ using namespace std;
 
 #include <immintrin.h>
 
-void *aligned_malloc(int size, int alignment) {
+void *aligned_malloc_impl(int size, int alignment) {
   assert(alignment == 4 || alignment == 8 || alignment == 16 ||
          alignment == 32);
 

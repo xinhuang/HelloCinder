@@ -102,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\LifeGame\GpuGlslUniverse.cpp" />
+    <ClCompile Include="..\LifeGame\ivlib.cpp" />
     <ClCompile Include="..\LifeGame\stdafx.cpp" />
     <ClCompile Include="..\LifeGame\Universe.cpp" />
     <ClCompile Include="..\LifeGame\vax.cpp" />

@@ -39,6 +39,8 @@ struct LifeGame::Data {
   vector<function<unique_ptr<IUniverse>(int, int)>> creators_;
   unique_ptr<IUniverse> u_;
   Sysinfo sysinfo_;
+
+  const int FALLBACK = 0;
 };
 
 LifeGame::LifeGame() : d(make_unique<Data>()) {
@@ -47,6 +49,7 @@ LifeGame::LifeGame() : d(make_unique<Data>()) {
   d->creators_.push_back(bigBang<CpuLoopOmpUniverse>);
   d->creators_.push_back(bigBang<CpuIppUniverse>);
   d->creators_.push_back(bigBang<CpuIppOmpUniverse>);
+  d->creators_.push_back(bigBang<CpuAvxUniverse>);
 #if defined USE_TBB
   d->creators_.push_back(bigBang<CpuIppTbbUniverse>);
 #endif // USE_TBB
@@ -63,9 +66,15 @@ void LifeGame::setup() {
 }
 
 void LifeGame::createUniverse(int width, int height) {
-  d->u_ = d->creators_[d->iuniverse_](width, height);
-  d->sysinfo_.init(*(d->u_));
-  d->offset_ = {};
+  try {
+    d->u_ = d->creators_[d->iuniverse_](width, height);
+    d->sysinfo_.init(*(d->u_));   // rename to bind
+    d->offset_ = {};
+  } catch (std::runtime_error &e) {
+	d->u_ = d->creators_[d->FALLBACK](width, height);
+	d->sysinfo_.init(*(d->u_), e.what());
+	d->offset_ = {};
+  }
 }
 
 void LifeGame::draw() {
@@ -98,7 +107,7 @@ void LifeGame::keyUp(KeyEvent e) {
 
   case KeyEvent::KEY_RIGHT:
     d->iuniverse_ = (d->iuniverse_ + 1) % d->creators_.size();
-    createUniverse(getWindowWidth(), getWindowHeight());
+	createUniverse(getWindowWidth(), getWindowHeight());
     break;
 
   case KeyEvent::KEY_LEFT:
