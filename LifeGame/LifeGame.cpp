@@ -37,10 +37,10 @@ struct LifeGame::Data {
   ci::Vec2i windowSize_;
 
   int iuniverse_ = 0;
-  vector<function<unique_ptr<IUniverse>(int, int)>> creators_;
+  vector<function<unique_ptr<IUniverse>(int, int)> > creators_;
   unique_ptr<IUniverse> u_;
   Sysinfo sysinfo_;
-  
+
   const int FALLBACK = 0;
 };
 
@@ -60,7 +60,7 @@ LifeGame::LifeGame() : d(make_unique<Data>()) {
 }
 
 void LifeGame::setup() {
-  d->font_ = TextureFont::create(Font("Arial", 20));
+  d->font_ = TextureFont::create(Font("Arial", 16));
   gl::disableVerticalSync();
   setFrameRate(99999.f);
 
@@ -72,12 +72,13 @@ void LifeGame::setup() {
 void LifeGame::createUniverse(int width, int height) {
   try {
     d->u_ = d->creators_[d->iuniverse_](width, height);
-    d->sysinfo_.init(*(d->u_));   // rename to bind
+    d->sysinfo_.init(*(d->u_)); // rename to bind
     d->offset_ = {};
-  } catch (std::runtime_error &e) {
-	d->u_ = d->creators_[d->FALLBACK](width, height);
-	d->sysinfo_.init(*(d->u_), e.what());
-	d->offset_ = {};
+  }
+  catch (std::runtime_error &e) {
+    d->u_ = d->creators_[d->FALLBACK](width, height);
+    d->sysinfo_.init(*(d->u_), e.what());
+    d->offset_ = {};
   }
 }
 
@@ -87,8 +88,11 @@ void LifeGame::draw() {
   gl::setMatricesWindow(d->windowSize_);
   gl::draw(tex, d->windowBounds_);
 
-  if (d->displayInfo_)
-	d->font_->drawString(d->sysinfo_.msg(*this), d->windowBounds_);
+  if (d->displayInfo_) {
+    gl::enableAlphaBlending();
+    d->font_->drawString(d->sysinfo_.msg(*this), d->windowBounds_);
+	gl::disableAlphaBlending();
+  }
 }
 
 void LifeGame::update() {
@@ -112,7 +116,7 @@ void LifeGame::keyUp(KeyEvent e) {
 
   case KeyEvent::KEY_RIGHT:
     d->iuniverse_ = (d->iuniverse_ + 1) % d->creators_.size();
-	createUniverse(getWindowWidth(), getWindowHeight());
+    createUniverse(getWindowWidth(), getWindowHeight());
     break;
 
   case KeyEvent::KEY_LEFT:
@@ -171,7 +175,7 @@ void LifeGame::keyDown(KeyEvent e) {
 
 Vec2i LifeGame::screenToUniverse(const Vec2i &v) const {
   return {(int)((v.x - d->offset_.x) / d->cellSize_),
-          (int)((v.y - d->offset_.y) / d->cellSize_)};
+          (int)((v.y - d->offset_.y) / d->cellSize_) };
 }
 
 void LifeGame::mouseUp(MouseEvent e) {

@@ -54,8 +54,8 @@ public:
     char buf[256];
     _snprintf_s(buf, sizeof(buf) - 1,
                 "<Left>/<Right>: Change "
-                "algorithm <Enter>: Re-generate "
-                "universe <Space>: Pause <G>: Toggle info display\nGEN "
+                "algorithm\n<Enter>: Re-generate "
+                "universe\n<Space>: Pause\n<G>: Toggle info display\nGEN "
                 "\t#%d\nSIZE\t%d\nFPS \t%f\n%s\n",
                 ngen_, size_, app.getAverageFps(), strategy_.c_str());
 
