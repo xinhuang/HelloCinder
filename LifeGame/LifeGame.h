@@ -20,12 +20,13 @@ public:
   void draw() override;
   void update() override;
 
-  void keyUp(ci::app::KeyEvent e) override;
-  void keyDown(ci::app::KeyEvent e) override;
-  void mouseDrag(ci::app::MouseEvent e) override;
-  void mouseDown(ci::app::MouseEvent e) override;
-  void mouseUp(ci::app::MouseEvent e) override;
-  void mouseWheel(ci::app::MouseEvent e) override;
+  void keyUp(ci::app::KeyEvent e) final;
+  void keyDown(ci::app::KeyEvent e) final;
+  void mouseDrag(ci::app::MouseEvent e) final;
+  void mouseDown(ci::app::MouseEvent e) final;
+  void mouseUp(ci::app::MouseEvent e) final;
+  void mouseWheel(ci::app::MouseEvent e) final;
+  void resize() final;
 
 private:
   void createUniverse(int width, int height);

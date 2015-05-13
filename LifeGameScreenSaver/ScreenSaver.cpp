@@ -28,7 +28,7 @@ using namespace ci::gl;
 ScreenSaver::ScreenSaver() {}
 
 void ScreenSaver::setup() {
-  font_ = TextureFont::create(Font("Consolas", 20));
+  font_ = TextureFont::create(Font("Arial", 20));
   u_ = bigBang<universe_t>(getWindowWidth(), getWindowHeight());
   sysinfo_.init(*u_);
   ippInit();
