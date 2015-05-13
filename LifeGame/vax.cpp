@@ -6,30 +6,7 @@ using namespace std;
 
 #include <immintrin.h>
 
-void *aligned_malloc_impl(int size, int alignment) {
-  assert(alignment == 4 || alignment == 8 || alignment == 16 ||
-         alignment == 32);
-
-  const int payload_size = sizeof(intptr_t);
-  auto alloc_size = alignment - 1 + payload_size + size;
-  auto origin = new uint8_t[alloc_size];
-  if (!origin)
-    return origin;
-  auto ptr = reinterpret_cast<uintptr_t>(origin + payload_size);
-  ptr += (alignment - ptr % alignment) % alignment;
-  assert(ptr % alignment == 0);
-  ((void **)ptr)[-1] = origin;
-  return reinterpret_cast<void *>(ptr);
-}
-
-void aligned_free(void *ptr) {
-  if (!ptr)
-    return;
-  void *origin = static_cast<void **>(ptr)[-1];
-  delete origin;
-}
-
-#if !defined NO_PRIVATE_IPP
+#ifdef NO_IPP
 
 IppStatus ippInit() { return ippStsNoErr; }
 
@@ -119,4 +96,4 @@ IppStatus ippiCompareC_8u_C1R(const uint8_t *pSrc, int srcStep, uint8_t value,
   return ippStsNoErr;
 }
 
-#endif // USE_IPP
+#endif // NO_IPP

@@ -8,6 +8,8 @@
 #include <memory>
 #include <iosfwd>
 
+#include "ivlib.h"
+
 struct Point;
 
 class IUniverse {
@@ -124,39 +126,42 @@ protected:
 
 class CpuIppTbbUniverse : public AbstractCpuUniverse {
 public:
-	CpuIppTbbUniverse(int width, int height)
-		: AbstractCpuUniverse(width, height) {}
+  CpuIppTbbUniverse(int width, int height)
+      : AbstractCpuUniverse(width, height) {}
 
-	std::string name() const { return "CPU IPP with TBB"; }
+  std::string name() const { return "CPU IPP with TBB"; }
 
 protected:
-	void next(ci::Channel &src, ci::Channel &dst) const final {
-		nextIppTbb(src, dst);
-	}
+  void next(ci::Channel &src, ci::Channel &dst) const final {
+    nextIppTbb(src, dst);
+  }
 };
 
 class CpuAvxUniverse : public AbstractCpuUniverse {
 public:
-	CpuAvxUniverse(int width, int height)
-		: AbstractCpuUniverse(width, height) {}
+  CpuAvxUniverse(int width, int height) : AbstractCpuUniverse(width, height) {
+    sum = aligned_malloc<uint8_t>(width - 2, 32);
+  }
+  ~CpuAvxUniverse() final { aligned_free(sum); }
 
-	std::string name() const { return "CPU AVX"; }
+  std::string name() const { return "CPU AVX"; }
 
 protected:
-	void next(ci::Channel &src, ci::Channel &dst) const final {
-		nextAvx(src, dst);
-	}
+  void next(ci::Channel &src, ci::Channel &dst) const final;
+
+private:
+  uint8_t *sum;
 };
 
 class CpuAvxOmpUniverse : public AbstractCpuUniverse {
 public:
-	CpuAvxOmpUniverse(int width, int height)
-		: AbstractCpuUniverse(width, height) {}
+  CpuAvxOmpUniverse(int width, int height)
+      : AbstractCpuUniverse(width, height) {}
 
-	std::string name() const { return "CPU AVX OpenMP"; }
+  std::string name() const { return "CPU AVX OpenMP"; }
 
 protected:
-	void next(ci::Channel &src, ci::Channel &dst) const final {
-		nextAvxOmp(src, dst);
-	}
+  void next(ci::Channel &src, ci::Channel &dst) const final {
+    nextAvxOmp(src, dst);
+  }
 };

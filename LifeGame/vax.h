@@ -3,21 +3,16 @@
 #include <cstdint>
 #include <cassert>
 
-void *aligned_malloc_impl(int size, int alignment);
-void aligned_free(void *ptr);
-template <typename T>
-T* aligned_malloc(int size, int alignment) { 
-	return reinterpret_cast<T*>(aligned_malloc_impl(size, alignment)); 
-}
-
 #if defined _IPP_PARALLEL_STATIC || defined _IPP_PARALLEL_DYNAMIC ||           \
     defined _IPP_SEQUENTIAL_STATIC || defined _IPP_SEQUENTIAL_DYNAMIC
 
 #include <ipp.h>
 
-#define NO_PRIVATE_IPP
-
 #else
+
+#define NO_IPP
+
+#include "ivlib.h"
 
 enum IppStatus {
   ippStsNoErr,

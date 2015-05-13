@@ -4,6 +4,18 @@
 
 //#ifdef __cplusplus
 
+void *aligned_malloc_impl(int size, int alignment);
+void aligned_free(void *ptr);
+
+#ifdef __cplusplus
+template <typename T>
+T* aligned_malloc(int size, int alignment) {
+	return reinterpret_cast<T*>(aligned_malloc_impl(size, alignment));
+}
+#else
+#define aligned_malloc aligned_malloc_impl
+#endif // __cplusplus
+
 void ui8vadd(int n, const uint8_t *lhs, const uint8_t *rhs, uint8_t *dst);
 void ui8vaddu(int n, const uint8_t *lhs, const uint8_t *rhs, uint8_t *dst);
 

@@ -306,7 +306,7 @@ void AbstractCpuUniverse::nextIppTbb(ci::Channel &src, ci::Channel &dst) const {
 #endif // USE_TBB
 }
 
-void AbstractCpuUniverse::nextAvx(ci::Channel &src, ci::Channel &dst) const {
+void CpuAvxUniverse::next(ci::Channel &src, ci::Channel &dst) const {
   const int width = src.getWidth();
   const int height = src.getHeight();
 
@@ -333,7 +333,6 @@ void AbstractCpuUniverse::nextAvx(ci::Channel &src, ci::Channel &dst) const {
   const int x[] = { 1, 1, 0, -1, -1, -1, 0, 1, };
   const int y[] = { 0, 1, 1, 1, 0, -1, -1, -1, };
 
-  auto sum = aligned_malloc<uint8_t>(width - 2, 32);
   for (int r = 1; r < height - 1; ++r) {
     uint8_t *row = src.getData() + src.getRowBytes() * r + src.getIncrement();
     uint8_t *dst_row =
@@ -353,8 +352,6 @@ void AbstractCpuUniverse::nextAvx(ci::Channel &src, ci::Channel &dst) const {
 
     ui8voru(width - 2, sum, dst_row, dst_row);
   }
-
-  aligned_free(sum);
 }
 
 void AbstractCpuUniverse::nextAvxOmp(ci::Channel &src, ci::Channel &dst) const {
