@@ -13,6 +13,7 @@ using namespace std;
 using namespace ci;
 
 #include "vax.h"
+#include "ivlib.h"
 
 //#include "tbb/task_scheduler_init.h"
 //#include "tbb/blocked_range.h"
@@ -312,6 +313,42 @@ void AbstractCpuUniverse::nextIppTbb(ci::Channel &src, ci::Channel &dst) const {
 #else
   throw exception("TBB not availible");
 #endif // USE_TBB
+}
+
+void AbstractCpuUniverse::nextAvx(ci::Channel &src, ci::Channel &dst) const {
+	const int width = src.getWidth();
+	const int height = src.getHeight();
+
+	const int x[] = {
+		1, 1, 0, -1, -1, -1, 0, 1,
+	};
+	const int y[] = {
+		0, 1, 1, 1, 0, -1, -1, -1,
+	};
+
+	auto sum = aligned_malloc<uint8_t>(width - 2, 64);
+	for (int c = 1; c < height; ++c) {
+		uint8_t* row = src.getData() + src.getRowBytes() * c;
+		uint8_t* dst_row = dst.getData() + dst.getRowBytes() + dst.getIncrement();
+		/*
+		sum <- row + y[0] * rowSize + x[0]
+		sum = row + y[1] * rs + x[1] + sum
+		*/
+		memcpy(sum, row + y[0] * src.getRowBytes() + x[0] * src.getIncrement(), width - 2);
+		for (int i = 1; i < 8; ++i)
+			ui8vaddu(width - 2, sum, width - 2, row + y[i] * src.getRowBytes() + x[i] * src.getIncrement(), src.getRowBytes(), sum, width - 2);
+
+		memcpy(sum, dst_row, width - 2);
+		
+		ui8vcmpcu(width - 2, sum, sum, 2, ivEq);
+		ui8vandu(width - 2, sum, row, sum);
+
+		ui8vcmpcu(width - 2, dst_row, sum, 3, ivEq);
+
+		ui8voru(width - 2, sum, dst_row, dst_row);
+	}
+
+	aligned_free(sum);
 }
 
 void AbstractCpuUniverse::next(uint8_t *src, int srcStride, uint8_t *dest,

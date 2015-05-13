@@ -98,6 +98,7 @@
   <ItemGroup>
     <ClInclude Include="GameConfig.h" />
     <ClInclude Include="GpuGlslUniverse.h" />
+    <ClInclude Include="ivlib.h" />
     <ClInclude Include="LifeGame.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Resources.h" />
@@ -108,6 +109,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GpuGlslUniverse.cpp" />
+    <ClCompile Include="ivlib.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="LifeGame.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

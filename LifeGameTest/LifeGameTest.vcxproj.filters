@@ -1,51 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="LifeGame">
-      <UniqueIdentifier>{f642f306-dc99-41ae-9139-3de50aa69f90}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Test">
       <UniqueIdentifier>{abc0fdc1-684d-4510-9862-24ad9e9411ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{c9a802f2-4246-4c8f-acde-15b6ab1daf14}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\LifeGame\Cell.h">
-      <Filter>LifeGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LifeGame\Rule.h">
-      <Filter>LifeGame</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>LifeGame</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>LifeGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LifeGame\Universe.h">
-      <Filter>LifeGame</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>LifeGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\LifeGame\Universe.cpp">
-      <Filter>LifeGame</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Test</Filter>
     </ClCompile>
-    <ClCompile Include="RuleTest.cpp">
+    <ClCompile Include="ivtest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
-    <ClCompile Include="UniverseTest.cpp">
-      <Filter>Test</Filter>
+    <ClCompile Include="..\LifeGame\ivlib.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\LifeGame\Rule.cpp">
-      <Filter>LifeGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\LifeGame\Cell.cpp">
-      <Filter>LifeGame</Filter>
-    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\LifeGame\ivlib.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

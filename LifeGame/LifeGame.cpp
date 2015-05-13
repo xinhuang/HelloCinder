@@ -49,6 +49,7 @@ LifeGame::LifeGame() : d(make_unique<Data>()) {
   d->creators_.push_back(bigBang<CpuLoopOmpUniverse>);
   d->creators_.push_back(bigBang<CpuIppUniverse>);
   d->creators_.push_back(bigBang<CpuIppOmpUniverse>);
+  d->creators_.push_back(bigBang<CpuAvxUniverse>);
 #if defined USE_TBB
   d->creators_.push_back(bigBang<CpuIppTbbUniverse>);
 #endif // USE_TBB

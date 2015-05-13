@@ -3,8 +3,12 @@
 #include <cstdint>
 #include <cassert>
 
-void *aligned_malloc(int size, int alignment);
+void *aligned_malloc_impl(int size, int alignment);
 void aligned_free(void *ptr);
+template <typename T>
+T* aligned_malloc(int size, int alignment) { 
+	return reinterpret_cast<T*>(aligned_malloc_impl(size, alignment)); 
+}
 
 #if defined _IPP_PARALLEL_STATIC || defined _IPP_PARALLEL_DYNAMIC ||           \
     defined _IPP_SEQUENTIAL_STATIC || defined _IPP_SEQUENTIAL_DYNAMIC
@@ -36,7 +40,7 @@ IppStatus ippInit();
 
 inline uint8_t *ippsMalloc_8u(int size) {
   assert(size >= sizeof(intptr_t));
-  return static_cast<uint8_t *>(aligned_malloc(size, 32));
+  return aligned_malloc<uint8_t>(size, 32);
 }
 
 inline void ippsFree(void *p) { return aligned_free(p); }
