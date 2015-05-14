@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Roll", "Roll\Roll.vcxproj", "{918E15DE-B36B-4A59-903F-16E25D93C885}"
 EndProject
@@ -10,15 +10,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DrMario", "DrMario\DrMario.vcxproj", "{E2C53528-BF73-41A3-A9F6-2A2D26701E2F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LifeGame", "LifeGame\LifeGame.vcxproj", "{A592EB37-DD69-4D79-AEE4-26A8DEE86747}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HCUI", "HCUI\HCUI.vcxproj", "{7470CB15-31C2-4F76-BDBC-1E39B3926EC2}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HCT", "HCT\HCT.vcxproj", "{F126EDBB-D971-45E3-BF68-CCFDFAAF50BF}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7470CB15-31C2-4F76-BDBC-1E39B3926EC2} = {7470CB15-31C2-4F76-BDBC-1E39B3926EC2}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LifeGameBenchmark", "LifeGameBenchmark\LifeGameBenchmark.vcxproj", "{64E140C3-03AF-40B1-802B-2C0782E45D37}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LifeGameScreenSaver", "LifeGameScreenSaver\LifeGameScreenSaver.vcxproj", "{C89776CC-FBD4-421F-9B75-754E35166C87}"
 EndProject
@@ -52,18 +43,6 @@ Global
 		{A592EB37-DD69-4D79-AEE4-26A8DEE86747}.Debug|Win32.Build.0 = Debug|Win32
 		{A592EB37-DD69-4D79-AEE4-26A8DEE86747}.Release|Win32.ActiveCfg = Release|Win32
 		{A592EB37-DD69-4D79-AEE4-26A8DEE86747}.Release|Win32.Build.0 = Release|Win32
-		{7470CB15-31C2-4F76-BDBC-1E39B3926EC2}.Debug|Win32.ActiveCfg = Debug|Win32
-		{7470CB15-31C2-4F76-BDBC-1E39B3926EC2}.Debug|Win32.Build.0 = Debug|Win32
-		{7470CB15-31C2-4F76-BDBC-1E39B3926EC2}.Release|Win32.ActiveCfg = Release|Win32
-		{7470CB15-31C2-4F76-BDBC-1E39B3926EC2}.Release|Win32.Build.0 = Release|Win32
-		{F126EDBB-D971-45E3-BF68-CCFDFAAF50BF}.Debug|Win32.ActiveCfg = Debug|Win32
-		{F126EDBB-D971-45E3-BF68-CCFDFAAF50BF}.Debug|Win32.Build.0 = Debug|Win32
-		{F126EDBB-D971-45E3-BF68-CCFDFAAF50BF}.Release|Win32.ActiveCfg = Release|Win32
-		{F126EDBB-D971-45E3-BF68-CCFDFAAF50BF}.Release|Win32.Build.0 = Release|Win32
-		{64E140C3-03AF-40B1-802B-2C0782E45D37}.Debug|Win32.ActiveCfg = Debug|Win32
-		{64E140C3-03AF-40B1-802B-2C0782E45D37}.Debug|Win32.Build.0 = Debug|Win32
-		{64E140C3-03AF-40B1-802B-2C0782E45D37}.Release|Win32.ActiveCfg = Release|Win32
-		{64E140C3-03AF-40B1-802B-2C0782E45D37}.Release|Win32.Build.0 = Release|Win32
 		{C89776CC-FBD4-421F-9B75-754E35166C87}.Debug|Win32.ActiveCfg = Debug|Win32
 		{C89776CC-FBD4-421F-9B75-754E35166C87}.Debug|Win32.Build.0 = Debug|Win32
 		{C89776CC-FBD4-421F-9B75-754E35166C87}.Release|Win32.ActiveCfg = Release|Win32
