@@ -30,7 +30,6 @@ struct LifeGame::Data {
   bool dragging_ = false;
   bool displayInfo_ = true;
   float fixedFps_ = 0;
-  float cellSize_ = GameConfig::INIT_CELL_SIZE;
 
   ci::Vec2f offset_;
   ci::Vec2f mouseDownOffset_;
@@ -179,77 +178,6 @@ void LifeGame::keyUp(KeyEvent e) {
     d->displayInfo_ = !d->displayInfo_;
     break;
   }
-}
-
-void LifeGame::keyDown(KeyEvent e) {
-  switch (e.getCode()) {
-
-  case KeyEvent::KEY_UP:
-    d->offset_.y += d->cellSize_;
-    break;
-
-  case KeyEvent::KEY_DOWN:
-    d->offset_.y -= d->cellSize_;
-    break;
-
-  case KeyEvent::KEY_LEFT:
-    d->offset_.x += d->cellSize_;
-    break;
-
-  case KeyEvent::KEY_RIGHT:
-    d->offset_.x -= d->cellSize_;
-    break;
-  }
-}
-
-Vec2i LifeGame::screenToUniverse(const Vec2i &v) const {
-  return {(int)((v.x - d->offset_.x) / d->cellSize_),
-          (int)((v.y - d->offset_.y) / d->cellSize_) };
-}
-
-void LifeGame::mouseUp(MouseEvent e) {
-  if (e.isLeft())
-    d->dragging_ = false;
-}
-
-void LifeGame::mouseDrag(MouseEvent e) {
-  if (e.isRightDown()) {
-    d->u_->add(screenToUniverse(e.getPos()));
-    return;
-  }
-
-  if (d->dragging_) {
-    d->offset_ = e.getPos() - d->mouseDownOffset_;
-  }
-}
-
-void LifeGame::mouseDown(MouseEvent e) {
-  if (e.isLeft()) {
-    if (!d->dragging_) {
-      d->dragging_ = true;
-      d->mouseDownOffset_ = e.getPos() - d->offset_;
-    }
-  } else if (e.isRight()) {
-    auto pt = screenToUniverse(e.getPos());
-    d->u_->add(pt);
-  }
-}
-
-void LifeGame::mouseWheel(ci::app::MouseEvent e) {
-  if (!e.isControlDown()) {
-    d->offset_.y +=
-        e.getWheelIncrement() * d->cellSize_ * GameConfig::SCROLL_LINES;
-  } else {
-    zoom(e.getWheelIncrement());
-  }
-}
-
-void LifeGame::zoom(float scale) {
-  d->cellSize_ += scale;
-  if (d->cellSize_ < GameConfig::MIN_CELL_SIZE)
-    d->cellSize_ = GameConfig::MIN_CELL_SIZE;
-  if (d->cellSize_ > GameConfig::MAX_CELL_SIZE)
-    d->cellSize_ = GameConfig::MAX_CELL_SIZE;
 }
 
 CINDER_APP_BASIC(LifeGame, RendererGl)
