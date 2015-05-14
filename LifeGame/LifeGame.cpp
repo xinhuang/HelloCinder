@@ -86,6 +86,7 @@ void LifeGame::createUniverse(int width, int height) {
 
 void LifeGame::draw() {
   auto tex = d->u_->render();
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   gl::setViewport(d->windowBounds_);
   gl::setMatricesWindow(d->windowSize_);
   gl::draw(tex, d->windowBounds_);
@@ -251,4 +252,4 @@ void LifeGame::zoom(float scale) {
     d->cellSize_ = GameConfig::MAX_CELL_SIZE;
 }
 
-CINDER_APP_BASIC(LifeGame, RendererGl(RendererGl::AA_NONE))
+CINDER_APP_BASIC(LifeGame, RendererGl)
