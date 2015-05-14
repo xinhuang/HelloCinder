@@ -9,7 +9,7 @@ void ClockApp::prepareSettings(Settings *settings) {
   settings->setBorderless();
   settings->setAlwaysOnTop();
   settings->setWindowSize(68, 20);
-  settings->setFrameRate(30);
+  settings->setFrameRate(12);
 }
 
 void ClockApp::setup() {
@@ -21,9 +21,10 @@ void ClockApp::setup() {
 }
 
 void ClockApp::draw() {
+  gl::enableAlphaBlending();
   gl::clear(Color::black());
   gl::color(Color::white());
-  Rectf windowRect{ 0, 0, (float)getWindowWidth(), (float)getWindowHeight() };
+  Rectf windowRect{ 1, 1, (float)getWindowWidth(), (float)getWindowHeight() };
 
   _font->drawString(currentTime(), windowRect);
 }
