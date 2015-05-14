@@ -31,11 +31,12 @@ struct LifeGame::Data {
   bool displayInfo_ = true;
   float fixedFps_ = 0;
   float cellSize_ = GameConfig::INIT_CELL_SIZE;
-  ci::gl::TextureFontRef font_;
+
   ci::Vec2f offset_;
   ci::Vec2f mouseDownOffset_;
   ci::Area windowBounds_;
   ci::Vec2i windowSize_;
+  ci::Font font_;
 
   int iuniverse_ = 0;
   vector<function<unique_ptr<IUniverse>(int, int)> > creators_;
@@ -61,19 +62,19 @@ LifeGame::LifeGame() : d(make_unique<Data>()) {
 }
 
 void LifeGame::setup() {
-  d->font_ = TextureFont::create(Font("Arial", 16));
   gl::disableVerticalSync();
   setFrameRate(99999.f);
+  d->font_ = Font("Arial", 20);
 
   createUniverse(getWindowWidth(), getWindowHeight());
 
   ippInit();
-}
+} 
 
 void LifeGame::createUniverse(int width, int height) {
   try {
     d->u_ = d->creators_[d->iuniverse_](width, height);
-    d->sysinfo_.init(*(d->u_)); // rename to bind
+    d->sysinfo_.init(*(d->u_));
     d->offset_ = {};
   }
   catch (std::runtime_error &e) {
@@ -90,8 +91,16 @@ void LifeGame::draw() {
   gl::draw(tex, d->windowBounds_);
 
   if (d->displayInfo_) {
+    ci::TextLayout layout;
     gl::enableAlphaBlending();
-    d->font_->drawString(d->sysinfo_.msg(*this), d->windowBounds_);
+	layout.setFont(d->font_);
+	layout.setColor(ColorA::white());
+	layout.addRightLine(d->sysinfo_.msg(*this));
+	auto tex = layout.render(true);
+	gl::color(ColorA(0.f, 0.f, 1.f, 0.5f));
+	gl::drawSolidRect(tex.getBounds());
+	gl::color(ColorA::white());
+	gl::draw(tex);
 	gl::disableAlphaBlending();
   }
 }

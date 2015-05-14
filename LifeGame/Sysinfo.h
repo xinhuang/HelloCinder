@@ -54,10 +54,10 @@ public:
   std::string msg(const ci::app::App &app) const {
     char buf[256];
     _snprintf_s(buf, sizeof(buf) - 1,
-                "<G>: Toggle info display\n"
+                "<G>: Toggle information\n"
 				"<Enter>: Re-generate universe\n"
 				"<Space>: Pause\n"
-				"<Left>/<Right>: Change algorithm\n"
+				"<Left>/<Right>: Switch algorithm\n"
 				"<UP>/<DOWN>: Set FPS\n"
 				"\n"
 				"GEN \t#%d\n"
