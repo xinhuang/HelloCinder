@@ -1,16 +1,8 @@
 #pragma once
 
-#include <cinder/Cinder.h>
-#include <cinder/app/AppBasic.h>
-#include <cinder/gl/TextureFont.h>
-
-#include <functional>
-#include <deque>
-#include <chrono>
-#include <memory>
-
-#include "Universe.h"
 #include "Sysinfo.h"
+
+#include <cinder/app/AppBasic.h>
 
 class LifeGame : public ci::app::AppBasic {
 public:

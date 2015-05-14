@@ -1,7 +1,7 @@
 #pragma once
 
-#include <deque>
-#include <sstream>
+#include "Universe.h"
+
 #include <chrono>
 
 #include <cinder/app/App.h>
