@@ -306,48 +306,46 @@ void AbstractCpuUniverse::nextIppTbb(ci::Channel &src, ci::Channel &dst) const {
 }
 
 void CpuAvxUniverse::next(ci::Channel &src, ci::Channel &dst) const {
-  const int width = src.getWidth();
-  const int height = src.getHeight();
+  next(src.getWidth(), src.getHeight(), src.getData(), src.getRowBytes(),
+       src.getIncrement(), dst.getData(), dst.getRowBytes(),
+       dst.getIncrement());
+}
 
-  auto pSrcData = src.getData();
-  auto cbSrcRow = src.getRowBytes();
-  auto cbSrcInc = src.getIncrement();
-
-  auto pDstData = dst.getData();
-  auto cbDestRow = dst.getRowBytes();
-  auto cbDestInc = dst.getIncrement();
-
+void CpuAvxUniverse::next(int width, int height, uint8_t *src, int srcStride,
+                          int srcInc, uint8_t *dst, int dstStride,
+                          int dstInc) const {
   for (int r = 0; r < height; ++r) {
-    *(pSrcData + r *cbSrcRow) = 0x00;
-    *(pSrcData + r *cbSrcRow + (width - 1) *cbSrcInc) = 0x00;
+    *(src + r * srcStride) = 0x00;
+    *(src + r * srcStride + (width - 1) * srcInc) = 0x00;
   }
-  fill(pSrcData, pSrcData + (width - 1) * cbSrcInc, 0x00);
-  fill(pSrcData + (height - 1) * cbSrcRow,
-       pSrcData + (height - 1) * cbSrcRow + (width - 1) * cbSrcInc, 0x00);
+  fill(src, src + (width - 1) * srcInc, 0x00);
+  fill(src + (height - 1) * srcStride,
+       src + (height - 1) * srcStride + (width - 1) * srcInc, 0x00);
 
   for (int r = 0; r < height; ++r)
-    ui8vandcu(width, src.getData() + src.getRowBytes() * r,
-              src.getData() + src.getRowBytes() * r, 1);
+    ui8vandcu(width, src + srcStride * r, src + srcStride * r, 1);
 
-  const int x[] = { 1, 1, 0, -1, -1, -1, 0, 1, };
-  const int y[] = { 0, 1, 1, 1, 0, -1, -1, -1, };
+  const int x[] = {
+      -1, 0, 1, -1, 1, -1, 0, 1,
+  };
+  const int y[] = {
+      -1, -1, -1, 0, 0, 1, 1, 1,
+  };
 
   for (int r = 1; r < height - 1; ++r) {
-    uint8_t *row = src.getData() + src.getRowBytes() * r + src.getIncrement();
-    uint8_t *dst_row =
-        dst.getData() + dst.getRowBytes() * r + dst.getIncrement();
-    memcpy(sum, row + y[0] * src.getRowBytes() + x[0] * src.getIncrement(),
-           width - 2);
+    uint8_t *row = src + srcStride * r + srcInc;
+    uint8_t *dst_row = dst + dstStride * r + dstInc;
+    memcpy(sum, row + y[0] * srcStride + x[0] * srcInc, width - 2);
     for (int i = 1; i < 8; ++i)
-      ui8vaddu(width - 2, sum,
-               row + y[i] * src.getRowBytes() + x[i] * src.getIncrement(), sum);
+		ui8vaddu(width - 2, sum, row + y[i] * srcStride + x[i] * srcInc, sum);
 
     memcpy(dst_row, sum, width - 2);
 
-    ui8vcmpcu(width - 2, sum, sum, 2, ivEq);
-    ui8vandu(width - 2, sum, row, sum);
+    ui8vcmpcu(width - 2, sum, sum, 2, ivEq);		// 2 => 255
+    ui8vandu(width - 2, sum, row, sum);				// 255 & 1
+	ui8vcmpcu(width - 2, sum, sum, 1, ivEq);		// 1 => 255
 
-    ui8vcmpcu(width - 2, dst_row, dst_row, 3, ivEq);
+    ui8vcmpcu(width - 2, dst_row, dst_row, 3, ivEq);	// 3 => 255
 
     ui8voru(width - 2, sum, dst_row, dst_row);
   }

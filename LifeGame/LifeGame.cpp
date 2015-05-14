@@ -121,7 +121,7 @@ void LifeGame::resize() {
 void LifeGame::keyUp(KeyEvent e) {
   switch (e.getCode()) {
   case KeyEvent::KEY_RETURN:
-    createUniverse(getWindowWidth(), getWindowHeight());
+	createUniverse(getWindowWidth(), getWindowHeight());
     break;
 
   case KeyEvent::KEY_RIGHT:

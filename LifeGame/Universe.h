@@ -146,6 +146,9 @@ public:
 
   std::string name() const { return "CPU AVX"; }
 
+  void next(int width, int height, uint8_t *src, int srcStride, int srcInc,
+	  uint8_t *dst, int dstStride, int dstInc) const;
+
 protected:
   void next(ci::Channel &src, ci::Channel &dst) const final;
 

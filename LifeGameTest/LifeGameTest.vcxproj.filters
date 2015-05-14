@@ -18,11 +18,20 @@
     <ClCompile Include="..\LifeGame\ivlib.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\LifeGame\Universe.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="UniverseTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\LifeGame\ivlib.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="..\LifeGame\Universe.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
