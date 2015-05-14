@@ -8,6 +8,7 @@
 
 class Sysinfo {
   const size_t MAX_GEN_COST = 10;
+  bool fixedFps_ = false;
   size_t ngen_ = 0;
   size_t size_ = 0;
   std::chrono::steady_clock::time_point timestamp_;
@@ -53,14 +54,24 @@ public:
   std::string msg(const ci::app::App &app) const {
     char buf[256];
     _snprintf_s(buf, sizeof(buf) - 1,
-                "<Left>/<Right>: Change "
-                "algorithm\n<Enter>: Re-generate "
-                "universe\n<Space>: Pause\n<G>: Toggle info display\nGEN "
-                "\t#%d\nSIZE\t%d\nFPS \t%f\n%s\n",
-                ngen_, size_, app.getAverageFps(), strategy_.c_str());
+                "<G>: Toggle info display\n"
+				"<Enter>: Re-generate universe\n"
+				"<Space>: Pause\n"
+				"<Left>/<Right>: Change algorithm\n"
+				"<UP>/<DOWN>: Set FPS\n"
+				"\n"
+				"GEN \t#%d\n"
+				"SIZE\t%d\n"
+				"FPS \t%f (%s)\n"
+				"%s\n",
+                ngen_, size_, app.getAverageFps(), fixedFps_ ? "Fixed" : "Unlimited", 
+				strategy_.c_str());
 
     return error_.empty() ? buf : buf + ("\n" + error_);
   }
+
+  void fixFps() { fixedFps_ = true; }
+  void unfixFps() { fixedFps_ = false; }
 
   void setError(const std::string &reason) { error_ = "Error: " + reason; }
 };

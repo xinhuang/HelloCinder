@@ -29,6 +29,7 @@ struct LifeGame::Data {
   bool suspend_ = false;
   bool dragging_ = false;
   bool displayInfo_ = true;
+  float fixedFps_ = 0;
   float cellSize_ = GameConfig::INIT_CELL_SIZE;
   ci::gl::TextureFontRef font_;
   ci::Vec2f offset_;
@@ -123,6 +124,24 @@ void LifeGame::keyUp(KeyEvent e) {
     d->iuniverse_ =
         (d->iuniverse_ + d->creators_.size() - 1) % d->creators_.size();
     createUniverse(getWindowWidth(), getWindowHeight());
+    break;
+
+  case KeyEvent::KEY_UP:
+	  d->fixedFps_ += 1;
+	  setFrameRate(d->fixedFps_);
+	  d->sysinfo_.fixFps();
+	  break;
+
+  case KeyEvent::KEY_DOWN:
+    d->fixedFps_ -= 1;
+    if (d->fixedFps_ > 0) {
+      setFrameRate(d->fixedFps_);
+	  d->sysinfo_.fixFps();
+    } else {
+      d->fixedFps_ = 0;
+      setFrameRate(99999.f);
+	  d->sysinfo_.unfixFps();
+    }
     break;
 
   case KeyEvent::KEY_ESCAPE:
