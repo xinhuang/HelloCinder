@@ -14,6 +14,8 @@
 
 #include "ivlib.h"
 
+extern "C" {
+
 enum IppStatus {
   ippStsNoErr,
 };
@@ -64,5 +66,7 @@ IppStatus ippiCopy_8u_C1R(const uint8_t *pSrc, int srcStep, uint8_t *pDst,
 IppStatus ippiCompareC_8u_C1R(const uint8_t *pSrc, int srcStep, uint8_t value,
                               uint8_t *pDst, int dstStep, IppiSize roiSize,
                               IppCmpOp ippCmpOp);
+
+}
 
 #endif // USE_IPP

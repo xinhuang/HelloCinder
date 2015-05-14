@@ -24,6 +24,7 @@
     <ClCompile Include="UniverseTest.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="..\LifeGame\vax.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\LifeGame\ivlib.h">
@@ -33,5 +34,6 @@
     <ClInclude Include="..\LifeGame\Universe.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\LifeGame\vax.h" />
   </ItemGroup>
 </Project>

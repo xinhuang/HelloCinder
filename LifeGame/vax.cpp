@@ -8,6 +8,8 @@ using namespace std;
 
 #ifdef NO_IPP
 
+extern "C" {
+
 IppStatus ippInit() { return ippStsNoErr; }
 
 IppStatus ippiAndC_8u_C1R(const uint8_t *pSrc, int srcStep, const uint8_t value,
@@ -94,6 +96,8 @@ IppStatus ippiCompareC_8u_C1R(const uint8_t *pSrc, int srcStep, uint8_t value,
     }
   }
   return ippStsNoErr;
+}
+
 }
 
 #endif // NO_IPP

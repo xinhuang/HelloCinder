@@ -92,6 +92,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\LifeGame\Universe.cpp" />
+    <ClCompile Include="..\LifeGame\vax.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ivtest.cpp" />
     <ClCompile Include="UniverseTest.cpp" />
@@ -99,6 +100,7 @@
   <ItemGroup>
     <ClInclude Include="..\LifeGame\ivlib.h" />
     <ClInclude Include="..\LifeGame\Universe.h" />
+    <ClInclude Include="..\LifeGame\vax.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
